@@ -1,0 +1,761 @@
+{% extends "base.html" %}
+{% block title %}Aara Voyages – Journeys Worth Telling | Premium Travel Experiences{% endblock %}
+{% block meta_description %}Discover extraordinary travel experiences with Aara Voyages. Explore Dubai, Singapore,
+Malaysia, Bali, Vietnam, Kerala, Rajasthan, Goa, Kashmir & Andaman with handcrafted itineraries and premium service.{%
+endblock %}
+
+{% block content %}
+
+<style>
+    /* ── Hero Search Bar ──────────────────────────────────────────────────────── */
+    .hero-search {
+        background: rgba(255, 255, 255, 0.12);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 16px;
+        padding: 1.25rem 1.5rem;
+        margin-top: 2rem;
+        max-width: 780px;
+        width: 100%;
+    }
+
+    .hero-search-title {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 0.78rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        margin-bottom: 0.85rem;
+        font-weight: 600;
+    }
+
+    .hero-search-row {
+        display: flex;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .hero-search-row input,
+    .hero-search-row select {
+        flex: 1;
+        min-width: 140px;
+        padding: 0.7rem 1rem;
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        background: rgba(255, 255, 255, 0.95);
+        color: #1a1a2e;
+        font-size: 0.85rem;
+        font-family: inherit;
+        outline: none;
+        transition: border-color 0.2s;
+    }
+
+    .hero-search-row input:focus,
+    .hero-search-row select:focus {
+        border-color: rgba(255, 255, 255, 0.7);
+    }
+
+    .hero-search-row .btn-search {
+        background: linear-gradient(135deg, #e94560, #c0392b);
+        color: #fff;
+        border: none;
+        padding: 0.72rem 1.5rem;
+        border-radius: 10px;
+        font-size: 0.88rem;
+        font-weight: 600;
+        cursor: pointer;
+        white-space: nowrap;
+        transition: all 0.2s;
+        font-family: inherit;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .hero-search-row .btn-search:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(233, 69, 96, 0.4);
+    }
+
+    /* ── Trust Badges ─────────────────────────────────────────────────────────── */
+    .trust-section {
+        background: var(--white, #fff);
+        padding: 2.5rem 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .trust-grid {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1.5rem .8rem;
+        align-items: center;
+    }
+
+    .trust-item {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        font-size: 0.9rem;
+        color: #444;
+        font-weight: 500;
+    }
+
+    .trust-icon {
+        font-size: 1.5rem;
+        flex-shrink: 0;
+    }
+
+    .trust-item strong {
+        display: block;
+        font-size: 0.82rem;
+        color: #888;
+        font-weight: 400;
+    }
+
+    /* ── Package Categories ──────────────────────────────────────────────────── */
+    .pkg-cats-section {
+        background: linear-gradient(135deg, #f8f9fc 0%, #eef1f8 100%);
+        padding: 4rem 0;
+    }
+
+    .pkg-tabs {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 2rem;
+        justify-content: center;
+    }
+
+    .pkg-tab {
+        padding: 0.55rem 1.4rem;
+        border-radius: 30px;
+        border: 2px solid transparent;
+        background: rgba(255, 255, 255, 0.7);
+        color: #555;
+        font-size: 0.88rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-family: inherit;
+    }
+
+    .pkg-tab.active,
+    .pkg-tab:hover {
+        background: #1a1a2e;
+        color: #fff;
+        border-color: #1a1a2e;
+    }
+
+    .pkg-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 1rem;
+    }
+
+    .pkg-cat-card {
+        background: #fff;
+        border-radius: 14px;
+        padding: 1.4rem 1rem;
+        text-align: center;
+        text-decoration: none;
+        color: #333;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+        transition: all 0.25s;
+        border: 1px solid rgba(0, 0, 0, 0.04);
+        display: block;
+    }
+
+    .pkg-cat-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+        color: #1a1a2e;
+    }
+
+    .pkg-cat-icon {
+        font-size: 2.2rem;
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+
+    .pkg-cat-name {
+        font-weight: 700;
+        font-size: 0.9rem;
+        margin-bottom: 0.2rem;
+    }
+
+    .pkg-cat-from {
+        font-size: 0.75rem;
+        color: #e94560;
+        font-weight: 600;
+    }
+
+    .pkg-cat-dur {
+        font-size: 0.72rem;
+        color: #999;
+        margin-top: 0.15rem;
+    }
+
+    /* ── Why Book With Us ─────────────────────────────────────────────────────── */
+    .why-book-section {
+        background: #fff;
+        padding: 1rem 0 3rem 0;
+    }
+
+    .why-book-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2.5rem;
+    }
+
+    .why-card {
+        text-align: center;
+        padding: 2rem 1.25rem;
+        border-radius: 16px;
+        background: linear-gradient(135deg, #f8f9fc, #eef1f8);
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        transition: all 0.25s;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    .why-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.09);
+    }
+
+    .why-card-icon {
+        font-size: 2.4rem;
+        margin-bottom: 0.75rem;
+        display: block;
+    }
+
+    .why-card h4 {
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: #1a1a2e;
+        margin-bottom: 0.5rem;
+    }
+
+    .why-card p {
+        font-size: 0.82rem;
+        color: #666;
+        line-height: 1.55;
+    }
+
+    /* ── Testimonials ─────────────────────────────────────────────────────────── */
+    .testimonials-section {
+        background: linear-gradient(135deg, #0f3460 0%, #16213e 50%, #1a1a2e 100%);
+        padding: 5rem 0;
+    }
+
+    .testimonials-section .section-title {
+        color: #fff !important;
+    }
+
+    .testimonials-section .section-subtitle {
+        color: rgba(255, 255, 255, 0.6) !important;
+    }
+
+    .reviews-bar {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        margin-bottom: 2.5rem;
+        flex-wrap: wrap;
+    }
+
+    .reviews-bar .rating-big {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: #ffd700;
+        line-height: 1;
+    }
+
+    .reviews-bar .rating-stars {
+        font-size: 1.2rem;
+        margin-bottom: 0.2rem;
+    }
+
+    .reviews-bar .rating-meta {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 0.82rem;
+    }
+
+    .testimonials-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .testimonial-card {
+        background: rgba(255, 255, 255, 0.07);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 16px;
+        padding: 1.75rem;
+        backdrop-filter: blur(6px);
+        transition: all 0.25s;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    .testimonial-card:hover {
+        background: rgba(255, 255, 255, 0.11);
+        transform: translateY(-3px);
+    }
+
+    .testimonial-stars {
+        color: #ffd700;
+        font-size: 1rem;
+        margin-bottom: 0.85rem;
+        letter-spacing: 2px;
+    }
+
+    .testimonial-text {
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 0.88rem;
+        line-height: 1.65;
+        margin-bottom: 1.25rem;
+        font-style: italic;
+    }
+
+    .testimonial-author {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-top: auto;
+    }
+
+    .author-avatar {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #e94560, #c0392b);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        color: #fff;
+        font-size: 0.85rem;
+        flex-shrink: 0;
+    }
+
+    .author-info .author-name {
+        font-weight: 700;
+        color: #fff;
+        font-size: 0.88rem;
+    }
+
+    .author-info .author-dest {
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.5);
+        margin-top: 1px;
+    }
+
+    /* ── Hero Slideshow ──────────────────────────────────────────────────────── */
+    .hero-bg img.slide {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0;
+        transition: opacity 1.5s ease-in-out;
+    }
+
+    .hero-bg img.slide.active {
+        opacity: 1;
+    }
+</style>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<section class="hero" id="home-hero">
+    <div class="hero-bg" id="hero-slideshow">
+        <img src="{{ url_for('static', filename='images/hero_bg.jpg') }}" class="slide active"
+            alt="Luxury travel destination">
+        <img src="{{ url_for('static', filename='images/dubai.jpg') }}" class="slide" alt="Dubai">
+        <img src="{{ url_for('static', filename='images/kerala.jpg') }}" class="slide" alt="Kerala">
+        <img src="{{ url_for('static', filename='images/bali.jpg') }}" class="slide" alt="Bali">
+        <img src="{{ url_for('static', filename='images/rajasthan.jpg') }}" class="slide" alt="Rajasthan">
+        <img src="{{ url_for('static', filename='images/singapore.jpg') }}" class="slide" alt="Singapore">
+        <img src="{{ url_for('static', filename='images/kashmir.jpg') }}" class="slide" alt="Kashmir">
+    </div>
+    <div class="hero-overlay"></div>
+
+    <div class="hero-content">
+        <!-- <div class="hero-badge">✦ Premium Travel Experiences ✦</div> -->
+        <h1>Discover the World,<br><span>One Journey at a Time</span></h1>
+        <p>We craft unforgettable travel experiences that transform destinations into stories worth telling. Let <b>Aara
+                Voyages</b> be your guide to the extraordinary.</p>
+        <!-- <div class="hero-buttons">
+            <a href="/destinations" class="btn btn-primary" id="hero-explore-btn">Explore Destinations</a>
+            <a href="/contact" class="btn btn-outline" id="hero-contact-btn">Plan Your Trip</a>
+        </div> -->
+
+        <!-- Quick Enquiry Bar -->
+        <div class="hero-search" id="hero-search-bar">
+            <div class="hero-search-title"><i class="fa-solid fa-magnifying-glass"></i> Find Your Destination</div>
+            <div class="hero-search-row">
+                <select id="hero-destination" aria-label="Select destination">
+                    <option value="">Where to? 🌍</option>
+                    <optgroup label="🏖️ International">
+                        <option value="/destination/dubai">Dubai, UAE</option>
+                        <option value="/destination/singapore">Singapore</option>
+                        <option value="/destination/malaysia">Malaysia</option>
+                        <option value="/destination/bali">Bali, Indonesia</option>
+                        <option value="/destination/vietnam">Vietnam</option>
+                    </optgroup>
+                    <optgroup label="🇮🇳 Domestic">
+                        <option value="/destination/kerala">Kerala</option>
+                        <option value="/destination/rajasthan">Rajasthan</option>
+                        <option value="/destination/goa">Goa</option>
+                        <option value="/destination/kashmir">Kashmir</option>
+                        <option value="/destination/andaman">Andaman</option>
+                    </optgroup>
+                </select>
+                <input type="date" id="hero-month" placeholder="📅 When are you travelling?" aria-label="Travel month">
+                <select id="hero-travellers" aria-label="Number of travellers">
+                    <option value="">👥 Travellers</option>
+                    <option value="1">1 Person</option>
+                    <option value="2">2 People (Couple)</option>
+                    <option value="3">3 People</option>
+                    <option value="4">4 People (Family)</option>
+                    <option value="5">5+ People (Group)</option>
+                </select>
+                <a href="/contact" class="btn-search" id="hero-search-btn" onclick="handleHeroSearch(event)">Search
+                    →</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<!-- ═══════════════ PACKAGE CATEGORIES ═══════════════ -->
+<!-- <section class="pkg-cats-section section-padding" id="package-categories">
+    <div class="container">
+        <h2 class="section-title reveal">Explore Holiday Packages</h2>
+        <p class="section-subtitle reveal">Handpicked destinations for every type of traveller</p>
+
+        <div class="pkg-tabs" id="pkg-tabs" role="tablist">
+            <button class="pkg-tab active" id="tab-all" onclick="filterPkgs('all')" role="tab">All Packages</button>
+            <button class="pkg-tab" id="tab-international" onclick="filterPkgs('international')" role="tab"><i class="fa-solid fa-plane"></i>
+                International</button>
+            <button class="pkg-tab" id="tab-domestic" onclick="filterPkgs('domestic')" role="tab"><i class="fa-solid fa-flag"></i> Domestic</button>
+        </div>
+
+        <div class="pkg-grid" id="pkg-grid">
+            
+<a href="/destination/dubai" class="pkg-cat-card reveal" data-type="international" id="pkg-dubai">
+    <span class="pkg-cat-icon"><i class="fa-solid fa-city"></i></span>
+    <div class="pkg-cat-name">Dubai</div>
+    <div class="pkg-cat-from">From ₹45,000</div>
+    <div class="pkg-cat-dur">5D / 4N · UAE</div>
+</a>
+<a href="/destination/singapore" class="pkg-cat-card reveal" data-type="international" id="pkg-singapore">
+    <span class="pkg-cat-icon"><i class="fa-solid fa-paw"></i></span>
+    <div class="pkg-cat-name">Singapore</div>
+    <div class="pkg-cat-from">From ₹55,000</div>
+    <div class="pkg-cat-dur">4D / 3N · Singapore</div>
+</a>
+<a href="/destination/bali" class="pkg-cat-card reveal" data-type="international" id="pkg-bali">
+    <span class="pkg-cat-icon"><i class="fa-solid fa-spa"></i></span>
+    <div class="pkg-cat-name">Bali</div>
+    <div class="pkg-cat-from">From ₹40,000</div>
+    <div class="pkg-cat-dur">5D / 4N · Indonesia</div>
+</a>
+<a href="/destination/malaysia" class="pkg-cat-card reveal" data-type="international" id="pkg-malaysia">
+    <span class="pkg-cat-icon"><i class="fa-solid fa-building"></i></span>
+    <div class="pkg-cat-name">Malaysia</div>
+    <div class="pkg-cat-from">From ₹35,000</div>
+    <div class="pkg-cat-dur">5D / 4N · Malaysia</div>
+</a>
+<a href="/destination/vietnam" class="pkg-cat-card reveal" data-type="international" id="pkg-vietnam">
+    <span class="pkg-cat-icon"><i class="fa-solid fa-sailboat"></i></span>
+    <div class="pkg-cat-name">Vietnam</div>
+    <div class="pkg-cat-from">From ₹38,000</div>
+    <div class="pkg-cat-dur">6D / 5N · Vietnam</div>
+</a>
+
+<a href="/destination/kerala" class="pkg-cat-card reveal" data-type="domestic" id="pkg-kerala">
+    <span class="pkg-cat-icon"><i class="fa-solid fa-leaf"></i></span>
+    <div class="pkg-cat-name">Kerala</div>
+    <div class="pkg-cat-from">From ₹22,000</div>
+    <div class="pkg-cat-dur">5D / 4N · India</div>
+</a>
+<a href="/destination/rajasthan" class="pkg-cat-card reveal" data-type="domestic" id="pkg-rajasthan">
+    <span class="pkg-cat-icon"><i class="fa-brands fa-fort-awesome"></i></span>
+    <div class="pkg-cat-name">Rajasthan</div>
+    <div class="pkg-cat-from">From ₹25,000</div>
+    <div class="pkg-cat-dur">6D / 5N · India</div>
+</a>
+<a href="/destination/goa" class="pkg-cat-card reveal" data-type="domestic" id="pkg-goa">
+    <span class="pkg-cat-icon"><i class="fa-solid fa-umbrella-beach"></i></span>
+    <div class="pkg-cat-name">Goa</div>
+    <div class="pkg-cat-from">From ₹18,000</div>
+    <div class="pkg-cat-dur">4D / 3N · India</div>
+</a>
+<a href="/destination/kashmir" class="pkg-cat-card reveal" data-type="domestic" id="pkg-kashmir">
+    <span class="pkg-cat-icon"><i class="fa-solid fa-mountain"></i></span>
+    <div class="pkg-cat-name">Kashmir</div>
+    <div class="pkg-cat-from">From ₹28,000</div>
+    <div class="pkg-cat-dur">5D / 4N · India</div>
+</a>
+<a href="/destination/andaman" class="pkg-cat-card reveal" data-type="domestic" id="pkg-andaman">
+    <span class="pkg-cat-icon"><i class="fa-solid fa-fish"></i></span>
+    <div class="pkg-cat-name">Andaman</div>
+    <div class="pkg-cat-from">From ₹30,000</div>
+    <div class="pkg-cat-dur">5D / 4N · India</div>
+</a>
+</div>
+</div>
+</section> -->
+
+<!-- ═══════════════ FEATURED DESTINATIONS ═══════════════ -->
+<section class="section-padding" id="featured-destinations">
+    <div class="container">
+        <h2 class="section-title reveal">Popular Destinations</h2>
+        <p class="section-subtitle reveal mb-30">Handpicked paradises waiting for you</p>
+
+        <div class="destinations-grid">
+            {% for slug, dest in destinations.items() %}
+            <a href="/destination/{{ slug }}" class="dest-card reveal" id="dest-card-{{ slug }}">
+                <img src="{{ url_for('static', filename='images/' + dest.hero_image) }}" alt="{{ dest.name }}"
+                    loading="lazy">
+                <div class="dest-card-overlay"></div>
+                <div class="dest-card-content">
+                    <span class="dest-card-badge">{{ dest.duration }}</span>
+                    <h3>{{ dest.name }}</h3>
+                    <p class="dest-country">{{ dest.country }}</p>
+                    <div class="dest-meta">
+                        <span><i class="fa-regular fa-calendar"></i> {{ dest.duration }}</span>
+                        <span><i class="fa-solid fa-sack-dollar"></i> From {{ dest.price_from }}</span>
+                    </div>
+                    <div class="view-link">
+                        View Itinerary <span class="arrow">→</span>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════ TRUST BADGES ═══════════════ -->
+<section class="trust-section" id="trust-section">
+    <div class="container">
+        <div class="trust-grid">
+            <div class="trust-item" id="trust-reviews">
+                <span class="trust-icon"><i class="fa-solid fa-star"></i></span>
+                <div>
+                    <span>Rated 4.7/5</span>
+                    <strong>725+ Happy Travellers</strong>
+                </div>
+            </div>
+            <div class="trust-item" id="trust-insurance">
+                <span class="trust-icon"><i class="fa-solid fa-shield-halved"></i></span>
+                <div>
+                    <span>Travel Insurance</span>
+                    <strong>Complimentary on All Packages</strong>
+                </div>
+            </div>
+            <div class="trust-item" id="trust-manager">
+                <span class="trust-icon"><i class="fa-solid fa-handshake"></i></span>
+                <div>
+                    <span>Relationship Manager</span>
+                    <strong>Personalised for Every Trip</strong>
+                </div>
+            </div>
+            <div class="trust-item" id="trust-support">
+                <span class="trust-icon"><i class="fa-solid fa-phone"></i></span>
+                <div>
+                    <span>24 × 7 On-Ground Support</span>
+                    <strong>We're Always There for You</strong>
+                </div>
+            </div>
+            <div class="trust-item" id="trust-price">
+                <span class="trust-icon"><i class="fa-solid fa-sack-dollar"></i></span>
+                <div>
+                    <span>Best Price Guarantee</span>
+                    <strong>Matched if You Find Lower</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════ WHY CHOOSE US ═══════════════ -->
+<section class="why-book-section" id="why-book-with-us">
+    <div class="container">
+        <h2 class="section-title reveal">Why Book with Aara Voyages?</h2>
+        <p class="section-subtitle reveal" style="color: #777;">The 5 reasons 725+ travellers choose us</p>
+
+        <div class="why-book-grid">
+            <div class="why-card reveal" id="why-insurance">
+                <span class="why-card-icon"><i class="fa-solid fa-shield-halved"></i></span>
+                <h4>Complimentary Travel Insurance</h4>
+                <p>Every package comes with travel insurance included — so you travel with complete peace of mind,
+                    knowing you're covered.</p>
+            </div>
+            <div class="why-card reveal" id="why-manager">
+                <span class="why-card-icon"><i class="fa-solid fa-handshake"></i></span>
+                <h4>Personalised Support</h4>
+                <p>A dedicated travel expert is assigned to you from first enquiry to safe return — your single point of
+                    contact for everything.</p>
+            </div>
+            <div class="why-card reveal" id="why-support">
+                <span class="why-card-icon"><i class="fa-solid fa-phone"></i></span>
+                <h4>24 × 7 Support</h4>
+                <p>Whether it's midnight in Bali or dawn in Dubai, our team is awake and reachable whenever you need
+                    assistance.</p>
+            </div>
+            <div class="why-card reveal" id="why-price">
+                <span class="why-card-icon"><i class="fa-solid fa-sack-dollar"></i></span>
+                <h4>Best Price Guarantee</h4>
+                <p>We negotiate the best possible deals with hotels and airlines. Found it cheaper? We'll match or beat
+                    the price.</p>
+            </div>
+            <div class="why-card reveal" id="why-custom">
+                <span class="why-card-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
+                <h4>100% Customisable Itineraries</h4>
+                <p>No off-the-shelf packages. Every itinerary is crafted around your preferences, travel style, and
+                    budget.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════ FEATURES / USPs ═══════════════ -->
+<section class="features-section section-padding" id="why-choose-us">
+    <div class="container">
+        <h2 class="section-title reveal" style="color: var(--white);">Why Aara Voyages?</h2>
+        <p class="section-subtitle reveal">What makes us your perfect travel partner</p>
+
+        <div class="features-grid">
+            <div class="feature-card reveal">
+                <span class="feature-icon"><i class="fa-solid fa-star"></i></span>
+                <h3>Curated Experiences</h3>
+                <p>Every itinerary is handcrafted to perfection — no cookie-cutter tours, only bespoke journeys tailored
+                    to your dreams.</p>
+            </div>
+            <div class="feature-card reveal">
+                <span class="feature-icon"><i class="fa-regular fa-gem"></i></span>
+                <h3>Premium Quality</h3>
+                <p>From luxury stays to curated activities, we ensure every detail exceeds your expectations for a truly
+                    premium experience.</p>
+            </div>
+            <div class="feature-card reveal">
+                <span class="feature-icon"><i class="fa-solid fa-handshake"></i></span>
+                <h3>Personal Touch</h3>
+                <p>A dedicated travel consultant guides you from planning to homecoming, ensuring seamless support every
+                    step of the way.</p>
+            </div>
+            <div class="feature-card reveal">
+                <span class="feature-icon"><i class="fa-solid fa-sack-dollar"></i></span>
+                <h3>Best Value</h3>
+                <p>Exceptional experiences at competitive prices. We negotiate the best deals so you can travel more for
+                    less.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════ TESTIMONIALS ═══════════════ -->
+<section class="testimonials-section section-padding" id="testimonials">
+    <div class="container">
+        <h2 class="section-title reveal">What Our Travellers Say</h2>
+        <p class="section-subtitle reveal">Real reviews from real journeys</p>
+
+        <div class="reviews-bar reveal">
+            <div class="rating-big">4.7</div>
+            <div>
+                <div class="rating-stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
+                        class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                </div>
+                <div class="rating-meta">Based on 725+ verified reviews</div>
+                <div class="rating-meta">across Google, WhatsApp & Social Media</div>
+            </div>
+        </div>
+
+        <div class="testimonials-grid">
+            {% for t in testimonials %}
+            <div class="testimonial-card reveal" id="testimonial-{{ loop.index }}">
+                <div class="testimonial-stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
+                        class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                </div>
+                <p class="testimonial-text">"{{ t.review }}"</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">{{ t.initials }}</div>
+                    <div class="author-info">
+                        <div class="author-name">{{ t.name }}</div>
+                        <div class="author-dest">{{ t.destination }} trip · {{ t.location }}</div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════ CTA ═══════════════ -->
+<section class="cta-section section-padding" id="home-cta">
+    <div class="container">
+        <h2 class="reveal">Ready for Your Next Adventure?</h2>
+        <p class="reveal">Let's turn your travel dreams into unforgettable stories. Reach out to us today!</p>
+        <div class="reveal" style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+            <a href="{{ brand.whatsapp_link }}" target="_blank" class="btn btn-primary" id="cta-whatsapp"><i
+                    class="fa-brands fa-whatsapp fa-lg"></i> Chat on WhatsApp</a>
+            <a href="/contact" class="btn btn-outline" style="border-color: rgba(255,255,255,.4);"
+                id="cta-contact-btn"><i class="fa-solid fa-clipboard" style="color: rgb(255, 255, 255);"></i> Send
+                Enquiry</a>
+        </div>
+    </div>
+</section>
+
+<script>
+    // Package filter tabs
+    function filterPkgs(type) {
+        document.querySelectorAll('.pkg-tab').forEach(t => t.classList.remove('active'));
+        if (type === 'all') document.getElementById('tab-all').classList.add('active');
+        else if (type === 'international') document.getElementById('tab-international').classList.add('active');
+        else document.getElementById('tab-domestic').classList.add('active');
+
+        document.querySelectorAll('.pkg-cat-card').forEach(card => {
+            if (type === 'all' || card.dataset.type === type) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+
+    // Hero search handler
+    function handleHeroSearch(e) {
+        const dest = document.getElementById('hero-destination').value;
+        if (dest) {
+            e.preventDefault();
+            window.location.href = dest;
+        }
+    }
+
+    // Hero Slideshow
+    document.addEventListener("DOMContentLoaded", function () {
+        const slides = document.querySelectorAll('#hero-slideshow .slide');
+        if (slides.length > 0) {
+            let currentSlide = 0;
+            setInterval(() => {
+                slides[currentSlide].classList.remove('active');
+                currentSlide = (currentSlide + 1) % slides.length;
+                slides[currentSlide].classList.add('active');
+            }, 5000); // 5 seconds per slide
+        }
+    });
+</script>
+<script src="https://cdn.botpress.cloud/webchat/v5.0/inject.js"></script>
+<script src="https://files.bpcontent.cloud/2026/09/19/17/20260919171918-CZGDSPFA.js" defer></script>
+
+{% endblock %}

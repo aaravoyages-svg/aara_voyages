@@ -1,0 +1,406 @@
+{% extends "base.html" %}
+{% block title %}About Us – Aara Voyages | Our Story & Mission{% endblock %}
+{% block meta_description %}Learn about Aara Voyages — our passion for travel, our commitment to excellence, and why
+725+ travellers trust us to craft their dream vacations across India and the world.{% endblock %}
+
+{% block content %}
+
+<style>
+    /* ── Achievements / Recognition ─────────────────────────────────────────── */
+    .achievements-strip {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        padding: 1.5rem 0;
+    }
+
+    .achievements-inner {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1rem 3rem;
+        align-items: center;
+    }
+
+    .achievement-item {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 0.88rem;
+        font-weight: 500;
+    }
+
+    .achievement-item .ach-icon {
+        font-size: 1.3rem;
+    }
+
+    /* ── Why Book Strip ─────────────────────────────────────────────────────── */
+    .why-book-strip {
+        background: #fff8f0;
+        border-left: 4px solid #e94560;
+        border-radius: 0 10px 10px 0;
+        padding: 1.25rem 1.5rem;
+        margin: 2rem 0;
+    }
+
+    .why-book-strip h3 {
+        color: #1a1a2e;
+        font-size: 1rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .why-book-strip ul {
+        padding: 0;
+        margin: 0;
+        list-style: none;
+    }
+
+    .why-book-strip ul li {
+        font-size: 0.87rem;
+        color: #555;
+        padding: 0.3rem 0;
+        display: flex;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    /* ── Team Section ───────────────────────────────────────────────────────── */
+    .team-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2.5rem;
+    }
+
+    .team-card {
+        background: #fff;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        text-align: center;
+        transition: transform 0.25s;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    .team-card:hover {
+        transform: translateY(-4px);
+    }
+
+    .team-avatar {
+        width: 100%;
+        height: 180px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 4rem;
+        background: linear-gradient(135deg, #1a1a2e, #0f3460);
+    }
+
+    .team-card-body {
+        padding: 1.25rem;
+    }
+
+    .team-card-body h4 {
+        font-size: 0.95rem;
+        color: #1a1a2e;
+        margin-bottom: 0.25rem;
+    }
+
+    .team-card-body .team-role {
+        font-size: 0.78rem;
+        color: #e94560;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .team-card-body p {
+        font-size: 0.8rem;
+        color: #777;
+        line-height: 1.5;
+    }
+
+    /* ── Milestones ──────────────────────────────────────────────────────────── */
+    .milestone-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2.5rem;
+    }
+
+    .milestone-card {
+        background: linear-gradient(135deg, #f8f9fc, #eef1f8);
+        border-radius: 14px;
+        padding: 1.5rem;
+        text-align: center;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    .milestone-year {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: #e94560;
+        margin-bottom: 0.25rem;
+    }
+
+    .milestone-label {
+        font-size: 0.85rem;
+        color: #555;
+    }
+</style>
+
+<!-- ═══════════════ PAGE HERO ═══════════════ -->
+<section class="page-hero" id="about-hero">
+    <div class="page-hero-content">
+        <h1>About Aara Voyages</h1>
+        <p>Where passion for travel meets dedication to excellence</p>
+    </div>
+</section>
+
+<!-- ═══════════════ ACHIEVEMENTS STRIP ═══════════════ -->
+<div class="achievements-strip" id="achievements-strip">
+    <div class="container">
+        <div class="achievements-inner">
+            <div class="achievement-item">
+                <span class="ach-icon"><i class="fa-solid fa-star"></i></span>
+                <span>Rated 4.7 / 5 across Social Media</span>
+            </div>
+            <div class="achievement-item">
+                <span class="ach-icon"><i class="fa-solid fa-users"></i></span>
+                <span>725+ Happy Travellers</span>
+            </div>
+            <div class="achievement-item">
+                <span class="ach-icon"><i class="fa-solid fa-globe"></i></span>
+                <span>25+ Destinations Covered</span>
+            </div>
+            <div class="achievement-item">
+                <span class="ach-icon"><i class="fa-solid fa-shield-halved"></i></span>
+                <span>Complimentary Travel Insurance</span>
+            </div>
+            <div class="achievement-item">
+                <span class="ach-icon"><i class="fa-solid fa-phone"></i></span>
+                <span>24 × 7 On-Ground Support</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════ OUR STORY ═══════════════ -->
+<section class="section-padding" id="our-story">
+    <div class="container">
+        <div class="about-content">
+            <div class="about-text reveal">
+                <h2>Our Story</h2>
+                <p>
+                    <strong>Aara Voyages</strong> was born from a simple yet powerful belief — every
+                    journey should be a story worth telling. Founded by passionate travellers who
+                    have explored the world's most captivating destinations — from the sand dunes
+                    of Rajasthan to the backwaters of Kerala, from the temples of Bali to the
+                    skyscrapers of Dubai — we set out to create a travel company that goes beyond
+                    bookings and logistics.
+                </p>
+                <p>
+                    We believe travel is one of life's greatest teachers. It broadens perspectives,
+                    creates memories that last a lifetime, and connects us to cultures far beyond our
+                    own. That's why every itinerary we craft is designed not just to show you a
+                    destination — but to immerse you in it, to make you feel it in your bones.
+                </p>
+                <p>
+                    From crafting honeymooners' dream escapes to Bali, to planning multi-generational
+                    family holidays to Singapore, to organising solo adventures across Vietnam's
+                    ancient streets — we pour the same passion and precision into every single trip.
+                    Over 725 travellers have trusted us, and that number grows every day.
+                </p>
+
+                <div class="why-book-strip" id="why-book-strip">
+                    <h3><i class="fa-solid fa-bullseye"></i> Why Travellers Choose Aara Voyages</h3>
+                    <ul>
+                        <li><span><i class="fa-solid fa-check"></i></span> Complimentary Travel Insurance on every
+                            package</li>
+                        <li><span><i class="fa-solid fa-check"></i></span> Personalised Relationship Manager from first
+                            call to safe return</li>
+                        <li><span><i class="fa-solid fa-check"></i></span> 24 × 7 On-Ground Support — we're there when
+                            it matters most</li>
+                        <li><span><i class="fa-solid fa-check"></i></span> Rated 4.7<i class="fa-solid fa-star"></i>
+                            across Social Media by 725+ verified travellers</li>
+                        <li><span><i class="fa-solid fa-check"></i></span> 100% customisable itineraries — no
+                            cookie-cutter packages</li>
+                    </ul>
+                </div>
+
+                <a href="/contact" class="btn btn-primary" id="about-cta-btn">Start Your Journey</a>
+            </div>
+            <div class="about-image reveal">
+                <img src="{{ url_for('static', filename='images/about_bg.jpg') }}" alt="Aara Voyages - Premium Travel">
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-row reveal">
+            <div class="stat-item">
+                <span class="stat-number" data-count="725" data-suffix="+">0</span>
+                <span class="stat-label">Happy Travellers</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" data-count="15" data-suffix="+">0</span>
+                <span class="stat-label">Destinations</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" data-count="4" data-suffix="+">0</span>
+                <span class="stat-label">Years of Excellence</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" data-count="4" data-suffix=".7+">0</span>
+                <span class="stat-label">Average Rating</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" data-count="24" data-suffix="/7">0</span>
+                <span class="stat-label">Travel Support</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════ OUR MILESTONES ═══════════════ -->
+<section class="section-padding" style="background: #f8f9fc;" id="milestones">
+    <div class="container">
+        <h2 class="section-title reveal">Our Journey So Far</h2>
+        <p class="section-subtitle reveal">Milestones that define our growth</p>
+
+        <div class="milestone-row reveal">
+            <div class="milestone-card">
+                <div class="milestone-year">2022</div>
+                <div class="milestone-label">Aara Voyages founded with a vision to make premium travel accessible</div>
+            </div>
+            <div class="milestone-card">
+                <div class="milestone-year">2023</div>
+                <div class="milestone-label">Launched domestic packages — Kerala, Goa & Rajasthan</div>
+            </div>
+            <div class="milestone-card">
+                <div class="milestone-year">2024</div>
+                <div class="milestone-label">Expanded to international packages — Dubai, Bali & Singapore</div>
+            </div>
+            <div class="milestone-card">
+                <div class="milestone-year">2025</div>
+                <div class="milestone-label">Added Kashmir, Andaman & Vietnam to our portfolio</div>
+            </div>
+            <div class="milestone-card">
+                <div class="milestone-year">2026</div>
+                <div class="milestone-label">725+ travellers & rated 4.7<i class="fa-solid fa-star"></i> across social
+                    platforms</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════ OUR VALUES ═══════════════ -->
+<section class="section-padding" style="background: var(--white);" id="our-values">
+    <div class="container">
+        <h2 class="section-title reveal">Our Core Values</h2>
+        <p class="section-subtitle reveal">The principles that guide every journey we create</p>
+
+        <div class="values-grid">
+            <div class="value-card reveal">
+                <span class="value-icon"><i class="fa-solid fa-bullseye"></i></span>
+                <h3>Personalisation</h3>
+                <p>No two travellers are alike. We listen to your preferences, interests, and budget to create an
+                    itinerary that's uniquely yours — never off-the-shelf.</p>
+            </div>
+            <div class="value-card reveal">
+                <span class="value-icon"><i class="fa-solid fa-shield-halved"></i></span>
+                <h3>Trust & Transparency</h3>
+                <p>What you see is what you get. Clear pricing, honest advice, and no hidden charges — your trust is our
+                    greatest asset.</p>
+            </div>
+            <div class="value-card reveal">
+                <span class="value-icon"><i class="fa-solid fa-star"></i></span>
+                <h3>Excellence</h3>
+                <p>We partner with only the finest hotels, guides, and service providers to ensure every detail of your
+                    trip meets our exacting standards.</p>
+            </div>
+            <div class="value-card reveal">
+                <span class="value-icon"><i class="fa-solid fa-globe"></i></span>
+                <h3>Responsible Travel</h3>
+                <p>We promote sustainable tourism, respect local cultures, and support communities in every destination
+                    we serve.</p>
+            </div>
+            <div class="value-card reveal">
+                <span class="value-icon"><i class="fa-regular fa-comment-dots"></i></span>
+                <h3>Always Available</h3>
+                <p>From the moment you enquire to the day you return, our team is available around the clock to assist
+                    you — because great service never sleeps.</p>
+            </div>
+            <div class="value-card reveal">
+                <span class="value-icon"><i class="fa-solid fa-heart"></i></span>
+                <h3>Passion</h3>
+                <p>We're not just travel agents — we're explorers ourselves. Our first-hand experience of every
+                    destination ensures authentic, insider recommendations.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════ MEET THE TEAM ═══════════════ -->
+<!-- <section class="section-padding" style="background: linear-gradient(135deg, #f8f9fc, #eef1f8);" id="meet-team">
+    <div class="container">
+        <h2 class="section-title reveal">Meet Our Team</h2>
+        <p class="section-subtitle reveal">Passionate travel experts dedicated to your perfect journey</p>
+
+        <div class="team-grid">
+            <div class="team-card reveal" id="team-1">
+                <div class="team-avatar"><i class="fa-solid fa-user-tie"></i></div>
+                <div class="team-card-body">
+                    <h4>Manoj Kumar</h4>
+                    <div class="team-role">Founder & Head of Travel</div>
+                    <p>15+ years in the travel industry. Expert in international packages across SE Asia & the Middle
+                        East.</p>
+                </div>
+            </div>
+            <div class="team-card reveal" id="team-2">
+                <div class="team-avatar">👩‍💼</div>
+                <div class="team-card-body">
+                    <h4>Priya Singh</h4>
+                    <div class="team-role">Domestic Packages Lead</div>
+                    <p>Specialist in Kerala, Rajasthan, and Himalayan tours. Has personally explored 20+ Indian states.
+                    </p>
+                </div>
+            </div>
+            <div class="team-card reveal" id="team-3">
+                <div class="team-avatar">👨‍<i class="fa-solid fa-plane"></i></div>
+                <div class="team-card-body">
+                    <h4>Arjun Mehta</h4>
+                    <div class="team-role">Client Relations Manager</div>
+                    <p>Your first call, your last call. Arjun ensures every traveller's experience is seamless from
+                        start to finish.</p>
+                </div>
+            </div>
+            <div class="team-card reveal" id="team-4">
+                <div class="team-avatar">👩‍🌏</div>
+                <div class="team-card-body">
+                    <h4>Riya Kapoor</h4>
+                    <div class="team-role">International Tour Specialist</div>
+                    <p>Bali, Vietnam, Dubai & Singapore expert. Riya has lived and travelled across 30+ countries.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section> -->
+
+<!-- ═══════════════ CTA ═══════════════ -->
+<section class="cta-section section-padding" id="about-cta">
+    <div class="container">
+        <h2 class="reveal">Let's Create Your Story Together</h2>
+        <p class="reveal">Every great journey begins with a conversation. Tell us your travel dreams.</p>
+        <div class="reveal" style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+            <a href="/contact" class="btn btn-primary" id="about-contact-btn">Get in Touch</a>
+            <a href="{{ brand.whatsapp_link }}" target="_blank" class="btn btn-whatsapp" id="about-whatsapp-btn"><i
+                    class="fa-regular fa-comment-dots"></i>
+                WhatsApp Us</a>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

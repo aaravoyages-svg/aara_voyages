@@ -1,0 +1,1456 @@
+{% extends "base.html" %}
+{% block title %}{{ page_title }} | Aara Voyages{% endblock %}
+{% block meta_description %}{{ page_subtitle }}. Book with Aara Voyages — personalised itineraries, complimentary travel
+insurance, 24/7 support.{% endblock %}
+
+{% block content %}
+<style>
+    /* ── Page Layout ──────────────────────────────────────────────────────── */
+    .pkg-page {
+        background: #f4f6fb;
+        min-height: 100vh;
+    }
+
+    /* ── Hero Banner ──────────────────────────────────────────────────────── */
+    .pkg-hero {
+        background: linear-gradient(135deg, #0f3460 0%, #16213e 50%, #1a1a2e 100%);
+        padding: 3.5rem 0 3rem;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .pkg-hero::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    .pkg-hero h1 {
+        font-size: clamp(1.6rem, 4vw, 2.5rem);
+        font-weight: 800;
+        color: #fff;
+        margin-bottom: 0.5rem;
+        position: relative;
+    }
+
+    .pkg-hero p {
+        color: rgba(255, 255, 255, 0.65);
+        font-size: 0.95rem;
+        position: relative;
+    }
+
+    .pkg-hero-tabs {
+        display: flex;
+        gap: 0.5rem;
+        justify-content: center;
+        margin-top: 1.5rem;
+        position: relative;
+    }
+
+    .pkg-hero-tab {
+        padding: 0.5rem 1.5rem;
+        border-radius: 30px;
+        font-size: 0.88rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.2s;
+        border: 2px solid rgba(255, 255, 255, 0.25);
+        color: rgba(255, 255, 255, 0.75);
+    }
+
+    .pkg-hero-tab.active {
+        background: #e94560;
+        border-color: #e94560;
+        color: #fff;
+    }
+
+    .pkg-hero-tab:hover:not(.active) {
+        border-color: rgba(255, 255, 255, 0.6);
+        color: #fff;
+    }
+
+    /* ── Main Layout ──────────────────────────────────────────────────────── */
+    .pkg-layout {
+        display: flex;
+        gap: 1.5rem;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 2rem 1.25rem 4rem;
+        align-items: flex-start;
+    }
+
+    /* ── Sidebar ──────────────────────────────────────────────────────────── */
+    .pkg-sidebar {
+        width: 270px;
+        flex-shrink: 0;
+        position: sticky;
+        top: 80px;
+    }
+
+    .pkg-sidebar-box {
+        background: #fff;
+        border-radius: 16px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 16px rgba(0, 0, 0, 0.07);
+        margin-bottom: 1rem;
+    }
+
+    .sidebar-title {
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: #999;
+        margin-bottom: 1rem;
+    }
+
+    .filter-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .filter-group:last-child {
+        margin-bottom: 0;
+    }
+
+    .filter-group-title {
+        font-size: 0.88rem;
+        font-weight: 700;
+        color: #1a1a2e;
+        margin-bottom: 0.6rem;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+    }
+
+    .filter-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.35rem 0;
+        cursor: pointer;
+    }
+
+    .filter-item input[type="checkbox"] {
+        width: 16px;
+        height: 16px;
+        accent-color: #e94560;
+        cursor: pointer;
+        flex-shrink: 0;
+    }
+
+    .filter-item label {
+        font-size: 0.84rem;
+        color: #555;
+        cursor: pointer;
+        line-height: 1.3;
+    }
+
+    .filter-count {
+        margin-left: auto;
+        font-size: 0.72rem;
+        background: #f0f0f5;
+        color: #888;
+        border-radius: 20px;
+        padding: 1px 7px;
+    }
+
+    .dest-chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+    }
+
+    .dest-chip {
+        padding: 0.3rem 0.8rem;
+        border-radius: 20px;
+        border: 1.5px solid #e0e0e0;
+        background: #fff;
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: #555;
+        cursor: pointer;
+        transition: all 0.2s;
+        text-transform: capitalize;
+    }
+
+    .dest-chip.active,
+    .dest-chip:hover {
+        background: #1a1a2e;
+        border-color: #1a1a2e;
+        color: #fff;
+    }
+
+    .btn-clear-filters {
+        width: 100%;
+        padding: 0.6rem;
+        border: 1.5px solid #e94560;
+        background: none;
+        color: #e94560;
+        border-radius: 10px;
+        font-size: 0.84rem;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: inherit;
+        transition: all 0.2s;
+        margin-top: 0.5rem;
+    }
+
+    .btn-clear-filters:hover {
+        background: #e94560;
+        color: #fff;
+    }
+
+    /* ── Main Content Area ────────────────────────────────────────────────── */
+    .pkg-main {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .pkg-toolbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        margin-bottom: 1.5rem;
+        background: #fff;
+        border-radius: 12px;
+        padding: 0.85rem 1.2rem;
+        box-shadow: 0 1px 8px rgba(0, 0, 0, 0.06);
+    }
+
+    .pkg-result-count {
+        font-size: 0.9rem;
+        color: #555;
+        font-weight: 500;
+    }
+
+    .pkg-result-count strong {
+        color: #1a1a2e;
+    }
+
+    .pkg-sort {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .pkg-sort label {
+        font-size: 0.82rem;
+        color: #888;
+    }
+
+    .pkg-sort select {
+        padding: 0.4rem 0.8rem;
+        border: 1.5px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 0.84rem;
+        font-family: inherit;
+        color: #333;
+        outline: none;
+        cursor: pointer;
+    }
+
+    /* Mobile filter button */
+    .btn-mobile-filter {
+        display: none;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.5rem 1rem;
+        background: #1a1a2e;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        font-size: 0.84rem;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: inherit;
+    }
+
+    .filter-badge {
+        background: #e94560;
+        color: #fff;
+        border-radius: 50%;
+        width: 18px;
+        height: 18px;
+        font-size: 0.7rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        display: none;
+    }
+
+    /* ── Package Cards Grid ──────────────────────────────────────────────── */
+    .pkg-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.25rem;
+    }
+
+    .pkg-card {
+        background: #fff;
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 2px 16px rgba(0, 0, 0, 0.07);
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        display: flex;
+        flex-direction: column;
+        border: 1px solid rgba(0, 0, 0, 0.04);
+    }
+
+    .pkg-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 36px rgba(0, 0, 0, 0.13);
+    }
+
+    .pkg-card.hidden {
+        display: none !important;
+    }
+
+    /* Card image area */
+    .pkg-card-img {
+        position: relative;
+        height: 190px;
+        overflow: hidden;
+    }
+
+    .pkg-card-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.4s ease;
+    }
+
+    .pkg-card:hover .pkg-card-img img {
+        transform: scale(1.06);
+    }
+
+    .pkg-card-badge {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: #fff;
+        letter-spacing: 0.04em;
+    }
+
+    .pkg-card-duration {
+        position: absolute;
+        bottom: 12px;
+        right: 12px;
+        background: rgba(0, 0, 0, 0.65);
+        backdrop-filter: blur(4px);
+        color: #fff;
+        font-size: 0.78rem;
+        font-weight: 600;
+        padding: 4px 10px;
+        border-radius: 20px;
+    }
+
+    /* Card body */
+    .pkg-card-body {
+        padding: 1.1rem 1.2rem;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .pkg-card-dest {
+        font-size: 0.75rem;
+        color: #e94560;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        margin-bottom: 0.3rem;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+    }
+
+    .pkg-card-name {
+        font-size: 1rem;
+        font-weight: 800;
+        color: #1a1a2e;
+        margin-bottom: 0.75rem;
+        line-height: 1.3;
+    }
+
+    .pkg-highlights {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
+    }
+
+    .pkg-highlights li {
+        font-size: 0.8rem;
+        color: #555;
+        display: flex;
+        align-items: flex-start;
+        gap: 0.4rem;
+        line-height: 1.4;
+    }
+
+    .pkg-highlights li::before {
+        content: '✓';
+        color: #e94560;
+        font-weight: 700;
+        flex-shrink: 0;
+        margin-top: 1px;
+    }
+
+    .pkg-inclusions-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.3rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .pkg-inclusion-tag {
+        font-size: 0.68rem;
+        font-weight: 600;
+        background: #f0f4ff;
+        color: #3d5a99;
+        border-radius: 6px;
+        padding: 2px 7px;
+    }
+
+    /* Card footer */
+    .pkg-card-footer {
+        padding: 0.85rem 1.2rem 1.1rem;
+        border-top: 1px solid #f0f0f5;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+    }
+
+    .pkg-price-block {
+        line-height: 1.2;
+    }
+
+    .pkg-price-label {
+        font-size: 0.68rem;
+        color: #aaa;
+        font-weight: 500;
+    }
+
+    .pkg-price {
+        font-size: 1.15rem;
+        font-weight: 800;
+        color: #e94560;
+    }
+
+    .pkg-per {
+        font-size: 0.72rem;
+        color: #aaa;
+    }
+
+    .pkg-hotel-star {
+        font-size: 0.72rem;
+        color: #888;
+        margin-top: 1px;
+    }
+
+    .pkg-card-actions {
+        display: flex;
+        gap: 0.4rem;
+        flex-shrink: 0;
+    }
+
+    .btn-pkg-enquire {
+        padding: 0.5rem 0.9rem;
+        background: linear-gradient(135deg, #e94560, #c0392b);
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        font-size: 0.78rem;
+        font-weight: 700;
+        cursor: pointer;
+        font-family: inherit;
+        transition: all 0.2s;
+        white-space: nowrap;
+    }
+
+    .btn-pkg-enquire:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(233, 69, 96, 0.35);
+    }
+
+    .btn-pkg-view {
+        padding: 0.5rem 0.9rem;
+        background: none;
+        color: #1a1a2e;
+        border: 1.5px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 0.78rem;
+        font-weight: 700;
+        cursor: pointer;
+        font-family: inherit;
+        transition: all 0.2s;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        white-space: nowrap;
+    }
+
+    .btn-pkg-view:hover {
+        border-color: #1a1a2e;
+        color: #1a1a2e;
+    }
+
+    /* ── No Results ────────────────────────────────────────────────────────── */
+    .no-results {
+        text-align: center;
+        padding: 4rem 2rem;
+        display: none;
+        grid-column: 1 / -1;
+    }
+
+    .no-results-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+
+    .no-results h3 {
+        color: #1a1a2e;
+        margin-bottom: 0.5rem;
+    }
+
+    .no-results p {
+        color: #888;
+        font-size: 0.9rem;
+    }
+
+    /* ── Package Detail Modal ─────────────────────────────────────────────── */
+    .pkg-detail-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.65);
+        backdrop-filter: blur(4px);
+        z-index: 9990;
+    }
+
+    .pkg-detail-overlay.open {
+        display: block;
+    }
+
+    .pkg-detail-modal {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0.9);
+        z-index: 9999;
+        background: #fff;
+        border-radius: 20px;
+        width: min(820px, 95vw);
+        max-height: 88vh;
+        overflow-y: auto;
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
+    }
+
+    .pkg-detail-modal.open {
+        display: flex;
+        flex-direction: column;
+        animation: modalIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+
+    @keyframes modalIn {
+        from {
+            transform: translate(-50%, -50%) scale(0.88);
+            opacity: 0;
+        }
+
+        to {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+    }
+
+    .pdm-hero {
+        position: relative;
+        height: 220px;
+        flex-shrink: 0;
+    }
+
+    .pdm-hero img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 20px 20px 0 0;
+    }
+
+    .pdm-hero-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to bottom, transparent 30%, rgba(0, 0, 0, 0.75));
+        border-radius: 20px 20px 0 0;
+    }
+
+    .pdm-hero-info {
+        position: absolute;
+        bottom: 1rem;
+        left: 1.5rem;
+        right: 4rem;
+    }
+
+    .pdm-hero-info h2 {
+        color: #fff;
+        font-size: 1.35rem;
+        font-weight: 800;
+        margin-bottom: 0.25rem;
+    }
+
+    .pdm-hero-info .pdm-dur {
+        color: rgba(255, 255, 255, 0.75);
+        font-size: 0.85rem;
+    }
+
+    .pdm-close {
+        position: absolute;
+        top: 14px;
+        right: 14px;
+        background: rgba(255, 255, 255, 0.92);
+        border: none;
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        font-size: 1rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #333;
+        transition: all 0.2s;
+        z-index: 2;
+    }
+
+    .pdm-close:hover {
+        background: #e94560;
+        color: #fff;
+    }
+
+    .pdm-body {
+        padding: 1.5rem;
+    }
+
+    .pdm-price-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1.25rem;
+        border-bottom: 1px solid #f0f0f5;
+    }
+
+    .pdm-price {
+        font-size: 1.6rem;
+        font-weight: 800;
+        color: #e94560;
+    }
+
+    .pdm-price-note {
+        font-size: 0.78rem;
+        color: #aaa;
+    }
+
+    .pdm-hotel-cat {
+        font-size: 0.82rem;
+        color: #888;
+        margin-top: 2px;
+    }
+
+    .pdm-cta-row {
+        display: flex;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+    }
+
+    .pdm-enquire-btn {
+        flex: 1;
+        padding: 0.75rem 1.25rem;
+        background: linear-gradient(135deg, #e94560, #c0392b);
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        font-size: 0.92rem;
+        font-weight: 700;
+        cursor: pointer;
+        font-family: inherit;
+        transition: all 0.2s;
+        min-width: 150px;
+    }
+
+    .pdm-enquire-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 18px rgba(233, 69, 96, 0.35);
+    }
+
+    .pdm-wa-btn {
+        flex: 1;
+        padding: 0.75rem 1.25rem;
+        background: #25d366;
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        font-size: 0.92rem;
+        font-weight: 700;
+        cursor: pointer;
+        font-family: inherit;
+        transition: all 0.2s;
+        text-decoration: none;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 150px;
+    }
+
+    .pdm-wa-btn:hover {
+        background: #1da851;
+    }
+
+    .pdm-sections {
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+    }
+
+    .pdm-section h4 {
+        font-size: 0.88rem;
+        font-weight: 700;
+        color: #1a1a2e;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        margin-bottom: 0.6rem;
+    }
+
+    .pdm-highlights-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+    }
+
+    .pdm-highlights-list li {
+        font-size: 0.88rem;
+        color: #444;
+        display: flex;
+        align-items: flex-start;
+        gap: 0.5rem;
+        line-height: 1.45;
+    }
+
+    .pdm-highlights-list li::before {
+        content: '✓';
+        color: #e94560;
+        font-weight: 700;
+        flex-shrink: 0;
+        margin-top: 1px;
+    }
+
+    .pdm-inclusions-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+    }
+
+    .pdm-incl-tag {
+        background: #f0f7f0;
+        color: #2e7d32;
+        border-radius: 8px;
+        padding: 0.3rem 0.8rem;
+        font-size: 0.78rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+    }
+
+    .pdm-incl-tag::before {
+        content: '✓';
+    }
+
+    /* ── Mobile Filter Drawer ─────────────────────────────────────────────── */
+    .filter-drawer-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 8000;
+    }
+
+    .filter-drawer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: #fff;
+        border-radius: 20px 20px 0 0;
+        max-height: 85vh;
+        overflow-y: auto;
+        padding: 1.5rem;
+        transform: translateY(100%);
+        transition: transform 0.3s ease;
+        z-index: 8001;
+    }
+
+    .filter-drawer.open {
+        transform: translateY(0);
+    }
+
+    .filter-drawer-overlay.open {
+        display: block;
+    }
+
+    .filter-drawer-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1.25rem;
+        font-weight: 700;
+        font-size: 1rem;
+        color: #1a1a2e;
+    }
+
+    .filter-drawer-close {
+        background: #f0f0f0;
+        border: none;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        font-size: 0.9rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .btn-apply-filters {
+        width: 100%;
+        margin-top: 1.25rem;
+        padding: 0.85rem;
+        background: linear-gradient(135deg, #e94560, #c0392b);
+        color: #fff;
+        border: none;
+        border-radius: 12px;
+        font-size: 0.95rem;
+        font-weight: 700;
+        cursor: pointer;
+        font-family: inherit;
+    }
+
+    /* ── Responsive ───────────────────────────────────────────────────────── */
+    @media (max-width: 900px) {
+        .pkg-sidebar {
+            display: none;
+        }
+
+        .btn-mobile-filter {
+            display: flex;
+        }
+
+        .pkg-grid {
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        }
+    }
+
+    @media (max-width: 580px) {
+        .pkg-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .pkg-layout {
+            padding: 1rem 0.75rem 3rem;
+        }
+
+        .pdm-cta-row {
+            flex-direction: column;
+        }
+    }
+</style>
+
+<!-- ═══════════════ HERO BANNER ═══════════════ -->
+<div class="pkg-hero">
+    <div class="container">
+        <h1 id="pkg-page-title">{{ page_title }}</h1>
+        <p id="pkg-page-subtitle">{{ page_subtitle }}</p>
+        <div class="pkg-hero-tabs">
+            <a href="/packages/international"
+                class="pkg-hero-tab {% if category == 'international' %}active{% endif %}">
+                <i class="fa-solid fa-plane"></i> International
+            </a>
+            <a href="/packages/domestic" class="pkg-hero-tab {% if category == 'domestic' %}active{% endif %}">
+                <i class="fa-solid fa-flag"></i> Domestic
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════ MAIN LAYOUT ═══════════════ -->
+<div class="pkg-page">
+    <div class="pkg-layout">
+
+        <!-- ─── SIDEBAR FILTERS ─── -->
+        <aside class="pkg-sidebar" id="pkg-sidebar" role="complementary">
+            <div class="pkg-sidebar-box">
+                <div class="sidebar-title"><i class="fa-solid fa-magnifying-glass"></i> Filter Packages</div>
+
+                <!-- Destination chips -->
+                <div class="filter-group">
+                    <div class="filter-group-title"><i class="fa-solid fa-location-dot"></i> Destination</div>
+                    <div class="dest-chips" id="dest-chips">
+                        <button class="dest-chip active" data-dest="all"
+                            onclick="filterByDest('all', this)">All</button>
+                        {% for slug in dest_slugs %}
+                        <button class="dest-chip" data-dest="{{ slug }}" onclick="filterByDest('{{ slug }}', this)">
+                            {{ DESTINATIONS[slug]['name'] if slug in DESTINATIONS else slug|title }}
+                        </button>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Duration filter -->
+                <div class="filter-group">
+                    <div class="filter-group-title"><i class="fa-regular fa-calendar"></i> Duration</div>
+                    <div id="dur-filters">
+                        <label class="filter-item">
+                            <input type="checkbox" class="dur-filter" value="3"> <span>3 Nights / 4 Days</span>
+                            <span class="filter-count" id="cnt-dur-3"></span>
+                        </label>
+                        <label class="filter-item">
+                            <input type="checkbox" class="dur-filter" value="4"> <span>4 Nights / 5 Days</span>
+                            <span class="filter-count" id="cnt-dur-4"></span>
+                        </label>
+                        <label class="filter-item">
+                            <input type="checkbox" class="dur-filter" value="5"> <span>5 Nights / 6 Days</span>
+                            <span class="filter-count" id="cnt-dur-5"></span>
+                        </label>
+                        <label class="filter-item">
+                            <input type="checkbox" class="dur-filter" value="6"> <span>6 Nights / 7 Days</span>
+                            <span class="filter-count" id="cnt-dur-6"></span>
+                        </label>
+                        <label class="filter-item">
+                            <input type="checkbox" class="dur-filter" value="7+"> <span>7 Nights & Above</span>
+                            <span class="filter-count" id="cnt-dur-7"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Budget filter -->
+                <div class="filter-group">
+                    <div class="filter-group-title"><i class="fa-solid fa-sack-dollar"></i> Budget (per person)</div>
+                    <div id="budget-filters">
+                        <label class="filter-item">
+                            <input type="checkbox" class="budget-filter" data-min="0" data-max="20000"> <span>Under Rs.
+                                20,000</span>
+                        </label>
+                        <label class="filter-item">
+                            <input type="checkbox" class="budget-filter" data-min="20000" data-max="40000"> <span>Rs.
+                                20,000 – 40,000</span>
+                        </label>
+                        <label class="filter-item">
+                            <input type="checkbox" class="budget-filter" data-min="40000" data-max="65000"> <span>Rs.
+                                40,000 – 65,000</span>
+                        </label>
+                        <label class="filter-item">
+                            <input type="checkbox" class="budget-filter" data-min="65000" data-max="999999"> <span>Above
+                                Rs. 65,000</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Theme filter -->
+                <div class="filter-group">
+                    <div class="filter-group-title">🎨 Theme</div>
+                    <div id="theme-filters">
+                        <label class="filter-item"><input type="checkbox" class="theme-filter" value="beach"> <span><i
+                                    class="fa-solid fa-umbrella-beach"></i> Beach</span></label>
+                        <label class="filter-item"><input type="checkbox" class="theme-filter" value="adventure">
+                            <span>🧗 Adventure</span></label>
+                        <label class="filter-item"><input type="checkbox" class="theme-filter" value="heritage">
+                            <span><i class="fa-brands fa-fort-awesome"></i> Heritage</span></label>
+                        <label class="filter-item"><input type="checkbox" class="theme-filter" value="honeymoon">
+                            <span><i class="fa-solid fa-heart"></i> Honeymoon</span></label>
+                        <label class="filter-item"><input type="checkbox" class="theme-filter" value="family">
+                            <span>👨‍👩‍👧 Family</span></label>
+                        <label class="filter-item"><input type="checkbox" class="theme-filter" value="nature"> <span><i
+                                    class="fa-solid fa-leaf"></i> Nature</span></label>
+                        <label class="filter-item"><input type="checkbox" class="theme-filter" value="luxury"> <span><i
+                                    class="fa-regular fa-gem"></i> Luxury</span></label>
+                        <label class="filter-item"><input type="checkbox" class="theme-filter" value="culture"> <span>🎭
+                                Culture</span></label>
+                        <label class="filter-item"><input type="checkbox" class="theme-filter" value="city"> <span><i
+                                    class="fa-solid fa-building"></i> City</span></label>
+                    </div>
+                </div>
+
+                <button class="btn-clear-filters" onclick="clearAllFilters()" id="btn-clear">✕ Clear All
+                    Filters</button>
+            </div>
+        </aside>
+
+        <!-- ─── MAIN CONTENT ─── -->
+        <main class="pkg-main">
+            <!-- Toolbar -->
+            <div class="pkg-toolbar">
+                <div style="display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap;">
+                    <button class="btn-mobile-filter" onclick="openFilterDrawer()" id="btn-mobile-filter">
+                        ⚙️ Filters
+                        <span class="filter-badge" id="filter-badge">0</span>
+                    </button>
+                    <div class="pkg-result-count">
+                        Showing <strong id="result-count">{{ packages|length }}</strong> of {{ packages|length }}
+                        packages
+                    </div>
+                </div>
+                <div class="pkg-sort">
+                    <label for="pkg-sort-select">Sort by:</label>
+                    <select id="pkg-sort-select" onchange="sortPackages(this.value)">
+                        <option value="default">Default</option>
+                        <option value="price-asc">Price: Low to High</option>
+                        <option value="price-desc">Price: High to Low</option>
+                        <option value="duration-asc">Duration: Short First</option>
+                        <option value="duration-desc">Duration: Long First</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Package Cards Grid -->
+            <div class="pkg-grid" id="pkg-grid">
+                {% for pkg in packages %}
+                <div class="pkg-card reveal" id="card-{{ pkg.id }}" data-id="{{ pkg.id }}"
+                    data-dest="{{ pkg.destination }}" data-nights="{{ pkg.duration_nights }}"
+                    data-price="{{ pkg.price_numeric }}" data-themes="{{ pkg.theme | join(',') }}"
+                    data-name="{{ pkg.name }}" data-duration="{{ pkg.duration_label }}" data-country="{{ pkg.country }}"
+                    data-price-str="{{ pkg.price_per_person }}" data-hotel="{{ pkg.hotel_category }}"
+                    data-badge="{{ pkg.badge or '' }}" data-badge-color="{{ pkg.badge_color or '' }}"
+                    data-highlights="{{ pkg.top_highlights | join('||') }}"
+                    data-inclusions="{{ pkg.inclusions | join('||') }}" data-image="{{ pkg.image }}">
+
+                    <!-- Image -->
+                    <div class="pkg-card-img">
+                        <img src="{{ url_for('static', filename='images/' + pkg.image) }}" alt="{{ pkg.name }}"
+                            loading="lazy"
+                            onerror="this.src='https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=400&q=80'">
+                        {% if pkg.badge %}
+                        <span class="pkg-card-badge" style="background:{{ pkg.badge_color }};">{{ pkg.badge }}</span>
+                        {% endif %}
+                        <span class="pkg-card-duration">{{ pkg.duration_label }}</span>
+                    </div>
+
+                    <!-- Body -->
+                    <div class="pkg-card-body">
+                        <div class="pkg-card-dest">
+                            {{ pkg.country }}
+                        </div>
+                        <div class="pkg-card-name">{{ pkg.name }}</div>
+                        <ul class="pkg-highlights">
+                            {% for h in pkg.top_highlights[:3] %}
+                            <li>{{ h }}</li>
+                            {% endfor %}
+                        </ul>
+                        <div class="pkg-inclusions-row">
+                            {% for inc in pkg.inclusions[:4] %}
+                            <span class="pkg-inclusion-tag">{{ inc.split('(')[0].strip() }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="pkg-card-footer">
+                        <div class="pkg-price-block">
+                            <div class="pkg-price-label">Starting from</div>
+                            <div class="pkg-price">{{ pkg.price_per_person }}</div>
+                            <div class="pkg-per">per person</div>
+                            <div class="pkg-hotel-star">{{ pkg.hotel_category }}</div>
+                        </div>
+                        <div class="pkg-card-actions">
+                            <button class="btn-pkg-view" onclick="openPkgDetail('{{ pkg.id }}')">Details</button>
+                            <button class="btn-pkg-enquire"
+                                onclick="openEnquiryForPkg('{{ pkg.name }}', '{{ pkg.destination }}')">Enquire</button>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+
+                <!-- No results -->
+                <div class="no-results" id="no-results">
+                    <div class="no-results-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
+                    <h3>No packages found</h3>
+                    <p>Try adjusting your filters to see more options.</p>
+                    <button class="btn-clear-filters" onclick="clearAllFilters()"
+                        style="max-width:200px; margin:1rem auto 0;">Clear All Filters</button>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<!-- ═══════════════ PACKAGE DETAIL MODAL ═══════════════ -->
+<div class="pkg-detail-overlay" id="pdm-overlay" onclick="closePkgDetail()"></div>
+<div class="pkg-detail-modal" id="pdm-modal" role="dialog" aria-modal="true">
+    <div class="pdm-hero">
+        <img id="pdm-img" src="" alt="">
+        <div class="pdm-hero-overlay"></div>
+        <button class="pdm-close" onclick="closePkgDetail()" aria-label="Close">✕</button>
+        <div class="pdm-hero-info">
+            <h2 id="pdm-name"></h2>
+            <div class="pdm-dur" id="pdm-dur"></div>
+        </div>
+    </div>
+    <div class="pdm-body">
+        <div class="pdm-price-row">
+            <div>
+                <div class="pdm-price" id="pdm-price"></div>
+                <div class="pdm-price-note">per person (land arrangements)</div>
+                <div class="pdm-hotel-cat" id="pdm-hotel"></div>
+            </div>
+            <div class="pdm-cta-row">
+                <button class="pdm-enquire-btn" id="pdm-enquire-btn" onclick=""><i
+                        class="fa-solid fa-envelope-open-text"></i> Enquire Now</button>
+                <a class="pdm-wa-btn" id="pdm-wa-btn" href="#" target="_blank"><i
+                        class="fa-regular fa-comment-dots"></i> WhatsApp</a>
+            </div>
+        </div>
+        <div class="pdm-sections">
+            <div class="pdm-section">
+                <h4><i class="fa-solid fa-star"></i> Top Highlights</h4>
+                <ul class="pdm-highlights-list" id="pdm-highlights"></ul>
+            </div>
+            <div class="pdm-section">
+                <h4><i class="fa-solid fa-check"></i> Inclusions</h4>
+                <div class="pdm-inclusions-grid" id="pdm-inclusions"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════ MOBILE FILTER DRAWER ═══════════════ -->
+<div class="filter-drawer-overlay" id="filter-drawer-overlay" onclick="closeFilterDrawer()"></div>
+<div class="filter-drawer" id="filter-drawer">
+    <div class="filter-drawer-header">
+        <span><i class="fa-solid fa-magnifying-glass"></i> Filter Packages</span>
+        <button class="filter-drawer-close" onclick="closeFilterDrawer()">✕</button>
+    </div>
+    <!-- Destination -->
+    <div class="filter-group">
+        <div class="filter-group-title"><i class="fa-solid fa-location-dot"></i> Destination</div>
+        <div class="dest-chips" id="dest-chips-mobile">
+            <button class="dest-chip active" data-dest="all" onclick="filterByDest('all', this, true)">All</button>
+            {% for slug in dest_slugs %}
+            <button class="dest-chip" data-dest="{{ slug }}" onclick="filterByDest('{{ slug }}', this, true)">
+                {{ DESTINATIONS[slug]['name'] if slug in DESTINATIONS else slug|title }}
+            </button>
+            {% endfor %}
+        </div>
+    </div>
+    <!-- Duration -->
+    <div class="filter-group">
+        <div class="filter-group-title"><i class="fa-regular fa-calendar"></i> Duration</div>
+        <label class="filter-item"><input type="checkbox" class="dur-filter-mob" value="3"> 3 Nights / 4 Days</label>
+        <label class="filter-item"><input type="checkbox" class="dur-filter-mob" value="4"> 4 Nights / 5 Days</label>
+        <label class="filter-item"><input type="checkbox" class="dur-filter-mob" value="5"> 5 Nights / 6 Days</label>
+        <label class="filter-item"><input type="checkbox" class="dur-filter-mob" value="6"> 6 Nights / 7 Days</label>
+        <label class="filter-item"><input type="checkbox" class="dur-filter-mob" value="7+"> 7 Nights & Above</label>
+    </div>
+    <!-- Budget -->
+    <div class="filter-group">
+        <div class="filter-group-title"><i class="fa-solid fa-sack-dollar"></i> Budget</div>
+        <label class="filter-item"><input type="checkbox" class="budget-filter-mob" data-min="0" data-max="20000"> Under
+            Rs.20,000</label>
+        <label class="filter-item"><input type="checkbox" class="budget-filter-mob" data-min="20000" data-max="40000">
+            Rs.20,000 – 40,000</label>
+        <label class="filter-item"><input type="checkbox" class="budget-filter-mob" data-min="40000" data-max="65000">
+            Rs.40,000 – 65,000</label>
+        <label class="filter-item"><input type="checkbox" class="budget-filter-mob" data-min="65000" data-max="999999">
+            Above Rs.65,000</label>
+    </div>
+    <!-- Theme -->
+    <div class="filter-group">
+        <div class="filter-group-title">🎨 Theme</div>
+        <label class="filter-item"><input type="checkbox" class="theme-filter-mob" value="beach"> <i
+                class="fa-solid fa-umbrella-beach"></i> Beach</label>
+        <label class="filter-item"><input type="checkbox" class="theme-filter-mob" value="adventure"> 🧗
+            Adventure</label>
+        <label class="filter-item"><input type="checkbox" class="theme-filter-mob" value="heritage"> <i
+                class="fa-brands fa-fort-awesome"></i> Heritage</label>
+        <label class="filter-item"><input type="checkbox" class="theme-filter-mob" value="honeymoon"> <i
+                class="fa-solid fa-heart"></i> Honeymoon</label>
+        <label class="filter-item"><input type="checkbox" class="theme-filter-mob" value="family"> 👨‍👩‍👧
+            Family</label>
+        <label class="filter-item"><input type="checkbox" class="theme-filter-mob" value="luxury"> <i
+                class="fa-regular fa-gem"></i> Luxury</label>
+    </div>
+    <button class="btn-apply-filters" onclick="applyMobileFilters(); closeFilterDrawer();">Apply Filters</button>
+</div>
+
+<script>
+    // ── Package Data (from Jinja) ─────────────────────────────────────────────
+    const ALL_PACKAGES = [
+        {% for pkg in packages %}
+    {
+        id: "{{ pkg.id }}",
+            dest: "{{ pkg.destination }}",
+                nights: { { pkg.duration_nights } },
+        price: { { pkg.price_numeric } },
+        themes: { { pkg.theme | tojson } },
+        name: { { pkg.name | tojson } },
+        duration: { { pkg.duration_label | tojson } },
+        country: { { pkg.country | tojson } },
+        priceStr: { { pkg.price_per_person | tojson } },
+        hotel: { { pkg.hotel_category | tojson } },
+        badge: { { (pkg.badge or '') | tojson } },
+        badgeColor: { { (pkg.badge_color or '') | tojson } },
+        highlights: { { pkg.top_highlights | tojson } },
+        inclusions: { { pkg.inclusions | tojson } },
+        image: { { pkg.image | tojson } },
+    },
+    {% endfor %}
+];
+
+    // ── State ─────────────────────────────────────────────────────────────────
+    let activeFilters = {
+        dest: 'all',
+        durations: [],
+        budgets: [],
+        themes: [],
+    };
+    let currentSort = 'default';
+
+    // ── Filter Duration counts ─────────────────────────────────────────────────
+    function updateCounts() {
+        const durMap = { 3: 0, 4: 0, 5: 0, 6: 0, '7+': 0 };
+        ALL_PACKAGES.forEach(p => {
+            if (p.nights >= 7) durMap['7+']++;
+            else if (durMap[p.nights] !== undefined) durMap[p.nights]++;
+        });
+        [3, 4, 5, 6, '7+'].forEach(d => {
+            const el = document.getElementById('cnt-dur-' + (d === '7+' ? 7 : d));
+            if (el) el.textContent = durMap[d] || '';
+        });
+    }
+    updateCounts();
+
+    // ── Core Filter Engine ────────────────────────────────────────────────────
+    function applyFilters() {
+        const cards = document.querySelectorAll('.pkg-card');
+        let visible = 0;
+
+        cards.forEach(card => {
+            const dest = card.dataset.dest;
+            const nights = parseInt(card.dataset.nights);
+            const price = parseInt(card.dataset.price);
+            const themes = (card.dataset.themes || '').split(',');
+
+            let show = true;
+
+            // Destination
+            if (activeFilters.dest !== 'all' && dest !== activeFilters.dest) show = false;
+
+            // Duration
+            if (activeFilters.durations.length > 0) {
+                const durMatch = activeFilters.durations.some(d => {
+                    if (d === '7+') return nights >= 7;
+                    return nights === parseInt(d);
+                });
+                if (!durMatch) show = false;
+            }
+
+            // Budget
+            if (activeFilters.budgets.length > 0) {
+                const budgetMatch = activeFilters.budgets.some(b => price >= b.min && price < b.max);
+                if (!budgetMatch) show = false;
+            }
+
+            // Theme
+            if (activeFilters.themes.length > 0) {
+                const themeMatch = activeFilters.themes.some(t => themes.includes(t));
+                if (!themeMatch) show = false;
+            }
+
+            card.classList.toggle('hidden', !show);
+            if (show) visible++;
+        });
+
+        // Update count
+        document.getElementById('result-count').textContent = visible;
+
+        // No results
+        const noRes = document.getElementById('no-results');
+        noRes.style.display = visible === 0 ? 'block' : 'none';
+
+        // Filter badge
+        const activeCount = (activeFilters.dest !== 'all' ? 1 : 0)
+            + activeFilters.durations.length
+            + activeFilters.budgets.length
+            + activeFilters.themes.length;
+        const badge = document.getElementById('filter-badge');
+        if (activeCount > 0) {
+            badge.style.display = 'inline-flex';
+            badge.textContent = activeCount;
+        } else {
+            badge.style.display = 'none';
+        }
+    }
+
+    // ── Destination chips ─────────────────────────────────────────────────────
+    function filterByDest(dest, btn, isMobile) {
+        activeFilters.dest = dest;
+        // Update both chip groups
+        document.querySelectorAll('.dest-chip').forEach(c => c.classList.remove('active'));
+        document.querySelectorAll(`[data-dest="${dest}"]`).forEach(c => c.classList.add('active'));
+        applyFilters();
+    }
+
+    // ── Duration checkboxes ───────────────────────────────────────────────────
+    document.querySelectorAll('.dur-filter').forEach(cb => {
+        cb.addEventListener('change', () => {
+            activeFilters.durations = [...document.querySelectorAll('.dur-filter:checked')].map(c => c.value);
+            applyFilters();
+        });
+    });
+
+    // ── Budget checkboxes ─────────────────────────────────────────────────────
+    document.querySelectorAll('.budget-filter').forEach(cb => {
+        cb.addEventListener('change', () => {
+            activeFilters.budgets = [...document.querySelectorAll('.budget-filter:checked')].map(c => ({
+                min: parseInt(c.dataset.min),
+                max: parseInt(c.dataset.max)
+            }));
+            applyFilters();
+        });
+    });
+
+    // ── Theme checkboxes ──────────────────────────────────────────────────────
+    document.querySelectorAll('.theme-filter').forEach(cb => {
+        cb.addEventListener('change', () => {
+            activeFilters.themes = [...document.querySelectorAll('.theme-filter:checked')].map(c => c.value);
+            applyFilters();
+        });
+    });
+
+    // ── Clear filters ─────────────────────────────────────────────────────────
+    function clearAllFilters() {
+        activeFilters = { dest: 'all', durations: [], budgets: [], themes: [] };
+        document.querySelectorAll('.dur-filter, .budget-filter, .theme-filter').forEach(cb => cb.checked = false);
+        document.querySelectorAll('.dur-filter-mob, .budget-filter-mob, .theme-filter-mob').forEach(cb => cb.checked = false);
+        filterByDest('all', null);
+    }
+
+    // ── Sort ──────────────────────────────────────────────────────────────────
+    function sortPackages(sortKey) {
+        currentSort = sortKey;
+        const grid = document.getElementById('pkg-grid');
+        const cards = [...grid.querySelectorAll('.pkg-card')];
+
+        cards.sort((a, b) => {
+            const pa = parseInt(a.dataset.price), pb = parseInt(b.dataset.price);
+            const na = parseInt(a.dataset.nights), nb = parseInt(b.dataset.nights);
+            if (sortKey === 'price-asc') return pa - pb;
+            if (sortKey === 'price-desc') return pb - pa;
+            if (sortKey === 'duration-asc') return na - nb;
+            if (sortKey === 'duration-desc') return nb - na;
+            return 0;
+        });
+
+        const noRes = document.getElementById('no-results');
+        cards.forEach(c => grid.insertBefore(c, noRes));
+    }
+
+    // ── Package Detail Modal ──────────────────────────────────────────────────
+    function openPkgDetail(pkgId) {
+        const pkg = ALL_PACKAGES.find(p => p.id === pkgId);
+        if (!pkg) return;
+
+        document.getElementById('pdm-img').src = `/static/images/${pkg.image}`;
+        document.getElementById('pdm-img').onerror = function () {
+            this.src = 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=600&q=80';
+        };
+        document.getElementById('pdm-name').textContent = pkg.name;
+        document.getElementById('pdm-dur').textContent = pkg.duration + ' · ' + pkg.country;
+        document.getElementById('pdm-price').textContent = pkg.priceStr;
+        document.getElementById('pdm-hotel').textContent = pkg.hotel;
+
+        // Highlights
+        const hl = document.getElementById('pdm-highlights');
+        hl.innerHTML = pkg.highlights.map(h => '<li>' + h + '</li>').join('');
+
+        // Inclusions
+        const incl = document.getElementById('pdm-inclusions');
+        incl.innerHTML = pkg.inclusions.map(i => '<span class="pdm-incl-tag">' + i + '</span>').join('');
+
+        // Buttons
+        document.getElementById('pdm-enquire-btn').onclick = () => {
+            closePkgDetail();
+            openEnquiryForPkg(pkg.name, pkg.dest);
+        };
+        const waMsg = encodeURIComponent("Hi Aara Voyages! 👋\n\nI'm interested in:\n📦 " + pkg.name + "\n<i class='fa-solid fa-calendar'></i> " + pkg.duration + "\n<i class='fa-solid fa-globe'></i> " + pkg.country + "\n<i class='fa-solid fa-sack-dollar'></i> " + pkg.priceStr + " per person\n\nPlease contact me with more details. Thank you!");
+        document.getElementById('pdm-wa-btn').href = 'https://wa.me/919871976001?text=' + waMsg;
+
+        document.getElementById('pdm-overlay').classList.add('open');
+        document.getElementById('pdm-modal').classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+    function closePkgDetail() {
+        document.getElementById('pdm-overlay').classList.remove('open');
+        document.getElementById('pdm-modal').classList.remove('open');
+        document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') { closePkgDetail(); closeFilterDrawer(); } });
+
+    // ── Enquiry popup pre-fill ─────────────────────────────────────────────────
+    function openEnquiryForPkg(pkgName, dest) {
+        // Open the global enquiry popup and pre-fill destination
+        if (typeof openEnquiryPopup === 'function') openEnquiryPopup();
+        setTimeout(() => {
+            const destSel = document.getElementById('eq-destination');
+            if (destSel) {
+                for (let o of destSel.options) {
+                    if (o.text.toLowerCase().includes(dest.toLowerCase())) {
+                        o.selected = true;
+                        break;
+                    }
+                }
+            }
+            const msgField = document.getElementById('eq-message');
+            if (msgField) msgField.value = `I'm interested in: ${pkgName}`;
+        }, 350);
+    }
+
+    // ── Mobile Filter Drawer ───────────────────────────────────────────────────
+    function openFilterDrawer() {
+        document.getElementById('filter-drawer').classList.add('open');
+        document.getElementById('filter-drawer-overlay').classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeFilterDrawer() {
+        document.getElementById('filter-drawer').classList.remove('open');
+        document.getElementById('filter-drawer-overlay').classList.remove('open');
+        document.body.style.overflow = '';
+    }
+    function applyMobileFilters() {
+        activeFilters.durations = [...document.querySelectorAll('.dur-filter-mob:checked')].map(c => c.value);
+        activeFilters.budgets = [...document.querySelectorAll('.budget-filter-mob:checked')].map(c => ({
+            min: parseInt(c.dataset.min),
+            max: parseInt(c.dataset.max)
+        }));
+        activeFilters.themes = [...document.querySelectorAll('.theme-filter-mob:checked')].map(c => c.value);
+        applyFilters();
+    }
+</script>
+
+{% endblock %}

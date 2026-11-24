@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Aara Voyages – Journeys Worth Telling{% endblock %}</title>
+    <meta name="description"
+        content="{% block meta_description %}Aara Voyages crafts extraordinary travel experiences to Dubai, Singapore, Malaysia, Bali, Vietnam, Kerala, Rajasthan, Goa, Kashmir & Andaman. Your journey worth telling starts here.{% endblock %}">
+    <meta name="keywords"
+        content="travel agency India, holiday packages, Dubai packages, Bali packages, Kerala tour, Rajasthan tour, Goa holiday, Kashmir tour, Andaman packages, Singapore packages, Vietnam tour, international holiday packages, domestic tour packages, Aara Voyages">
+    <meta name="author" content="Aara Voyages">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/logo.png') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        /* ── Announcement Bar ─────────────────────────────────────────────── */
+        .announcement-bar {
+            background: linear-gradient(90deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: #e0e0e0;
+            font-size: 0.78rem;
+            padding: 7px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .announcement-bar .ann-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .ann-contact a {
+            color: #c8d4e8;
+            text-decoration: none;
+            margin-right: 18px;
+            transition: color 0.2s;
+            font-size: 0.78rem;
+        }
+
+        .ann-contact a:hover {
+            color: #fff;
+        }
+
+        .ann-contact span {
+            margin-right: 6px;
+        }
+
+        .ann-social a {
+            color: #c8d4e8;
+            text-decoration: none;
+            margin-left: 10px;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+
+        .ann-social a:hover {
+            color: #fff;
+        }
+
+        .ann-tagline {
+            font-size: 0.75rem;
+            color: #8899bb;
+            letter-spacing: 0.04em;
+        }
+
+        @media (max-width: 640px) {
+            .ann-tagline {
+                display: none;
+            }
+
+            .announcement-bar .ann-inner {
+                justify-content: center;
+            }
+        }
+
+        /* ── Footer enhancements ──────────────────────────────────────────── */
+        .footer-badge-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .footer-badge {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            padding: 4px 10px;
+            font-size: 0.72rem;
+            color: rgba(255, 255, 255, 0.6);
+            letter-spacing: 0.03em;
+        }
+
+        .footer-social-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-social-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .footer-social-icon:hover {
+            background: rgba(255, 255, 255, 0.18);
+            transform: translateY(-2px);
+        }
+
+        /* ── Nav Dropdown ─────────────────────────────────────────────────── */
+        .nav-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .nav-dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #fff;
+            min-width: 230px;
+            box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.12);
+            border-radius: 12px;
+            z-index: 1000;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 0.5rem 0;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-dropdown:hover .nav-dropdown-content {
+            display: block;
+        }
+
+        .nav-dropdown-content a {
+            color: #333 !important;
+            padding: 0.75rem 1.25rem;
+            text-decoration: none;
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .nav-dropdown-content a:hover {
+            background-color: #f4f6fb;
+            color: #e94560 !important;
+        }
+
+        .footer-col-lower {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-col-lower h4 {
+            font-size: 1.1rem;
+            color: #fff;
+            margin-bottom: 1rem;
+        }
+
+        .footer-col-lower-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .footer-col-lower-content>span {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.4;
+        }
+
+        .footer-col-lower-content a {
+            color: rgba(255, 255, 255, 0.85);
+            text-decoration: none;
+            transition: color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .footer-col-lower-content a:hover {
+            color: #fff;
+        }
+
+        @media (max-width: 768px) {
+            .footer-col-lower-content {
+                flex-direction: column;
+                gap: 1.25rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ═══════════════ ANNOUNCEMENT BAR ═══════════════ -->
+    <!-- <div class="announcement-bar" id="announcement-bar">
+        <div class="ann-inner">
+            <div class="ann-contact">
+                <a href="tel:+919871976001" id="ann-phone">
+                    <span><i class="fa-solid fa-phone"></i></span>+91 98719 76001
+                </a>
+                <a href="mailto:aaravoyages@gmail.com" id="ann-email">
+                    <span><i class="fa-solid fa-envelope"></i></span>aaravoyages@gmail.com
+                </a>
+            </div>
+            <div class="ann-tagline">✦ Curated Holiday Packages | Domestic & International ✦</div>
+            <div class="ann-social">
+                <a href="{{ brand.whatsapp_link }}" target="_blank" aria-label="WhatsApp" id="ann-whatsapp"><i class="fa-regular fa-comment-dots"></i></a>
+                <a href="https://www.instagram.com/" target="_blank" aria-label="Instagram" id="ann-instagram"><i class="fa-brands fa-instagram"></i></a>
+                <a href="https://www.facebook.com/" target="_blank" aria-label="Facebook" id="ann-facebook"><i class="fa-solid fa-users"></i></a>
+            </div>
+        </div>
+    </div> -->
+
+    <!-- ═══════════════ NAVBAR ═══════════════ -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <a href="/" class="nav-logo" id="nav-logo">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Aara Voyages Logo">
+                <div class="nav-logo-text">
+                    <span class="brand-name">Aara Voyages</span>
+                    <span class="brand-tagline">Journeys Worth Telling</span>
+                </div>
+            </a>
+
+            <div class="nav-links" id="nav-links">
+                <a href="/" id="nav-home">Home</a>
+                <a href="/about" id="nav-about">About</a>
+                <div class="nav-dropdown">
+                    <a href="#" style="cursor: pointer;">Packages ▾</a>
+                    <div class="nav-dropdown-content">
+                        <a href="/packages/international"><i class="fa-solid fa-plane"></i> International Packages</a>
+                        <a href="/packages/domestic"><i class="fa-solid fa-flag"></i> Domestic Packages</a>
+                        <a href="/destinations"><i class="fa-solid fa-location-dot"></i> All Destinations</a>
+                    </div>
+                </div>
+                <a href="/hotels-flights" id="nav-hotels-flights" style="display:flex;align-items:center;gap:5px;">
+                    Hotels &amp; Flights
+                </a>
+                <a href="/tips" id="nav-tips">Travel Tips</a>
+                <a href="/contact" id="nav-contact">Contact</a>
+                <!-- <a href="{{ brand.whatsapp_link }}" target="_blank" class="nav-cta" id="nav-enquiry"><i
+                        class="fa-solid fa-phone"></i> Enquire Now</a> -->
+            </div>
+
+
+            <button class="hamburger" id="hamburger" aria-label="Toggle navigation menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ═══════════════ MAIN CONTENT ═══════════════ -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- ═══════════════ FOOTER ═══════════════ -->
+    <footer class="footer" id="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <!-- Brand -->
+                <div class="footer-brand">
+                    <a href="/" class="nav-logo">
+                        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Aara Voyages"
+                            style="height: 45px;">
+                        <div class="nav-logo-text">
+                            <span class="brand-name">Aara Voyages</span>
+                            <span class="brand-tagline">Journeys Worth Telling</span>
+                        </div>
+                    </a>
+                    <p>Crafting extraordinary travel experiences that stay with you forever. Every journey we design is
+                        a story worth telling. Trusted by 725+ happy travellers.</p>
+                    <div class="footer-social-row">
+                        <a href="{{ brand.whatsapp_link }}" target="_blank" class="footer-social-icon"
+                            aria-label="WhatsApp" id="footer-whatsapp"><i class="fa-brands fa-whatsapp fa-lg"
+                                style="color: rgb(255, 255, 255);"></i></a>
+                        <a href="mailto:{{ brand.email }}" class="footer-social-icon" aria-label="Email"
+                            id="footer-email-icon"><i class="fa-solid fa-envelope fa-lg"
+                                style="color: rgb(255, 255, 255);"></i></a>
+                        <a href="https://www.instagram.com/aara_voyages" target="_blank" class="footer-social-icon"
+                            aria-label="Instagram" id="footer-instagram"><i class="fa-brands fa-instagram fa-xl"
+                                style="color: rgb(255, 255, 255);"></i></a>
+                        <a href="https://www.facebook.com/share/1B4GnsiXyF/?mibextid=wwXIfr" target="_blank"
+                            class="footer-social-icon" aria-label="Facebook" id="footer-facebook"><i
+                                class="fa-brands fa-facebook fa-lg" style="color: rgb(255, 255, 255);"></i></a>
+                        <a href="https://www.linkedin.com/in/aara-voyages-408680438" target="_blank"
+                            class="footer-social-icon" aria-label="Linkedin" id="footer-linkedin"><i
+                                class="fa-brands fa-linkedin-in fa-lg" style="color: rgb(255, 255, 255);"></i></a>
+                    </div>
+                    <div class="footer-badge-row">
+                        <span class="footer-badge"><i class="fa-solid fa-check"></i> Trusted Since 2022</span>
+                        <span class="footer-badge"><i class="fa-solid fa-star"></i> Rated 4.7/5</span>
+                        <span class="footer-badge"><i class="fa-solid fa-shield-halved"></i> Insured Travel</span>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="footer-col">
+                    <h4>Explore</h4>
+                    <a href="/">Home</a>
+                    <a href="/about">About Us</a>
+                    <a href="/destinations">All Destinations</a>
+                    <a href="/hotels-flights">Hotels &amp; Flights</a>
+                    <a href="/tips">Travel Tips</a>
+                    <a href="/contact">Contact Us</a>
+                </div>
+
+
+                <!-- Domestic Destinations -->
+                <div class="footer-col">
+                    <h4>Domestic Packages</h4>
+                    <a href="/destination/kerala">Kerala</a>
+                    <a href="/destination/rajasthan">Rajasthan</a>
+                    <a href="/destination/goa">Goa</a>
+                    <a href="/destination/kashmir">Kashmir</a>
+                    <a href="/destination/andaman">Andaman</a>
+                </div>
+
+                <!-- International Destinations -->
+                <div class="footer-col">
+                    <h4>International Packages</h4>
+                    <a href="/destination/dubai">Dubai</a>
+                    <a href="/destination/singapore">Singapore</a>
+                    <a href="/destination/malaysia">Malaysia</a>
+                    <a href="/destination/bali">Bali</a>
+                    <a href="/destination/vietnam">Vietnam</a>
+                </div>
+
+                <!-- Contact -->
+
+            </div>
+            <div class="footer-col-lower">
+                <h4>Get In Touch</h4>
+                <div class="footer-col-lower-content"
+                    style="display: flex; flex-direction: row; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1.5rem; width: 100%;">
+                    <a href="{{ brand.whatsapp_link }}" target="_blank"
+                        style="display: inline-flex; align-items: center; gap: 8px; color: rgba(255, 255, 255, .7); font-size: 0.9rem;"><i
+                            class="fa-solid fa-phone" style="color: #fff;"></i> {{ brand.phone_display }}</a>
+                    <a href="{{ brand.whatsapp_link }}" target="_blank"
+                        style="display: inline-flex; align-items: center; gap: 8px; color: rgba(255, 255, 255, .7); font-size: 0.9rem;"><i
+                            class="fa-brands fa-whatsapp" style="color: #fff;"></i> Chat on WhatsApp</a>
+                    <a href="mailto:{{ brand.email }}"
+                        style="display: inline-flex; align-items: center; gap: 8px; color: rgba(255, 255, 255, .7); font-size: 0.9rem;"><i
+                            class="fa-solid fa-envelope" style="color: #fff;"></i> {{ brand.email }}</a>
+                    <span
+                        style="display: inline-flex; align-items: center; gap: 8px; color: rgba(255, 255, 255, .7); font-size: 0.9rem;">
+                        <i class="fa-solid fa-clock" style="color: #fff;"></i> Mon – Sat: 10AM – 7PM
+                    </span>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2025 Aara Voyages. All rights reserved.</p>
+                <p>Crafted with <i class="fa-solid fa-heart"></i> for <a href="/">Aara Voyages</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ═══════════════ FLOATING ACTION BUTTONS ═══════════════ -->
+    <div class="fab-stack" id="fab-stack" role="complementary" aria-label="Quick contact buttons">
+
+        <!-- WhatsApp -->
+        <a href="{{ brand.whatsapp_link }}?text=Hi!%20I'd%20like%20to%20enquire%20about%20a%20travel%20package."
+            target="_blank" class="fab-btn fab-whatsapp" id="fab-whatsapp" aria-label="Chat on WhatsApp">
+            <span class="fab-icon">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22">
+                    <path
+                        d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                </svg>
+            </span>
+            <span class="fab-tooltip">WhatsApp Us</span>
+            <span class="fab-pulse"></span>
+        </a>
+
+        <!-- Call -->
+        <a href="tel:+919871976001" class="fab-btn fab-call" id="fab-call" aria-label="Call us now">
+            <span class="fab-icon">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                    <path
+                        d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" />
+                </svg>
+            </span>
+            <span class="fab-tooltip">Call Us Now</span>
+        </a>
+
+        <!-- Enquiry Form Trigger -->
+        <button class="fab-btn fab-enquiry" id="fab-enquiry-btn" onclick="openEnquiryPopup()"
+            aria-label="Send an enquiry" type="button">
+            <span class="fab-icon">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                    <path
+                        d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z" />
+                </svg>
+            </span>
+            <span class="fab-tooltip">Quick Enquiry</span>
+        </button>
+
+    </div>
+
+    <!-- ═══════════════ ENQUIRY POPUP MODAL ═══════════════ -->
+    <div class="eq-overlay" id="eq-overlay" onclick="closeEnquiryPopup()" aria-hidden="true"></div>
+    <div class="eq-modal" id="eq-modal" role="dialog" aria-modal="true" aria-labelledby="eq-modal-title">
+        <button class="eq-close" onclick="closeEnquiryPopup()" aria-label="Close enquiry form" type="button">✕</button>
+
+        <div class="eq-left">
+            <div class="eq-brand-logo"><i class="fa-solid fa-plane"></i></div>
+            <h3>Plan Your Dream Trip</h3>
+            <p>Share your travel wish and our expert will call you back within 2 hours!</p>
+            <ul class="eq-perks">
+                <li><i class="fa-solid fa-shield-halved"></i> Complimentary Travel Insurance</li>
+                <li><i class="fa-solid fa-handshake"></i> Dedicated Relationship Manager</li>
+                <li><i class="fa-solid fa-phone"></i> 24 × 7 On-Ground Support</li>
+                <li><i class="fa-solid fa-star"></i> Rated 4.7/5 by 725+ Travellers</li>
+            </ul>
+        </div>
+
+        <div class="eq-right">
+            <h4 id="eq-modal-title">Send Quick Enquiry</h4>
+            <p class="eq-subtitle">We respond within 2 hours · No spam, ever</p>
+
+            <form class="eq-form" id="eq-form" onsubmit="submitEnquiry(event)">
+                <div class="eq-row">
+                    <div class="eq-field">
+                        <label for="eq-name">Full Name *</label>
+                        <input type="text" id="eq-name" name="name" placeholder="Your name" required
+                            autocomplete="name">
+                    </div>
+                </div>
+                <div class="eq-row">
+                    <div class="eq-field">
+                        <label for="eq-phone">Mobile Number *</label>
+                        <input type="tel" id="eq-phone" name="phone" placeholder="+91 XXXXX XXXXX" required
+                            autocomplete="tel">
+                    </div>
+                    <div class="eq-field">
+                        <label for="eq-email">Email Address</label>
+                        <input type="email" id="eq-email" name="email" placeholder="you@email.com" autocomplete="email">
+                    </div>
+                </div>
+                <div class="eq-row">
+                    <div class="eq-field">
+                        <label for="eq-destination">Destination *</label>
+                        <select id="eq-destination" name="destination" required>
+                            <option value="">Select destination…</option>
+                            <optgroup label="<i class=" fa-solid fa-plane"></i> International">
+                                <option>Dubai, UAE</option>
+                                <option>Singapore</option>
+                                <option>Bali, Indonesia</option>
+                                <option>Malaysia</option>
+                                <option>Vietnam</option>
+                            </optgroup>
+                            <optgroup label="<i class=" fa-solid fa-flag"></i> Domestic">
+                                <option>Kerala</option>
+                                <option>Rajasthan</option>
+                                <option>Goa</option>
+                                <option>Kashmir</option>
+                                <option>Andaman</option>
+                            </optgroup>
+                            <option value="Other">Other / Not Sure Yet</option>
+                        </select>
+                    </div>
+                    <div class="eq-field">
+                        <label for="eq-travellers">No. of Travellers</label>
+                        <select id="eq-travellers" name="travellers">
+                            <option value="">Select…</option>
+                            <option>1</option>
+                            <option>2 (Couple)</option>
+                            <option>3–4 (Family)</option>
+                            <option>5–8 (Group)</option>
+                            <option>8+ (Large Group)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="eq-row">
+                    <div class="eq-field eq-full">
+                        <label for="eq-message">Any Special Requirements?</label>
+                        <textarea id="eq-message" name="message" rows="2"
+                            placeholder="Honeymoon, anniversary, specific dates, budget, etc."></textarea>
+                    </div>
+                </div>
+                <div class="eq-actions">
+                    <button type="submit" class="eq-submit-btn" id="eq-submit">
+                        <i class="fa-solid fa-envelope-open-text"></i> Send My Enquiry
+                    </button>
+                    <a href="{{ brand.whatsapp_link }}?text=Hi!%20I'd%20like%20to%20plan%20a%20trip.%20Can%20you%20help?"
+                        target="_blank" class="eq-whatsapp-btn" id="eq-wa-instead">
+                        <i class="fa-regular fa-comment-dots"></i> WhatsApp Instead
+                    </a>
+                </div>
+                <p class="eq-disclaimer">By submitting, you agree to be contacted by Aara Voyages about your enquiry.
+                </p>
+            </form>
+
+            <div class="eq-success" id="eq-success" style="display:none;">
+                <div class="eq-success-icon"><i class="fa-solid fa-champagne-glasses"></i></div>
+                <h4>Enquiry Sent!</h4>
+                <p>Thank you, we'll get back to you within 2 hours. Meanwhile, chat with us on WhatsApp for instant
+                    answers!</p>
+                <a href="{{ brand.whatsapp_link }}" target="_blank" class="eq-submit-btn"
+                    style="display:inline-block; margin-top:1rem; text-decoration:none; text-align:center;">
+                    <i class="fa-brands fa-whatsapp" style="color: rgb(255, 255, 255);"></i> Chat on WhatsApp
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        /* ── Floating Action Buttons ────────────────────────────────────────────── */
+        .fab-stack {
+            position: fixed;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            z-index: 9000;
+        }
+
+        .fab-btn {
+            position: relative;
+            width: 52px;
+            height: 52px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+            overflow: visible;
+        }
+
+        .fab-btn:first-child {
+            border-radius: 12px 0 0 0;
+        }
+
+        .fab-btn:last-child {
+            border-radius: 0 0 0 12px;
+        }
+
+        .fab-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            position: relative;
+            z-index: 1;
+            transition: transform 0.25s;
+        }
+
+        .fab-btn:hover .fab-icon {
+            transform: scale(1.15);
+        }
+
+        .fab-btn:hover {
+            width: 58px;
+        }
+
+        /* Colours */
+        .fab-whatsapp {
+            background: #25d366;
+        }
+
+        .fab-whatsapp:hover {
+            background: #1da851;
+        }
+
+        .fab-call {
+            background: #1a1a2e;
+        }
+
+        .fab-call:hover {
+            background: #0f3460;
+        }
+
+        .fab-enquiry {
+            background: #e94560;
+        }
+
+        .fab-enquiry:hover {
+            background: #c0392b;
+        }
+
+        /* Tooltip */
+        .fab-tooltip {
+            position: absolute;
+            right: calc(100% + 10px);
+            background: rgba(20, 20, 40, 0.92);
+            color: #fff;
+            font-size: 0.78rem;
+            font-weight: 600;
+            white-space: nowrap;
+            padding: 5px 10px;
+            border-radius: 6px;
+            pointer-events: none;
+            opacity: 0;
+            transform: translateX(6px);
+            transition: opacity 0.2s, transform 0.2s;
+            font-family: inherit;
+        }
+
+        .fab-tooltip::after {
+            content: '';
+            position: absolute;
+            left: 100%;
+            top: 50%;
+            transform: translateY(-50%);
+            border: 5px solid transparent;
+            border-left-color: rgba(20, 20, 40, 0.92);
+        }
+
+        .fab-btn:hover .fab-tooltip {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* WhatsApp pulse ring */
+        .fab-pulse {
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: #25d366;
+            animation: fabPulse 2.2s infinite;
+            z-index: 0;
+        }
+
+        @keyframes fabPulse {
+            0% {
+                transform: scale(1);
+                opacity: 0.6;
+            }
+
+            70% {
+                transform: scale(1.5);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        /* Mobile adjustments */
+        @media (max-width: 480px) {
+            .fab-stack {
+                top: auto;
+                bottom: 80px;
+                transform: none;
+            }
+
+            .fab-btn {
+                width: 46px;
+                height: 46px;
+            }
+
+            .fab-btn:hover {
+                width: 46px;
+            }
+
+            .fab-tooltip {
+                display: none;
+            }
+        }
+
+        /* ── Enquiry Modal ──────────────────────────────────────────────────────── */
+        .eq-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(3px);
+            z-index: 9990;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .eq-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.92);
+            z-index: 9999;
+            background: #fff;
+            border-radius: 20px;
+            overflow: hidden;
+            width: min(900px, 95vw);
+            max-height: 92vh;
+            overflow-y: auto;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
+            animation: none;
+            display: none;
+            flex-direction: row;
+        }
+
+        .eq-modal.open {
+            display: flex;
+            animation: modalIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        .eq-overlay.open {
+            display: block;
+        }
+
+        @keyframes modalIn {
+            from {
+                transform: translate(-50%, -50%) scale(0.88);
+                opacity: 0;
+            }
+
+            to {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Left panel */
+        .eq-left {
+            width: 280px;
+            flex-shrink: 0;
+            background: linear-gradient(160deg, #0f3460 0%, #16213e 50%, #1a1a2e 100%);
+            padding: 2.5rem 1.75rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .eq-brand-logo {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .eq-left h3 {
+            color: #fff;
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+            line-height: 1.35;
+        }
+
+        .eq-left p {
+            color: rgba(255, 255, 255, 0.65);
+            font-size: 0.85rem;
+            line-height: 1.55;
+            margin-bottom: 1.5rem;
+        }
+
+        .eq-perks {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .eq-perks li {
+            color: rgba(255, 255, 255, 0.82);
+            font-size: 0.82rem;
+            padding: 0.35rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .eq-perks li:last-child {
+            border: none;
+        }
+
+        /* Right panel */
+        .eq-right {
+            flex: 1;
+            padding: 2.25rem 2rem;
+            position: relative;
+            overflow-y: auto;
+        }
+
+        .eq-close {
+            position: absolute;
+            top: 14px;
+            right: 16px;
+            background: #f0f0f0;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #555;
+            transition: all 0.2s;
+            z-index: 1;
+        }
+
+        .eq-close:hover {
+            background: #e94560;
+            color: #fff;
+        }
+
+        .eq-right h4 {
+            font-size: 1.2rem;
+            color: #1a1a2e;
+            margin-bottom: 0.2rem;
+        }
+
+        .eq-subtitle {
+            font-size: 0.8rem;
+            color: #999;
+            margin-bottom: 1.25rem;
+        }
+
+        /* Form */
+        .eq-form {
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+        }
+
+        .eq-row {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .eq-field {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            min-width: 130px;
+            gap: 0.3rem;
+        }
+
+        .eq-field.eq-full {
+            flex: 1 1 100%;
+        }
+
+        .eq-field label {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .eq-field input,
+        .eq-field select,
+        .eq-field textarea {
+            padding: 0.6rem 0.85rem;
+            border: 1.5px solid #e0e0e0;
+            border-radius: 9px;
+            font-size: 0.85rem;
+            font-family: inherit;
+            color: #333;
+            background: #fafafa;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            outline: none;
+            resize: vertical;
+        }
+
+        .eq-field input:focus,
+        .eq-field select:focus,
+        .eq-field textarea:focus {
+            border-color: #e94560;
+            box-shadow: 0 0 0 3px rgba(233, 69, 96, 0.1);
+            background: #fff;
+        }
+
+        .eq-actions {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            margin-top: 0.5rem;
+        }
+
+        .eq-submit-btn {
+            flex: 1;
+            padding: 0.78rem 1rem;
+            background: linear-gradient(135deg, #e94560, #c0392b);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .eq-submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(233, 69, 96, 0.35);
+        }
+
+        .eq-whatsapp-btn {
+            flex: 1;
+            padding: 0.78rem 1rem;
+            background: #25d366;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .eq-whatsapp-btn:hover {
+            background: #1da851;
+            transform: translateY(-2px);
+        }
+
+        .eq-disclaimer {
+            font-size: 0.72rem;
+            color: #bbb;
+            margin-top: 0.5rem;
+            text-align: center;
+        }
+
+        /* Success state */
+        .eq-success {
+            text-align: center;
+            padding: 2rem 1rem;
+        }
+
+        .eq-success-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .eq-success h4 {
+            font-size: 1.3rem;
+            color: #1a1a2e;
+            margin-bottom: 0.5rem;
+        }
+
+        .eq-success p {
+            font-size: 0.88rem;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Mobile: stack panels */
+        @media (max-width: 640px) {
+            .eq-modal {
+                flex-direction: column;
+                max-height: 95vh;
+            }
+
+            .eq-left {
+                width: 100%;
+                padding: 1.5rem;
+            }
+
+            .eq-right {
+                padding: 1.5rem;
+            }
+
+            .eq-perks {
+                display: none;
+            }
+        }
+    </style>
+
+    <script>
+        // ── Enquiry Popup ──────────────────────────────────────────────────────────
+        function openEnquiryPopup() {
+            document.getElementById('eq-overlay').classList.add('open');
+            document.getElementById('eq-modal').classList.add('open');
+            document.body.style.overflow = 'hidden';
+            // Reset to form view
+            document.getElementById('eq-form').style.display = 'flex';
+            document.getElementById('eq-success').style.display = 'none';
+            setTimeout(() => document.getElementById('eq-name').focus(), 300);
+        }
+        function closeEnquiryPopup() {
+            document.getElementById('eq-overlay').classList.remove('open');
+            document.getElementById('eq-modal').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+        // Close on Escape key
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') closeEnquiryPopup();
+        });
+
+        // Form submit → redirect to WhatsApp with pre-filled message
+        function submitEnquiry(e) {
+            e.preventDefault();
+            const name = document.getElementById('eq-name').value.trim();
+            const phone = document.getElementById('eq-phone').value.trim();
+            const email = document.getElementById('eq-email').value.trim();
+            const dest = document.getElementById('eq-destination').value;
+            const pax = document.getElementById('eq-travellers').value;
+            const msg = document.getElementById('eq-message').value.trim();
+
+            const btn = document.getElementById('eq-submit');
+            btn.textContent = 'Sending…';
+            btn.disabled = true;
+
+            // Build WhatsApp message
+            const waMsg = encodeURIComponent(
+                `Hi Aara Voyages! 👋\n\n` +
+                `I'd like to enquire about a travel package.\n\n` +
+                `📛 Name: ${name}\n` +
+                `<i class="fa-solid fa-phone"></i> Phone: ${phone}\n` +
+                (email ? `📧 Email: ${email}\n` : '') +
+                `<i class="fa-solid fa-globe"></i> Destination: ${dest || 'Not decided yet'}\n` +
+                (pax ? `<i class="fa-solid fa-users"></i> Travellers: ${pax}\n` : '') +
+                (msg ? `📝 Note: ${msg}\n` : '') +
+                `\nPlease contact me to plan my trip. Thank you!`
+            );
+
+            // Show success message
+            setTimeout(() => {
+                document.getElementById('eq-form').style.display = 'none';
+                document.getElementById('eq-success').style.display = 'block';
+                // Open WhatsApp in background
+                window.open(`https://wa.me/919871976001?text=${waMsg}`, '_blank');
+                btn.textContent = '<i class="fa-solid fa-envelope-open-text"></i> Send My Enquiry';
+                btn.disabled = false;
+            }, 800);
+        }
+    </script>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+
+</html>

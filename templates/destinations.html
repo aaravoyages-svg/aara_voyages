@@ -1,0 +1,346 @@
+{% extends "base.html" %}
+{% block title %}Destinations – Aara Voyages | Domestic & International Tour Packages{% endblock %}
+{% block meta_description %}Explore handpicked destinations — Dubai, Singapore, Malaysia, Bali, Vietnam, Kerala,
+Rajasthan, Goa, Kashmir & Andaman. Detailed itineraries, local tips, and premium travel packages by Aara Voyages.{%
+endblock %}
+
+{% block content %}
+
+<style>
+    /* ── Filter Bar ─────────────────────────────────────────────────────────── */
+    .dest-filter-bar {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        flex-wrap: wrap;
+        margin-bottom: 2.25rem;
+        justify-content: center;
+    }
+
+    .dest-filter-btn {
+        padding: 0.5rem 1.2rem;
+        border-radius: 30px;
+        border: 2px solid #ddd;
+        background: #fff;
+        color: #555;
+        font-size: 0.85rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-family: inherit;
+    }
+
+    .dest-filter-btn.active,
+    .dest-filter-btn:hover {
+        background: #1a1a2e;
+        color: #fff;
+        border-color: #1a1a2e;
+    }
+
+    .dest-count-badge {
+        display: inline-block;
+        background: #e94560;
+        color: #fff;
+        font-size: 0.72rem;
+        font-weight: 700;
+        border-radius: 10px;
+        padding: 1px 7px;
+        margin-left: 4px;
+        vertical-align: middle;
+    }
+
+    /* ── Section Divider ─────────────────────────────────────────────────────── */
+    .dest-section-label {
+        width: 100%;
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #aaa;
+        padding: 0.5rem 0 0.25rem;
+        border-bottom: 1px solid #eee;
+        margin: 1rem 0 0.5rem;
+        grid-column: 1 / -1;
+    }
+
+    /* ── Tagline badge on cards ─────────────────────────────────────────────── */
+    .dest-tagline-badge {
+        font-size: 0.72rem;
+        color: rgba(255, 255, 255, 0.75);
+        font-style: italic;
+        margin-top: 0.15rem;
+        display: block;
+    }
+
+    /* ── Domestic badge overlay ─────────────────────────────────────────────── */
+    .dest-type-pill {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background: rgba(0, 0, 0, 0.55);
+        color: #fff;
+        font-size: 0.68rem;
+        font-weight: 700;
+        padding: 3px 8px;
+        border-radius: 20px;
+        letter-spacing: 0.04em;
+        z-index: 2;
+    }
+
+    .dest-card {
+        position: relative;
+    }
+
+    /* ── Popular tag ─────────────────────────────────────────────────────────── */
+    .popular-tag {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        background: #e94560;
+        color: #fff;
+        font-size: 0.65rem;
+        font-weight: 700;
+        padding: 3px 8px;
+        border-radius: 20px;
+        z-index: 2;
+        letter-spacing: 0.03em;
+    }
+</style>
+
+<!-- ═══════════════ PAGE HERO ═══════════════ -->
+<section class="page-hero" id="destinations-hero">
+    <div class="page-hero-content">
+        <h1>Our Destinations</h1>
+        <p>10 handpicked destinations · Domestic & International · Crafted itineraries you'll love</p>
+    </div>
+</section>
+
+<!-- ═══════════════ DESTINATIONS GRID ═══════════════ -->
+<section class="section-padding" id="destinations-grid-section">
+    <div class="container">
+        <h2 class="section-title reveal">Where Will Your Story Begin?</h2>
+        <p class="section-subtitle reveal">Choose your dream destination and let us handle the rest</p>
+
+        <!-- Filter Tabs -->
+        <div class="dest-filter-bar reveal" role="tablist">
+            <button class="dest-filter-btn active" id="dfilter-all" onclick="filterDest('all')" role="tab">
+                All Packages <span class="dest-count-badge" id="count-all">10</span>
+            </button>
+            <button class="dest-filter-btn" id="dfilter-international" onclick="filterDest('international')" role="tab">
+                <i class="fa-solid fa-plane"></i> International <span class="dest-count-badge" id="count-intl">5</span>
+            </button>
+            <button class="dest-filter-btn" id="dfilter-domestic" onclick="filterDest('domestic')" role="tab">
+                <i class="fa-solid fa-flag"></i> Domestic <span class="dest-count-badge" id="count-dom">5</span>
+            </button>
+        </div>
+
+        <div class="destinations-grid" id="destinations-grid">
+            <!-- International Destinations -->
+            <a href="/destination/dubai" class="dest-card reveal" data-type="international" id="dest-grid-dubai">
+                <span class="dest-type-pill">International</span>
+                <span class="popular-tag"><i class="fa-solid fa-fire"></i> Popular</span>
+                <img src="{{ url_for('static', filename='images/dubai.jpg') }}" alt="Dubai" loading="lazy">
+                <div class="dest-card-overlay"></div>
+                <div class="dest-card-content">
+                    <span class="dest-card-badge">5 Days / 4 Nights</span>
+                    <h3>Dubai</h3>
+                    <p class="dest-country">United Arab Emirates</p>
+                    <span class="dest-tagline-badge">Where Tradition Meets the Future</span>
+                    <div class="dest-meta">
+                        <span><i class="fa-regular fa-calendar"></i> 5D / 4N</span>
+                        <span><i class="fa-solid fa-sack-dollar"></i> From ₹45,000</span>
+                    </div>
+                    <div class="view-link">View Itinerary <span class="arrow">→</span></div>
+                </div>
+            </a>
+            <a href="/destination/singapore" class="dest-card reveal" data-type="international"
+                id="dest-grid-singapore">
+                <span class="dest-type-pill">International</span>
+                <img src="{{ url_for('static', filename='images/singapore.jpg') }}" alt="Singapore" loading="lazy">
+                <div class="dest-card-overlay"></div>
+                <div class="dest-card-content">
+                    <span class="dest-card-badge">4 Days / 3 Nights</span>
+                    <h3>Singapore</h3>
+                    <p class="dest-country">Singapore</p>
+                    <span class="dest-tagline-badge">The Lion City of Wonders</span>
+                    <div class="dest-meta">
+                        <span><i class="fa-regular fa-calendar"></i> 4D / 3N</span>
+                        <span><i class="fa-solid fa-sack-dollar"></i> From ₹55,000</span>
+                    </div>
+                    <div class="view-link">View Itinerary <span class="arrow">→</span></div>
+                </div>
+            </a>
+            <a href="/destination/malaysia" class="dest-card reveal" data-type="international" id="dest-grid-malaysia">
+                <span class="dest-type-pill">International</span>
+                <img src="{{ url_for('static', filename='images/malaysia.jpg') }}" alt="Malaysia" loading="lazy">
+                <div class="dest-card-overlay"></div>
+                <div class="dest-card-content">
+                    <span class="dest-card-badge">5 Days / 4 Nights</span>
+                    <h3>Malaysia</h3>
+                    <p class="dest-country">Malaysia</p>
+                    <span class="dest-tagline-badge">Truly Asia, Truly Magical</span>
+                    <div class="dest-meta">
+                        <span><i class="fa-regular fa-calendar"></i> 5D / 4N</span>
+                        <span><i class="fa-solid fa-sack-dollar"></i> From ₹35,000</span>
+                    </div>
+                    <div class="view-link">View Itinerary <span class="arrow">→</span></div>
+                </div>
+            </a>
+            <a href="/destination/bali" class="dest-card reveal" data-type="international" id="dest-grid-bali">
+                <span class="dest-type-pill">International</span>
+                <span class="popular-tag"><i class="fa-solid fa-heart"></i> Honeymoon</span>
+                <img src="{{ url_for('static', filename='images/bali.jpg') }}" alt="Bali" loading="lazy">
+                <div class="dest-card-overlay"></div>
+                <div class="dest-card-content">
+                    <span class="dest-card-badge">5 Days / 4 Nights</span>
+                    <h3>Bali</h3>
+                    <p class="dest-country">Indonesia</p>
+                    <span class="dest-tagline-badge">Island of Gods & Eternal Beauty</span>
+                    <div class="dest-meta">
+                        <span><i class="fa-regular fa-calendar"></i> 5D / 4N</span>
+                        <span><i class="fa-solid fa-sack-dollar"></i> From ₹40,000</span>
+                    </div>
+                    <div class="view-link">View Itinerary <span class="arrow">→</span></div>
+                </div>
+            </a>
+            <a href="/destination/vietnam" class="dest-card reveal" data-type="international" id="dest-grid-vietnam">
+                <span class="dest-type-pill">International</span>
+                <img src="{{ url_for('static', filename='images/vietnam.jpg') }}" alt="Vietnam" loading="lazy">
+                <div class="dest-card-overlay"></div>
+                <div class="dest-card-content">
+                    <span class="dest-card-badge">6 Days / 5 Nights</span>
+                    <h3>Vietnam</h3>
+                    <p class="dest-country">Vietnam</p>
+                    <span class="dest-tagline-badge">Timeless Charm, Boundless Beauty</span>
+                    <div class="dest-meta">
+                        <span><i class="fa-regular fa-calendar"></i> 6D / 5N</span>
+                        <span><i class="fa-solid fa-sack-dollar"></i> From ₹38,000</span>
+                    </div>
+                    <div class="view-link">View Itinerary <span class="arrow">→</span></div>
+                </div>
+            </a>
+
+            <!-- Domestic Destinations -->
+            <a href="/destination/kerala" class="dest-card reveal" data-type="domestic" id="dest-grid-kerala">
+                <span class="dest-type-pill"><i class="fa-solid fa-flag"></i> Domestic</span>
+                <span class="popular-tag"><i class="fa-solid fa-fire"></i> Popular</span>
+                <img src="{{ url_for('static', filename='images/kerala.jpg') }}" alt="Kerala" loading="lazy">
+                <div class="dest-card-overlay"></div>
+                <div class="dest-card-content">
+                    <span class="dest-card-badge">5 Days / 4 Nights</span>
+                    <h3>Kerala</h3>
+                    <p class="dest-country">India</p>
+                    <span class="dest-tagline-badge">God's Own Country</span>
+                    <div class="dest-meta">
+                        <span><i class="fa-regular fa-calendar"></i> 5D / 4N</span>
+                        <span><i class="fa-solid fa-sack-dollar"></i> From ₹22,000</span>
+                    </div>
+                    <div class="view-link">View Itinerary <span class="arrow">→</span></div>
+                </div>
+            </a>
+            <a href="/destination/rajasthan" class="dest-card reveal" data-type="domestic" id="dest-grid-rajasthan">
+                <span class="dest-type-pill"><i class="fa-solid fa-flag"></i> Domestic</span>
+                <img src="{{ url_for('static', filename='images/rajasthan.jpg') }}" alt="Rajasthan" loading="lazy">
+                <div class="dest-card-overlay"></div>
+                <div class="dest-card-content">
+                    <span class="dest-card-badge">6 Days / 5 Nights</span>
+                    <h3>Rajasthan</h3>
+                    <p class="dest-country">India</p>
+                    <span class="dest-tagline-badge">Land of Maharajas & Desert Splendour</span>
+                    <div class="dest-meta">
+                        <span><i class="fa-regular fa-calendar"></i> 6D / 5N</span>
+                        <span><i class="fa-solid fa-sack-dollar"></i> From ₹25,000</span>
+                    </div>
+                    <div class="view-link">View Itinerary <span class="arrow">→</span></div>
+                </div>
+            </a>
+            <a href="/destination/goa" class="dest-card reveal" data-type="domestic" id="dest-grid-goa">
+                <span class="dest-type-pill"><i class="fa-solid fa-flag"></i> Domestic</span>
+                <img src="{{ url_for('static', filename='images/goa.jpg') }}" alt="Goa" loading="lazy">
+                <div class="dest-card-overlay"></div>
+                <div class="dest-card-content">
+                    <span class="dest-card-badge">4 Days / 3 Nights</span>
+                    <h3>Goa</h3>
+                    <p class="dest-country">India</p>
+                    <span class="dest-tagline-badge">Sun, Sand, Spice & Soul</span>
+                    <div class="dest-meta">
+                        <span><i class="fa-regular fa-calendar"></i> 4D / 3N</span>
+                        <span><i class="fa-solid fa-sack-dollar"></i> From ₹18,000</span>
+                    </div>
+                    <div class="view-link">View Itinerary <span class="arrow">→</span></div>
+                </div>
+            </a>
+            <a href="/destination/kashmir" class="dest-card reveal" data-type="domestic" id="dest-grid-kashmir">
+                <span class="dest-type-pill"><i class="fa-solid fa-flag"></i> Domestic</span>
+                <img src="{{ url_for('static', filename='images/kashmir.jpg') }}" alt="Kashmir" loading="lazy">
+                <div class="dest-card-overlay"></div>
+                <div class="dest-card-content">
+                    <span class="dest-card-badge">5 Days / 4 Nights</span>
+                    <h3>Kashmir</h3>
+                    <p class="dest-country">India</p>
+                    <span class="dest-tagline-badge">Paradise on Earth</span>
+                    <div class="dest-meta">
+                        <span><i class="fa-regular fa-calendar"></i> 5D / 4N</span>
+                        <span><i class="fa-solid fa-sack-dollar"></i> From ₹28,000</span>
+                    </div>
+                    <div class="view-link">View Itinerary <span class="arrow">→</span></div>
+                </div>
+            </a>
+            <a href="/destination/andaman" class="dest-card reveal" data-type="domestic" id="dest-grid-andaman">
+                <span class="dest-type-pill"><i class="fa-solid fa-flag"></i> Domestic</span>
+                <img src="{{ url_for('static', filename='images/andaman.jpg') }}" alt="Andaman" loading="lazy">
+                <div class="dest-card-overlay"></div>
+                <div class="dest-card-content">
+                    <span class="dest-card-badge">5 Days / 4 Nights</span>
+                    <h3>Andaman</h3>
+                    <p class="dest-country">India</p>
+                    <span class="dest-tagline-badge">Jewel of the Indian Ocean</span>
+                    <div class="dest-meta">
+                        <span><i class="fa-regular fa-calendar"></i> 5D / 4N</span>
+                        <span><i class="fa-solid fa-sack-dollar"></i> From ₹30,000</span>
+                    </div>
+                    <div class="view-link">View Itinerary <span class="arrow">→</span></div>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════ CTA ═══════════════ -->
+<section class="cta-section section-padding" id="destinations-cta">
+    <div class="container">
+        <h2 class="reveal">Can't Decide? Let Us Help!</h2>
+        <p class="reveal">Tell us your travel preferences and budget — our experts will recommend the perfect
+            destination for you.</p>
+        <div class="reveal" style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+            <a href="{{ brand.whatsapp_link }}" target="_blank" class="btn btn-primary" id="dest-cta-whatsapp"><i
+                    class="fa-regular fa-comment-dots"></i> Chat With Us</a>
+            <a href="/contact" class="btn btn-outline" style="border-color: rgba(255,255,255,.4);"
+                id="dest-cta-contact"><i class="fa-solid fa-envelope"></i> Send an Enquiry</a>
+        </div>
+    </div>
+</section>
+
+<script>
+    function filterDest(type) {
+        // Update button states
+        ['all', 'international', 'domestic'].forEach(t => {
+            document.getElementById('dfilter-' + t).classList.remove('active');
+        });
+        const idMap = { all: 'dfilter-all', international: 'dfilter-international', domestic: 'dfilter-domestic' };
+        document.getElementById(idMap[type]).classList.add('active');
+
+        // Filter cards
+        let visible = 0;
+        document.querySelectorAll('#destinations-grid .dest-card').forEach(card => {
+            if (type === 'all' || card.dataset.type === type) {
+                card.style.display = '';
+                visible++;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+</script>
+
+{% endblock %}

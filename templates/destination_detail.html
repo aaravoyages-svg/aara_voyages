@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+{% block title %}{{ dest.name }} Tour Package – {{ dest.duration }} | Aara Voyages{% endblock %}
+{% block meta_description %}Explore {{ dest.name }}, {{ dest.country }} with Aara Voyages. {{ dest.duration }} curated
+itinerary with top attractions, local tips, and premium service. Book now!{% endblock %}
+
+{% block content %}
+
+<!-- ═══════════════ DESTINATION HERO ═══════════════ -->
+<section class="hero dest-detail-hero" id="dest-hero-{{ slug }}">
+    <div class="hero-bg">
+        <img src="{{ url_for('static', filename='images/' + dest.hero_image) }}" alt="{{ dest.name }}">
+    </div>
+    <div class="hero-overlay"></div>
+
+    <div class="hero-content container">
+        <p class="dest-tagline">{{ dest.tagline }}</p>
+        <h1>{{ dest.name }}</h1>
+
+        <div class="dest-meta-bar">
+            <div class="dest-meta-item">
+                <span class="meta-icon"><i class="fa-solid fa-location-dot"></i></span>
+                <span>{{ dest.country }}</span>
+            </div>
+            <div class="dest-meta-item">
+                <span class="meta-icon"><i class="fa-regular fa-calendar"></i></span>
+                <span>{{ dest.duration }}</span>
+            </div>
+            <div class="dest-meta-item">
+                <span class="meta-icon"><i class="fa-solid fa-sack-dollar"></i></span>
+                <span>Starting from {{ dest.price_from }}</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════ OVERVIEW & HIGHLIGHTS ═══════════════ -->
+<section class="dest-overview section-padding" id="dest-overview">
+    <div class="container">
+        <div class="overview-grid">
+            <div class="overview-text reveal">
+                <h2>Destination Overview</h2>
+                <p>{{ dest.overview }}</p>
+                <a href="{{ brand.whatsapp_link }}?text=Hi!%20I'm%20interested%20in%20the%20{{ dest.name }}%20tour%20package.%20Please%20share%20more%20details."
+                    target="_blank" class="btn btn-primary" id="overview-enquiry-btn">Enquire About This Trip</a>
+            </div>
+
+            <div class="reveal">
+                <h2
+                    style="font-family: var(--font-heading); font-size: 1.4rem; color: var(--navy); margin-bottom: var(--space-lg);">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> Trip Highlights</h2>
+                <ul class="highlights-list">
+                    {% for highlight in dest.highlights %}
+                    <li>
+                        <span class="check">✦</span>
+                        <span>{{ highlight }}</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════ ITINERARY ═══════════════ -->
+<section class="itinerary-section section-padding" id="itinerary">
+    <div class="container">
+        <h2 class="section-title reveal">Day-by-Day Itinerary</h2>
+        <p class="section-subtitle reveal">Your {{ dest.duration }} journey, planned to perfection</p>
+
+        <div class="itinerary-timeline">
+            {% for item in dest.itinerary %}
+            <div class="itinerary-item reveal" id="day-{{ item.day }}">
+                <div class="day-marker">
+                    <span style="font-size: .6rem;">DAY</span>
+                    <span class="day-num">{{ item.day }}</span>
+                </div>
+                <div class="itinerary-card">
+                    <h3>{{ item.title }}</h3>
+                    <p>{{ item.description }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════ LOCAL TIPS ═══════════════ -->
+<section class="section-padding" style="background: var(--white);" id="local-tips">
+    <div class="container">
+        <h2 class="section-title reveal">Local Tips for {{ dest.name }}</h2>
+        <p class="section-subtitle reveal">Insider advice to make the most of your trip</p>
+
+        <div class="local-tips-grid">
+            {% for tip in dest.tips %}
+            <div class="local-tip reveal">
+                <span class="tip-icon">💡</span>
+                <p>{{ tip }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════ ENQUIRY CTA ═══════════════ -->
+<section class="enquiry-section section-padding" id="enquiry-cta">
+    <div class="container" style="position: relative; z-index: 2;">
+        <h2 class="reveal">Ready to Explore {{ dest.name }}?</h2>
+        <p class="reveal">Get a personalised quote for this {{ dest.duration }} adventure. Our travel experts are just a
+            message away!</p>
+
+        <div class="enquiry-buttons reveal">
+            <a href="{{ brand.whatsapp_link }}?text=Hi!%20I'm%20interested%20in%20the%20{{ dest.name }}%20({{ dest.duration }})%20tour%20package.%20Please%20share%20pricing%20and%20details."
+                target="_blank" class="btn btn-whatsapp" id="enquiry-whatsapp"><i
+                    class="fa-regular fa-comment-dots"></i> WhatsApp Us</a>
+            <a href="mailto:{{ brand.email }}?subject=Enquiry%20-%20{{ dest.name }}%20Tour%20Package&body=Hi%20Aara%20Voyages,%0A%0AI'm%20interested%20in%20the%20{{ dest.name }}%20({{ dest.duration }})%20tour%20package.%20Please%20share%20pricing%20and%20availability.%0A%0AThank%20you!"
+                class="btn btn-primary" id="enquiry-email"><i class="fa-solid fa-envelope"></i> Email Enquiry</a>
+            <a href="/contact" class="btn btn-outline" style="border-color: rgba(255,255,255,.4);"
+                id="enquiry-contact">📝 Contact Form</a>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

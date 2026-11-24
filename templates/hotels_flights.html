@@ -1,0 +1,1809 @@
+{% extends "base.html" %}
+{% block title %}Hotels & Flights - Aara Voyages{% endblock %}
+{% block meta_description %}Browse hotels and flights to all destinations - Dubai, Singapore, Bali, Kerala, Goa, Kashmir
+and more.{% endblock %}
+{% block content %}
+
+<!-- CART SIDEBAR -->
+<div class="cart-overlay" id="cart-overlay" onclick="closeCart()"></div>
+<aside class="cart-sidebar" id="cart-sidebar">
+    <div class="cart-header">
+        <div class="cart-header-left">
+            <i class="fa-solid fa-bag-shopping"></i>
+            <h3>Your Selection</h3>
+        </div>
+        <button class="cart-close-btn" onclick="closeCart()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="cart-body" id="cart-body">
+        <div class="cart-empty" id="cart-empty">
+            <div class="cart-empty-icon"><i class="fa-solid fa-bag-shopping"></i></div>
+            <p>Your cart is empty</p>
+            <small>Add hotels, flights or packages to get started</small>
+        </div>
+        <div id="cart-items-list"></div>
+    </div>
+    <div class="cart-footer" id="cart-footer" style="display:none;">
+        <div class="cart-total-row">
+            <span>Estimated Total</span>
+            <span class="cart-total-amount" id="cart-total">0</span>
+        </div>
+        <p class="cart-disclaimer">* Prices are indicative. Final quote provided after review.</p>
+
+        <button class="cart-request-btn" id="cart-confirm-btn" onclick="showCheckoutForm()">
+            <i class="fa-solid fa-check-circle"></i> Confirm &amp; Proceed
+        </button>
+
+        <div id="cart-checkout-form" style="display:none;">
+            <div class="cart-name-field">
+                <label for="cart-name">Your Name *</label>
+                <input type="text" id="cart-name" placeholder="Enter your name">
+            </div>
+            <div class="cart-name-field">
+                <label for="cart-phone">Mobile Number *</label>
+                <input type="tel" id="cart-phone" placeholder="+91 XXXXX XXXXX">
+            </div>
+            <div class="cart-name-field">
+                <label for="cart-travellers">No. of Travellers</label>
+                <select id="cart-travellers">
+                    <option value="">Select</option>
+                    <option>1</option>
+                    <option>2 (Couple)</option>
+                    <option>3-4 (Family)</option>
+                    <option>5-8 (Group)</option>
+                    <option>8+ (Large Group)</option>
+                </select>
+            </div>
+            <div class="cart-name-field">
+                <label for="cart-travel-date">Travel Month (Approx.)</label>
+                <input type="month" id="cart-travel-date">
+            </div>
+            <button class="cart-request-btn" onclick="requestPackage()">
+                <i class="fa-solid fa-envelope-open-text"></i> Request via Email
+            </button>
+            <a class="cart-wa-btn" href="#" onclick="requestWhatsApp(event)">
+                <i class="fa-brands fa-whatsapp"></i> Request on WhatsApp
+            </a>
+        </div>
+
+        <button class="cart-clear-btn" onclick="clearCart()">
+            <i class="fa-solid fa-trash"></i> Clear All
+        </button>
+    </div>
+</aside>
+
+<!-- HERO -->
+<section class="hf-hero">
+    <div class="hf-hero-bg"></div>
+    <div class="container hf-hero-content">
+        <div class="hf-hero-badge"><i class="fa-solid fa-plane-departure"></i> Hotels &amp; Flights</div>
+        <h1>Find Your Perfect Stay &amp; Flight</h1>
+        <p>Browse curated hotels and flights across all our destinations. Add to cart, mix and match, then request a
+            personalised quote - no booking required.</p>
+    </div>
+</section>
+
+<!-- SEARCH SECTION -->
+<section class="hf-search-section" style="background:#fff; padding:1.5rem 0; border-bottom:1px solid #eee;">
+    <div class="container">
+        <div class="hf-search-box"
+            style="display:flex; flex-wrap:wrap; gap:1rem; align-items:flex-end; background:#f4f6fb; padding:1.5rem; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.03);">
+            <div style="flex:1; min-width:200px;">
+                <label style="display:block; font-size:0.8rem; font-weight:700; color:#555; margin-bottom:0.4rem;"><i
+                        class="fa-solid fa-plane-departure"></i> Departure City</label>
+                <select id="search-departure"
+                    style="width:100%; padding:0.8rem; border:1px solid #dcdcdc; border-radius:8px; outline:none; font-family:inherit; color:#333;">
+                    <option value="any">Any City</option>
+                    <optgroup label="India">
+                        <option value="DEL|Delhi">Delhi (DEL)</option>
+                        <option value="BOM|Mumbai">Mumbai (BOM)</option>
+                        <option value="BLR|Bengaluru">Bengaluru (BLR)</option>
+                        <option value="MAA|Chennai">Chennai (MAA)</option>
+                        <option value="CCU|Kolkata">Kolkata (CCU)</option>
+                        <option value="HYD|Hyderabad">Hyderabad (HYD)</option>
+                        <option value="COK|Kochi">Kochi (COK)</option>
+                        <option value="GOI|Goa">Goa (GOI)</option>
+                        <option value="JAI|Jaipur">Jaipur (JAI)</option>
+                    </optgroup>
+                    <optgroup label="Global">
+                        <option value="DXB|Dubai">Dubai, UAE (DXB)</option>
+                        <option value="LHR|London">London, UK (LHR)</option>
+                        <option value="JFK|New York">New York, USA (JFK)</option>
+                        <option value="CDG|Paris">Paris, France (CDG)</option>
+                        <option value="SIN|Singapore">Singapore (SIN)</option>
+                        <option value="NRT|Tokyo">Tokyo, Japan (NRT)</option>
+                        <option value="SYD|Sydney">Sydney, Australia (SYD)</option>
+                        <option value="FRA|Frankfurt">Frankfurt, Germany (FRA)</option>
+                        <option value="YYZ|Toronto">Toronto, Canada (YYZ)</option>
+                        <option value="BKK|Bangkok">Bangkok, Thailand (BKK)</option>
+                        <option value="KUL|Kuala Lumpur">Kuala Lumpur, Malaysia (KUL)</option>
+                        <option value="DPS|Bali">Bali, Indonesia (DPS)</option>
+                        <option value="SGN|Ho Chi Minh">Ho Chi Minh, Vietnam (SGN)</option>
+                        <option value="IST|Istanbul">Istanbul, Turkey (IST)</option>
+                        <option value="DOH|Doha">Doha, Qatar (DOH)</option>
+                        <option value="AUH|Abu Dhabi">Abu Dhabi, UAE (AUH)</option>
+                    </optgroup>
+                </select>
+            </div>
+            <div style="flex:1; min-width:200px;">
+                <label style="display:block; font-size:0.8rem; font-weight:700; color:#555; margin-bottom:0.4rem;"><i
+                        class="fa-solid fa-location-dot"></i> Destination</label>
+                <select id="search-destination"
+                    style="width:100%; padding:0.8rem; border:1px solid #dcdcdc; border-radius:8px; outline:none; font-family:inherit; color:#333;">
+                    <option value="any">Any Destination</option>
+                    <optgroup label="Global Destinations">
+                        <option value="DXB|Dubai">Dubai, UAE (DXB)</option>
+                        <option value="SIN|Singapore">Singapore (SIN)</option>
+                        <option value="DPS|Bali">Bali, Indonesia (DPS)</option>
+                        <option value="KUL|Kuala Lumpur">Kuala Lumpur, Malaysia (KUL)</option>
+                        <option value="SGN|Ho Chi Minh">Ho Chi Minh, Vietnam (SGN)</option>
+                        <option value="LHR|London">London, UK (LHR)</option>
+                        <option value="CDG|Paris">Paris, France (CDG)</option>
+                        <option value="FCO|Rome">Rome, Italy (FCO)</option>
+                        <option value="MAD|Madrid">Madrid, Spain (MAD)</option>
+                        <option value="AMS|Amsterdam">Amsterdam, Netherlands (AMS)</option>
+                        <option value="JFK|New York">New York, USA (JFK)</option>
+                        <option value="LAX|Los Angeles">Los Angeles, USA (LAX)</option>
+                        <option value="YYZ|Toronto">Toronto, Canada (YYZ)</option>
+                        <option value="SYD|Sydney">Sydney, Australia (SYD)</option>
+                        <option value="AKL|Auckland">Auckland, New Zealand (AKL)</option>
+                        <option value="NRT|Tokyo">Tokyo, Japan (NRT)</option>
+                        <option value="HKG|Hong Kong">Hong Kong (HKG)</option>
+                        <option value="BKK|Bangkok">Bangkok, Thailand (BKK)</option>
+                        <option value="MLE|Male">Male, Maldives (MLE)</option>
+                        <option value="CMB|Colombo">Colombo, Sri Lanka (CMB)</option>
+                        <option value="IST|Istanbul">Istanbul, Turkey (IST)</option>
+                    </optgroup>
+                    <optgroup label="Domestic (India)">
+                        <option value="DEL|Delhi">Delhi (DEL)</option>
+                        <option value="BOM|Mumbai">Mumbai (BOM)</option>
+                        <option value="GOI|Goa">Goa (GOI)</option>
+                        <option value="COK|Kochi">Kochi, Kerala (COK)</option>
+                        <option value="JAI|Jaipur">Jaipur, Rajasthan (JAI)</option>
+                        <option value="SXR|Srinagar">Srinagar, Kashmir (SXR)</option>
+                        <option value="IXZ|Port Blair">Port Blair, Andaman (IXZ)</option>
+                    </optgroup>
+                </select>
+            </div>
+            <div style="flex:1; min-width:200px;">
+                <label style="display:block; font-size:0.8rem; font-weight:700; color:#555; margin-bottom:0.4rem;"><i
+                        class="fa-regular fa-calendar"></i> Travel Date</label>
+                <input type="date" id="search-dates"
+                    style="width:100%; padding:0.8rem; border:1px solid #dcdcdc; border-radius:8px; outline:none; font-family:inherit; color:#333; box-sizing:border-box;">
+            </div>
+            <button onclick="performSearch()"
+                style="padding:0.8rem 2rem; background:linear-gradient(135deg,#e94560,#c0392b); color:#fff; border:none; border-radius:8px; font-weight:700; cursor:pointer; font-family:inherit; display:flex; align-items:center; gap:0.5rem; transition:transform 0.2s; height:47px;">
+                <i class="fa-solid fa-magnifying-glass"></i> Search Live
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- LOADING SPINNER (Hidden) -->
+<div id="search-loader" style="display:none; text-align:center; padding:4rem 0;">
+    <div
+        style="display:inline-block; width:50px; height:50px; border:4px solid #f3f3f3; border-top:4px solid #e94560; border-radius:50%; animation:spin 1s linear infinite;">
+    </div>
+    <p style="margin-top:1rem; color:#666; font-weight:600; font-size:1.1rem;">Fetching live availability...</p>
+    <style>
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</div>
+
+<!-- MAIN CONTENT -->
+<section class="hf-main-section">
+    <div class="container">
+        <!-- TYPE TABS -->
+        <div class="hf-tab-bar" id="hf-tab-bar">
+            <button class="hf-tab active" id="tab-all" onclick="switchTab('all')">
+                <i class="fa-solid fa-border-all"></i> All
+                <span class="hf-tab-count" id="cnt-all">0</span>
+            </button>
+            <button class="hf-tab" id="tab-flights" onclick="switchTab('flights')">
+                <i class="fa-solid fa-plane-departure"></i> Flights
+                <span class="hf-tab-count" id="cnt-flights">0</span>
+            </button>
+            <button class="hf-tab" id="tab-hotels" onclick="switchTab('hotels')">
+                <i class="fa-solid fa-hotel"></i> Hotels
+                <span class="hf-tab-count" id="cnt-hotels">0</span>
+            </button>
+            <button class="hf-tab" id="tab-packages" onclick="switchTab('packages')">
+                <i class="fa-solid fa-box-archive"></i> Packages
+                <span class="hf-tab-count" id="cnt-packages">0</span>
+            </button>
+        </div>﻿
+        <!-- FLIGHTS SECTION -->
+        <div class="hf-section" id="section-flights">
+            <div class="hf-section-header">
+                <h2><i class="fa-solid fa-plane-departure"></i> Available Flights</h2>
+                <p>Scheduled departures from major Indian cities - Economy &amp; Business class</p>
+            </div>
+            <div class="hf-cards-grid" id="flights-grid">
+                <div class="hf-empty-state">
+                    <i class="fa-solid fa-plane-departure"
+                        style="color: #ccc; font-size: 3rem; margin-bottom: 1rem;"></i>
+                    <p>Enter your departure, destination, and travel date above, then click <strong>Search Live</strong>
+                        to view live flights.</p>
+                </div>
+            </div>
+        </div>﻿
+        <!-- HOTELS SECTION -->
+        <div class="hf-section" id="section-hotels">
+            <div class="hf-section-header">
+                <h2><i class="fa-solid fa-hotel"></i> Curated Hotels</h2>
+                <p>Hand-picked stays from 3-star budget to 5-star ultra-luxury</p>
+            </div>
+            <div class="hf-cards-grid hotel-grid" id="hotels-grid">
+                <div class="hf-empty-state">
+                    <i class="fa-solid fa-hotel" style="color: #ccc; font-size: 3rem; margin-bottom: 1rem;"></i>
+                    <p>Enter your destination and travel date above, then click <strong>Search Live</strong> to view
+                        live hotels.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- PACKAGES SECTION -->
+        <div class="hf-section" id="section-packages">
+            <div class="hf-section-header">
+                <h2><i class="fa-solid fa-suitcase-rolling"></i> Complete Packages</h2>
+                <p>Curated hotel + sightseeing packages - the easiest way to plan your trip</p>
+            </div>
+            <div class="hf-cards-grid pkg-grid" id="packages-grid">
+                {% for p in packages %}
+                <div class="hf-card pkg-card" data-dest="{{ p.destination }}" data-dep="any">
+                    <div class="pkg-card-image">
+                        <img src="{{ url_for('static', filename='images/' + p.image) }}" alt="{{ p.name }}"
+                            loading="lazy">
+                        {% if p.badge %}<div class="pkg-badge" style="background:{{ p.badge_color }}">{{ p.badge }}
+                        </div>{% endif %}
+                        <div class="pkg-duration-tag">{{ p.duration_label }}</div>
+                    </div>
+                    <div class="pkg-card-body">
+                        <div class="pkg-dest-label"><i class="fa-solid fa-location-dot"></i> {{ p.country }}</div>
+                        <h3 class="pkg-name">{{ p.name }}</h3>
+                        <div class="pkg-hotel-cat"><i class="fa-solid fa-hotel"></i> {{ p.hotel_category }}</div>
+                        <ul class="pkg-highlights">
+                            {% for hl in p.top_highlights %}<li><i class="fa-solid fa-check-circle"></i> {{ hl }}</li>{%
+                            endfor %}
+                        </ul>
+                        <div class="pkg-inclusions">
+                            {% for inc in p.inclusions %}{% if loop.index <= 3 %}<span class="inc-chip">{{ inc
+                                }}</span>{% endif %}{% endfor %}
+                                {% if p.inclusions|length > 3 %}<span class="inc-chip">+{{ p.inclusions|length - 3 }}
+                                    more</span>{% endif %}
+                        </div>
+                    </div>
+                    <div class="hf-card-footer">
+                        <div class="hf-price-block">
+                            <span class="hf-price">{{ p.price_per_person }}</span>
+                            <span class="hf-price-label">per person</span>
+                        </div>
+                        <button class="hf-add-btn" id="btn-{{ p.id }}"
+                            data-item="{&quot;id&quot;:&quot;{{ p.id }}&quot;,&quot;type&quot;:&quot;package&quot;,&quot;name&quot;:&quot;{{ p.name }}&quot;,&quot;detail&quot;:&quot;{{ p.duration_label }} | {{ p.hotel_category }}&quot;,&quot;dest&quot;:&quot;{{ p.country }}&quot;,&quot;price&quot;:{{ p.price_numeric }},&quot;display&quot;:&quot;{{ p.price_per_person }}&quot;}"
+                            onclick="addToCart(JSON.parse(this.dataset.item))">
+                            <i class="fa-solid fa-plus"></i> Add to Cart
+                        </button>
+                    </div>
+                </div>
+                {% else %}
+                <div class="hf-empty-state"><i class="fa-solid fa-suitcase-rolling"></i>
+                    <p>No packages for this destination yet.</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div><!-- /container -->
+</section>
+
+<!-- FLOATING CART BUTTON -->
+<button class="cart-fab" id="cart-fab" onclick="openCart()">
+    <i class="fa-solid fa-bag-shopping"></i>
+    <span class="cart-fab-count" id="cart-fab-count" style="display:none;">0</span>
+    <span class="cart-fab-label">Cart</span>
+</button>﻿
+<style>
+    .hf-hero {
+        position: relative;
+        min-height: 380px;
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+    }
+
+    .hf-hero-bg {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, #0f3460 0%, #16213e 40%, #1a1a2e 70%, #0d0d1f 100%);
+    }
+
+    .hf-hero-bg::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image: radial-gradient(ellipse at 70% 50%, rgba(233, 69, 96, .18) 0%, transparent 60%), radial-gradient(ellipse at 20% 20%, rgba(100, 149, 237, .12) 0%, transparent 50%);
+    }
+
+    .hf-hero-content {
+        position: relative;
+        z-index: 1;
+        padding: 5rem 1.5rem 3rem;
+        color: #fff;
+    }
+
+    .hf-hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: .5rem;
+        background: rgba(233, 69, 96, .2);
+        border: 1px solid rgba(233, 69, 96, .4);
+        color: #ff8fa3;
+        font-size: .82rem;
+        font-weight: 700;
+        letter-spacing: .06em;
+        text-transform: uppercase;
+        padding: .35rem .9rem;
+        border-radius: 20px;
+        margin-bottom: 1.25rem;
+    }
+
+    .hf-hero-content h1 {
+        font-size: clamp(1.8rem, 4vw, 3rem);
+        font-weight: 800;
+        line-height: 1.2;
+        margin-bottom: .75rem;
+        background: linear-gradient(135deg, #fff 40%, #c8d4e8 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .hf-hero-content p {
+        color: rgba(255, 255, 255, .72);
+        font-size: 1rem;
+        max-width: 560px;
+        line-height: 1.6;
+        margin-bottom: 2rem;
+    }
+
+    .hf-hero-stats {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .hf-stat {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: rgba(255, 255, 255, .75);
+        font-size: .8rem;
+    }
+
+    .hf-stat span {
+        font-size: 1.6rem;
+        font-weight: 800;
+        color: #fff;
+        line-height: 1;
+    }
+
+    .hf-stat-div {
+        width: 1px;
+        height: 32px;
+        background: rgba(255, 255, 255, .2);
+    }
+
+    /* ---- DESTINATION FILTER: TRUE HORIZONTAL SCROLL ---- */
+    .hf-dest-filter-section {
+        background: #fff;
+        border-bottom: 1px solid #eee;
+        position: sticky;
+        top: 70px;
+        z-index: 800;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, .06);
+    }
+
+    .hf-dest-filter-row {
+        overflow-x: auto;
+        overflow-y: visible;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        user-select: none;
+    }
+
+    .hf-dest-filter-row::-webkit-scrollbar {
+        display: none;
+    }
+
+    .hf-dest-filter-inner {
+        display: inline-flex;
+        align-items: center;
+        gap: .5rem;
+        padding: .85rem 1.5rem;
+        white-space: nowrap;
+    }
+
+    .hf-dest-group-label {
+        font-size: .68rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: .06em;
+        color: #aaa;
+        white-space: nowrap;
+        padding: 0 .3rem;
+        flex-shrink: 0;
+    }
+
+    .hf-dest-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: .3rem;
+        padding: .42rem 1rem;
+        border-radius: 20px;
+        background: #f5f5f5;
+        color: #555;
+        font-size: .83rem;
+        font-weight: 600;
+        text-decoration: none;
+        white-space: nowrap;
+        transition: all .2s;
+        flex-shrink: 0;
+        border: 1.5px solid transparent;
+    }
+
+    .hf-dest-chip:hover {
+        background: #ffe8ec;
+        color: #e94560;
+        border-color: #fbb6c2;
+    }
+
+    .hf-dest-chip.active {
+        background: linear-gradient(135deg, #e94560, #c0392b);
+        color: #fff;
+        border-color: transparent;
+        box-shadow: 0 4px 14px rgba(233, 69, 96, .35);
+    }
+
+    .hf-main-section {
+        background: #f8f9fc;
+        padding: 2rem 0 4rem;
+        min-height: 60vh;
+    }
+
+    .hf-tab-bar {
+        display: flex;
+        gap: .5rem;
+        margin-bottom: 2rem;
+        border-bottom: 2px solid #e5e7eb;
+        flex-wrap: wrap;
+    }
+
+    .hf-tab {
+        display: flex;
+        align-items: center;
+        gap: .5rem;
+        padding: .75rem 1.4rem;
+        border: none;
+        background: none;
+        color: #666;
+        font-size: .9rem;
+        font-weight: 600;
+        cursor: pointer;
+        border-bottom: 3px solid transparent;
+        margin-bottom: -2px;
+        transition: all .2s;
+        font-family: inherit;
+    }
+
+    .hf-tab:hover {
+        color: #e94560;
+    }
+
+    .hf-tab.active {
+        color: #e94560;
+        border-bottom-color: #e94560;
+    }
+
+    .hf-tab-count {
+        background: #e94560;
+        color: #fff;
+        font-size: .7rem;
+        font-weight: 700;
+        padding: 1px 6px;
+        border-radius: 10px;
+        min-width: 20px;
+        text-align: center;
+    }
+
+    .hf-tab:not(.active) .hf-tab-count {
+        background: #ccc;
+    }
+
+    .hf-section {
+        margin-bottom: 3rem;
+    }
+
+    .hf-section-header {
+        margin-bottom: 1.5rem;
+    }
+
+    .hf-section-header h2 {
+        font-size: 1.4rem;
+        font-weight: 800;
+        color: #1a1a2e;
+        display: flex;
+        align-items: center;
+        gap: .6rem;
+        margin-bottom: .25rem;
+    }
+
+    .hf-section-header h2 i {
+        color: #e94560;
+    }
+
+    .hf-section-header p {
+        color: #888;
+        font-size: .88rem;
+    }
+
+    .hf-cards-grid {
+        display: grid;
+        gap: 1.25rem;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    }
+
+    .hotel-grid,
+    .pkg-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    }
+
+    .hf-card {
+        background: #fff;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, .07);
+        border: 1px solid rgba(0, 0, 0, .05);
+        transition: transform .25s, box-shadow .25s;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .hf-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 32px rgba(0, 0, 0, .12);
+    }
+
+    .flight-card-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1rem 1.25rem .5rem;
+    }
+
+    .flight-airline-badge {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .airline-code {
+        font-size: 1.3rem;
+        font-weight: 900;
+        color: #1a1a2e;
+        line-height: 1;
+    }
+
+    .airline-name {
+        font-size: .75rem;
+        color: #888;
+        font-weight: 500;
+    }
+
+    .flight-class-badge {
+        font-size: .72rem;
+        font-weight: 700;
+        padding: 3px 10px;
+        border-radius: 12px;
+        text-transform: uppercase;
+        letter-spacing: .05em;
+    }
+
+    .eco-badge {
+        background: #e8f5e9;
+        color: #2e7d32;
+    }
+
+    .biz-badge {
+        background: linear-gradient(135deg, #7b1fa2, #4a148c);
+        color: #fff;
+    }
+
+    .flight-route {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: .75rem 1.25rem .5rem;
+        gap: .75rem;
+    }
+
+    .flight-city {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .city-time {
+        font-size: 1.4rem;
+        font-weight: 800;
+        color: #1a1a2e;
+        line-height: 1;
+    }
+
+    .city-code {
+        font-size: 1rem;
+        font-weight: 700;
+        color: #e94560;
+    }
+
+    .city-name {
+        font-size: .72rem;
+        color: #999;
+        font-weight: 500;
+        max-width: 90px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .flight-middle {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 3px;
+        min-width: 0;
+    }
+
+    .flight-duration {
+        font-size: .78rem;
+        color: #666;
+        font-weight: 600;
+    }
+
+    .flight-line {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 3px;
+    }
+
+    .flight-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #ccc;
+        flex-shrink: 0;
+    }
+
+    .flight-track {
+        flex: 1;
+        height: 2px;
+        background: linear-gradient(90deg, #ddd 60%, #e94560 100%);
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .flight-stop-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #f57c00;
+        border: 2px solid #fff;
+        box-shadow: 0 0 0 1px #f57c00;
+    }
+
+    .flight-stops {
+        font-size: .7rem;
+        font-weight: 700;
+        padding: 2px 8px;
+        border-radius: 10px;
+        margin-top: 2px;
+    }
+
+    .stop-direct {
+        background: #e8f5e9;
+        color: #2e7d32;
+    }
+
+    .stop-layover {
+        background: #fff3e0;
+        color: #e65100;
+    }
+
+    .hf-card-features {
+        display: flex;
+        flex-wrap: wrap;
+        gap: .4rem;
+        padding: .5rem 1.25rem .75rem;
+    }
+
+    .hf-feature-chip {
+        font-size: .72rem;
+        color: #555;
+        background: #f5f5f5;
+        padding: 3px 8px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .hf-feature-chip i {
+        color: #4caf50;
+        font-size: .65rem;
+    }
+
+    .hotel-card-image,
+    .pkg-card-image {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hotel-card-image {
+        height: 180px;
+    }
+
+    .pkg-card-image {
+        height: 170px;
+    }
+
+    .hotel-card-image img,
+    .pkg-card-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform .4s;
+    }
+
+    .hf-card:hover .hotel-card-image img,
+    .hf-card:hover .pkg-card-image img {
+        transform: scale(1.05);
+    }
+
+    .hotel-stars {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        display: flex;
+        gap: 2px;
+    }
+
+    .hotel-stars i {
+        color: #fbbf24;
+        font-size: .8rem;
+    }
+
+    .hotel-dest-tag,
+    .pkg-duration-tag {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        background: rgba(0, 0, 0, .65);
+        color: #fff;
+        font-size: .72rem;
+        font-weight: 600;
+        padding: 3px 8px;
+        border-radius: 6px;
+        backdrop-filter: blur(4px);
+    }
+
+    .hotel-card-body,
+    .pkg-card-body {
+        padding: 1rem 1.25rem .75rem;
+        flex: 1;
+    }
+
+    .hotel-name,
+    .pkg-name {
+        font-size: 1rem;
+        font-weight: 700;
+        color: #1a1a2e;
+        margin-bottom: .25rem;
+        line-height: 1.3;
+    }
+
+    .hotel-location {
+        font-size: .78rem;
+        color: #888;
+        margin-bottom: .5rem;
+    }
+
+    .hotel-location i {
+        color: #e94560;
+    }
+
+    .hotel-highlights {
+        font-size: .8rem;
+        color: #666;
+        line-height: 1.5;
+        margin-bottom: .75rem;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .hotel-amenities {
+        display: flex;
+        flex-wrap: wrap;
+        gap: .35rem;
+    }
+
+    .amenity-chip {
+        font-size: .7rem;
+        background: #f0f7ff;
+        color: #1565c0;
+        padding: 2px 7px;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        gap: 3px;
+    }
+
+    .amenity-chip i {
+        font-size: .6rem;
+        color: #1565c0;
+    }
+
+    .more-chip {
+        background: #f5f5f5;
+        color: #999;
+    }
+
+    .pkg-badge {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        color: #fff;
+        font-size: .7rem;
+        font-weight: 700;
+        padding: 3px 9px;
+        border-radius: 12px;
+    }
+
+    .pkg-dest-label {
+        font-size: .75rem;
+        color: #e94560;
+        font-weight: 600;
+        margin-bottom: .2rem;
+    }
+
+    .pkg-hotel-cat {
+        font-size: .78rem;
+        color: #888;
+        margin-bottom: .6rem;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .pkg-highlights {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 .75rem;
+    }
+
+    .pkg-highlights li {
+        font-size: .78rem;
+        color: #444;
+        padding: 2px 0;
+        display: flex;
+        align-items: flex-start;
+        gap: 6px;
+        line-height: 1.4;
+    }
+
+    .pkg-highlights li i {
+        color: #e94560;
+        font-size: .7rem;
+        margin-top: 2px;
+    }
+
+    .pkg-inclusions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: .35rem;
+    }
+
+    .inc-chip {
+        font-size: .68rem;
+        background: #fff3f5;
+        color: #c0392b;
+        border: 1px solid #fbb6c2;
+        padding: 2px 7px;
+        border-radius: 6px;
+    }
+
+    .hf-card-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: .85rem 1.25rem;
+        border-top: 1px solid #f0f0f0;
+        background: #fafafa;
+        gap: .75rem;
+    }
+
+    .hf-price-block {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .hf-price {
+        font-size: 1.15rem;
+        font-weight: 800;
+        color: #e94560;
+        line-height: 1;
+    }
+
+    .hf-price-label {
+        font-size: .7rem;
+        color: #aaa;
+        margin-top: 2px;
+    }
+
+    .hf-add-btn {
+        display: flex;
+        align-items: center;
+        gap: .4rem;
+        padding: .55rem 1rem;
+        background: linear-gradient(135deg, #1a1a2e, #0f3460);
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        font-size: .82rem;
+        font-weight: 700;
+        cursor: pointer;
+        font-family: inherit;
+        transition: all .2s;
+        white-space: nowrap;
+    }
+
+    .hf-add-btn:hover {
+        background: linear-gradient(135deg, #e94560, #c0392b);
+        transform: translateY(-1px);
+        box-shadow: 0 6px 16px rgba(233, 69, 96, .3);
+    }
+
+    .hf-add-btn.added {
+        background: linear-gradient(135deg, #2e7d32, #1b5e20);
+    }
+
+    .hf-empty-state {
+        text-align: center;
+        padding: 3rem;
+        color: #bbb;
+        grid-column: 1/-1;
+    }
+
+    .hf-empty-state i {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        display: block;
+    }
+
+    .cart-fab {
+        position: fixed;
+        bottom: 2rem;
+        left: 2rem;
+        background: linear-gradient(135deg, #1a1a2e, #0f3460);
+        color: #fff;
+        border: none;
+        border-radius: 50px;
+        padding: .8rem 1.4rem;
+        display: flex;
+        align-items: center;
+        gap: .6rem;
+        font-size: .9rem;
+        font-weight: 700;
+        font-family: inherit;
+        cursor: pointer;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, .25);
+        z-index: 8000;
+        transition: all .25s;
+    }
+
+    .cart-fab:hover {
+        background: linear-gradient(135deg, #e94560, #c0392b);
+        transform: translateY(-3px);
+    }
+
+    .cart-fab-count {
+        background: #e94560;
+        color: #fff;
+        font-size: .75rem;
+        font-weight: 900;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .cart-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, .5);
+        backdrop-filter: blur(3px);
+        z-index: 9500;
+    }
+
+    .cart-overlay.open {
+        display: block;
+    }
+
+    .cart-sidebar {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: min(420px, 100vw);
+        height: 100vh;
+        background: #fff;
+        z-index: 9600;
+        display: flex;
+        flex-direction: column;
+        box-shadow: -8px 0 40px rgba(0, 0, 0, .2);
+        transform: translateX(100%);
+        transition: transform .35s cubic-bezier(.34, 1.56, .64, 1);
+    }
+
+    .cart-sidebar.open {
+        transform: translateX(0);
+    }
+
+    .cart-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1.25rem 1.5rem;
+        border-bottom: 1px solid #f0f0f0;
+        background: linear-gradient(135deg, #1a1a2e, #0f3460);
+        color: #fff;
+    }
+
+    .cart-header-left {
+        display: flex;
+        align-items: center;
+        gap: .6rem;
+    }
+
+    .cart-header-left i {
+        font-size: 1.2rem;
+        color: #e94560;
+    }
+
+    .cart-header h3 {
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: #fff;
+        margin: 0;
+    }
+
+    .cart-close-btn {
+        background: rgba(255, 255, 255, .1);
+        border: none;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        color: #fff;
+        font-size: 1rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background .2s;
+    }
+
+    .cart-close-btn:hover {
+        background: rgba(255, 255, 255, .25);
+    }
+
+    .cart-body {
+        flex: 1;
+        overflow-y: auto;
+        padding: 1rem 1.5rem;
+    }
+
+    .cart-empty {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        min-height: 200px;
+        text-align: center;
+    }
+
+    .cart-empty-icon {
+        font-size: 3rem;
+        margin-bottom: .75rem;
+        color: #ddd;
+    }
+
+    .cart-empty p {
+        font-size: 1rem;
+        color: #aaa;
+        margin-bottom: .25rem;
+    }
+
+    .cart-empty small {
+        font-size: .8rem;
+        color: #ccc;
+    }
+
+    .cart-item {
+        display: flex;
+        gap: .75rem;
+        padding: .9rem 0;
+        border-bottom: 1px solid #f5f5f5;
+        align-items: flex-start;
+    }
+
+    .cart-item-icon {
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1rem;
+        flex-shrink: 0;
+    }
+
+    .icon-flight {
+        background: #e3f2fd;
+        color: #1565c0;
+    }
+
+    .icon-hotel {
+        background: #fce4ec;
+        color: #c62828;
+    }
+
+    .icon-package {
+        background: #e8f5e9;
+        color: #2e7d32;
+    }
+
+    .cart-item-info {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .cart-item-type {
+        font-size: .68rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: .06em;
+        color: #aaa;
+        margin-bottom: 2px;
+    }
+
+    .cart-item-name {
+        font-size: .88rem;
+        font-weight: 700;
+        color: #1a1a2e;
+        line-height: 1.3;
+        word-break: break-word;
+    }
+
+    .cart-item-detail {
+        font-size: .75rem;
+        color: #888;
+        margin-top: 2px;
+    }
+
+    .cart-item-dest {
+        font-size: .72rem;
+        color: #e94560;
+        font-weight: 600;
+        margin-top: 3px;
+    }
+
+    .cart-item-price {
+        font-size: .9rem;
+        font-weight: 800;
+        color: #e94560;
+        margin-top: 2px;
+    }
+
+    .cart-item-remove {
+        background: none;
+        border: none;
+        color: #ccc;
+        cursor: pointer;
+        font-size: 1rem;
+        padding: 0;
+        transition: color .2s;
+        flex-shrink: 0;
+        margin-top: 2px;
+    }
+
+    .cart-item-remove:hover {
+        color: #e94560;
+    }
+
+    .cart-item-qty {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 8px;
+    }
+
+    .cart-item-qty button {
+        background: #f0f0f0;
+        border: none;
+        width: 24px;
+        height: 24px;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        color: #555;
+        transition: all .2s;
+    }
+
+    .cart-item-qty button:hover {
+        background: #e0e0e0;
+        color: #1a1a2e;
+    }
+
+    .cart-item-qty span {
+        font-size: .85rem;
+        font-weight: 700;
+        color: #333;
+        min-width: 16px;
+        text-align: center;
+    }
+
+    .cart-footer {
+        padding: 1rem 1.5rem 1.5rem;
+        border-top: 1px solid #f0f0f0;
+        background: #fafafa;
+    }
+
+    .cart-total-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: .3rem;
+        font-size: .88rem;
+        color: #666;
+        font-weight: 600;
+    }
+
+    .cart-total-amount {
+        font-size: 1.3rem;
+        font-weight: 800;
+        color: #1a1a2e;
+    }
+
+    .cart-disclaimer {
+        font-size: .7rem;
+        color: #bbb;
+        margin-bottom: 1rem;
+    }
+
+    .cart-name-field {
+        margin-bottom: .6rem;
+    }
+
+    .cart-name-field label {
+        display: block;
+        font-size: .75rem;
+        font-weight: 600;
+        color: #555;
+        margin-bottom: .25rem;
+    }
+
+    .cart-name-field input,
+    .cart-name-field select {
+        width: 100%;
+        padding: .5rem .75rem;
+        border: 1.5px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: .85rem;
+        font-family: inherit;
+        color: #333;
+        background: #fff;
+        transition: border-color .2s;
+        outline: none;
+        box-sizing: border-box;
+    }
+
+    .cart-name-field input:focus,
+    .cart-name-field select:focus {
+        border-color: #e94560;
+        box-shadow: 0 0 0 3px rgba(233, 69, 96, .1);
+    }
+
+    .cart-request-btn {
+        width: 100%;
+        padding: .85rem;
+        background: linear-gradient(135deg, #e94560, #c0392b);
+        color: #fff;
+        border: none;
+        border-radius: 12px;
+        font-size: .92rem;
+        font-weight: 700;
+        cursor: pointer;
+        font-family: inherit;
+        transition: all .2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: .5rem;
+        margin-bottom: .6rem;
+        margin-top: .5rem;
+    }
+
+    .cart-request-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(233, 69, 96, .35);
+    }
+
+    .cart-wa-btn {
+        width: 100%;
+        padding: .75rem;
+        background: #25d366;
+        color: #fff;
+        border: none;
+        border-radius: 12px;
+        font-size: .88rem;
+        font-weight: 700;
+        cursor: pointer;
+        font-family: inherit;
+        transition: all .2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: .5rem;
+        margin-bottom: .5rem;
+        text-decoration: none;
+        box-sizing: border-box;
+    }
+
+    .cart-wa-btn:hover {
+        background: #1da851;
+        transform: translateY(-2px);
+    }
+
+    .cart-clear-btn {
+        width: 100%;
+        padding: .6rem;
+        background: none;
+        color: #bbb;
+        border: 1.5px solid #e5e5e5;
+        border-radius: 10px;
+        font-size: .82rem;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: inherit;
+        transition: all .2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: .4rem;
+    }
+
+    .cart-clear-btn:hover {
+        color: #e94560;
+        border-color: #e94560;
+    }
+
+    @keyframes slideUp {
+        0% {
+            transform: translateX(-50%) translateY(20px);
+            opacity: 0
+        }
+
+        100% {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1
+        }
+    }
+
+    @media(max-width:640px) {
+
+        .hf-cards-grid,
+        .hotel-grid,
+        .pkg-grid {
+            grid-template-columns: 1fr
+        }
+
+        .cart-fab {
+            bottom: 1rem;
+            left: 1rem;
+            padding: .7rem 1rem;
+            font-size: .82rem
+        }
+
+        .hf-hero-content {
+            padding: 4rem 1rem 2rem
+        }
+    }
+</style>﻿
+<script>
+    var cart = JSON.parse(localStorage.getItem("avCart") || "[]");
+    function saveCart() { localStorage.setItem("avCart", JSON.stringify(cart)); }
+    function addToCart(item) {
+        var existing = cart.find(function (c) { return c.id === item.id; });
+        if (existing) {
+            existing.quantity = (existing.quantity || 1) + 1;
+            saveCart(); renderCart(); updateCartFab();
+            showToast("Quantity increased in cart!", "success");
+            openCart();
+            return;
+        }
+        item.quantity = 1;
+        cart.push(item); saveCart(); renderCart(); updateCartFab(); markButton(item.id, true);
+        var label = item.type === "flight" ? "Flight" : item.type === "hotel" ? "Hotel" : "Package";
+        showToast(label + " added to cart!", "success");
+        openCart();
+    }
+    function removeFromCart(id) {
+        cart = cart.filter(function (c) { return c.id !== id; });
+        saveCart(); renderCart(); updateCartFab(); markButton(id, false);
+    }
+    function updateQuantity(id, delta) {
+        var item = cart.find(function (c) { return c.id === id; });
+        if (item) {
+            item.quantity = (item.quantity || 1) + delta;
+            if (item.quantity <= 0) removeFromCart(id);
+            else { saveCart(); renderCart(); updateCartFab(); }
+        }
+    }
+    function clearCart() {
+        cart.forEach(function (c) { markButton(c.id, false); });
+        cart = []; saveCart(); renderCart(); updateCartFab();
+        resetCheckoutForm();
+    }
+    function showCheckoutForm() {
+        document.getElementById("cart-confirm-btn").style.display = "none";
+        document.getElementById("cart-checkout-form").style.display = "block";
+        /* Scroll to bottom */
+        setTimeout(function () {
+            var cartBody = document.getElementById("cart-sidebar");
+            cartBody.scrollTo({ top: cartBody.scrollHeight, behavior: 'smooth' });
+        }, 50);
+    }
+    function resetCheckoutForm() {
+        var btn = document.getElementById("cart-confirm-btn");
+        var form = document.getElementById("cart-checkout-form");
+        if (btn) btn.style.display = "flex";
+        if (form) form.style.display = "none";
+    }
+    function markButton(id, added) {
+        var btn = document.getElementById("btn-" + id);
+        if (!btn) return;
+        if (added) { btn.classList.add("added"); btn.innerHTML = '<i class="fa-solid fa-check"></i> Added'; }
+        else { btn.classList.remove("added"); btn.innerHTML = '<i class="fa-solid fa-plus"></i> Add to Cart'; }
+    }
+    function renderCart() {
+        var list = document.getElementById("cart-items-list");
+        var empty = document.getElementById("cart-empty");
+        var footer = document.getElementById("cart-footer");
+        if (cart.length === 0) { list.innerHTML = ""; empty.style.display = "flex"; footer.style.display = "none"; return; }
+        empty.style.display = "none"; footer.style.display = "block";
+        var total = 0;
+        var count = 0;
+        list.innerHTML = cart.map(function (item) {
+            var qty = item.quantity || 1;
+            total += item.price * qty;
+            count += qty;
+            var ic = item.type === "flight" ? "icon-flight" : item.type === "hotel" ? "icon-hotel" : "icon-package";
+            var ii = item.type === "flight" ? "plane-departure" : item.type === "hotel" ? "hotel" : "suitcase-rolling";
+            return "<div class=\"cart-item\" id=\"ci-" + item.id + "\">"
+                + "<div class=\"cart-item-icon " + ic + "\"><i class=\"fa-solid fa-" + ii + "\"></i></div>"
+                + "<div class=\"cart-item-info\">"
+                + "<div class=\"cart-item-type\">" + item.type + "</div>"
+                + "<div class=\"cart-item-name\">" + item.name + "</div>"
+                + "<div class=\"cart-item-detail\">" + item.detail + "</div>"
+                + "<div class=\"cart-item-dest\"><i class=\"fa-solid fa-location-dot\"></i> " + item.dest + "</div>"
+                + "<div class=\"cart-item-price\">" + item.display + " <span style=\"font-size:0.75rem;color:#999;font-weight:600;\">x " + qty + "</span></div>"
+                + "<div class=\"cart-item-qty\">"
+                + "<button onclick=\"updateQuantity('" + item.id + "',-1)\"><i class=\"fa-solid fa-minus\"></i></button>"
+                + "<span>" + qty + "</span>"
+                + "<button onclick=\"updateQuantity('" + item.id + "',1)\"><i class=\"fa-solid fa-plus\"></i></button>"
+                + "</div>"
+                + "</div>"
+                + "<button class=\"cart-item-remove\" onclick=\"removeFromCart('" + item.id + "')\" title=\"Remove\"><i class=\"fa-solid fa-trash-can\"></i></button>"
+                + "</div>";
+        }).join("");
+        document.getElementById("cart-total").textContent = "Rs." + total.toLocaleString("en-IN");
+        document.getElementById("cart-fab-count").textContent = count;
+    }
+    function updateCartFab() {
+        var cnt = document.getElementById("cart-fab-count");
+        var qty = 0;
+        cart.forEach(function (c) { qty += (c.quantity || 1); });
+        if (qty > 0) { cnt.textContent = qty; cnt.style.display = "flex"; }
+        else cnt.style.display = "none";
+    }
+    function openCart() {
+        document.getElementById("cart-sidebar").classList.add("open");
+        document.getElementById("cart-overlay").classList.add("open");
+        document.body.style.overflow = "hidden";
+    }
+    function closeCart() {
+        document.getElementById("cart-sidebar").classList.remove("open");
+        document.getElementById("cart-overlay").classList.remove("open");
+        document.body.style.overflow = "";
+        setTimeout(resetCheckoutForm, 300);
+    }
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeCart(); });
+    function switchTab(tab) {
+        document.querySelectorAll(".hf-tab").forEach(function (t) { t.classList.remove("active"); });
+        document.getElementById("tab-" + tab).classList.add("active");
+        var sections = ["flights", "hotels", "packages"];
+        if (tab === "all") { sections.forEach(function (s) { document.getElementById("section-" + s).style.display = "block"; }); }
+        else { sections.forEach(function (s) { document.getElementById("section-" + s).style.display = (s === tab) ? "block" : "none"; }); }
+    }
+    function requestPackage() {
+        if (cart.length === 0) { showToast("Your cart is empty!", "error"); return; }
+        var name = document.getElementById("cart-name").value.trim();
+        var phone = document.getElementById("cart-phone").value.trim();
+        var travellers = document.getElementById("cart-travellers").value;
+        var travelDate = document.getElementById("cart-travel-date").value;
+        if (!name || !phone) { showToast("Please enter your name and phone number.", "error"); return; }
+        var today = new Date().toLocaleDateString("en-IN");
+        var body = "TRAVEL REQUEST - AARA VOYAGES\n==================================================\n\n";
+        body += "Request Date: " + today + "\nName: " + name + "\nPhone: " + phone + "\n";
+        if (travellers) body += "Travellers: " + travellers + "\n";
+        if (travelDate) body += "Travel Month: " + travelDate + "\n";
+        var totalQty = cart.reduce(function (sum, c) { return sum + (c.quantity || 1); }, 0);
+        body += "\n--------------------------------------------------\nSELECTED ITEMS (" + totalQty + ")\n--------------------------------------------------\n\n";
+        var total = 0;
+        cart.forEach(function (item, i) {
+            var qty = item.quantity || 1;
+            total += item.price * qty;
+            body += (i + 1) + ". [" + item.type.toUpperCase() + "] " + item.name + " (Qty: " + qty + ")\n";
+            body += "   * Destination: " + item.dest + "\n   * Details: " + item.detail + "\n   * Price: " + item.display + " x " + qty + "\n\n";
+        });
+        body += "--------------------------------------------------\nESTIMATED TOTAL: Rs." + total.toLocaleString("en-IN") + "\n==================================================\n\n";
+        body += "--- JSON DATA ---\n" + JSON.stringify({ customer: { name: name, phone: phone, travellers: travellers, travelDate: travelDate }, items: cart, total_estimated: total, request_date: today }, null, 2);
+        var dests = [...new Set(cart.map(function (c) { return c.dest; }))].join(", ");
+        var subject = encodeURIComponent("Travel Request - " + dests + " - " + today);
+        window.location.href = "mailto:aaravoyages@gmail.com?subject=" + subject + "&body=" + encodeURIComponent(body);
+    }
+    function requestWhatsApp(e) {
+        e.preventDefault();
+        if (cart.length === 0) { showToast("Your cart is empty!", "error"); return; }
+        var name = document.getElementById("cart-name").value.trim() || "Customer";
+        var phone = document.getElementById("cart-phone").value.trim();
+        var travellers = document.getElementById("cart-travellers").value;
+        var travelDate = document.getElementById("cart-travel-date").value;
+        var msg = "Hi Aara Voyages!\n\nI would like to request a travel package.\n\nName: " + name + "\n";
+        if (phone) msg += "Phone: " + phone + "\n";
+        if (travellers) msg += "Travellers: " + travellers + "\n";
+        if (travelDate) msg += "Travel Month: " + travelDate + "\n";
+        msg += "\nMy Selection:\n";
+        var total = 0;
+        cart.forEach(function (item, i) {
+            var qty = item.quantity || 1;
+            total += item.price * qty;
+            msg += "\n" + (i + 1) + ". [" + item.type.toUpperCase() + "] " + item.name + " (Qty: " + qty + ")\n   " + item.detail + " | " + item.display + " x " + qty + "\n   Destination: " + item.dest + "\n";
+        });
+        msg += "\nEstimated Total: Rs." + total.toLocaleString("en-IN") + "\n\nPlease send me a detailed quote. Thank you!";
+        window.open("https://wa.me/919871976001?text=" + encodeURIComponent(msg), "_blank");
+    }
+    function showToast(message, type) {
+        var existing = document.getElementById("hf-toast");
+        if (existing) existing.remove();
+        var toast = document.createElement("div");
+        toast.id = "hf-toast";
+        var bg = type === "success" ? "#2e7d32" : type === "error" ? "#c62828" : "#1565c0";
+        toast.style.cssText = "position:fixed;bottom:6rem;left:50%;transform:translateX(-50%);background:" + bg + ";color:#fff;padding:.7rem 1.4rem;border-radius:50px;font-size:.88rem;font-weight:700;font-family:inherit;z-index:99999;box-shadow:0 8px 24px rgba(0,0,0,.2);animation:slideUp .3s ease;white-space:nowrap;";
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        setTimeout(function () { if (toast.parentNode) toast.remove(); }, 3000);
+    }
+
+    function performSearch() {
+        var dep = document.getElementById("search-departure").value.toLowerCase();
+        var dest = document.getElementById("search-destination").value.toLowerCase();
+        var date = document.getElementById("search-dates").value;
+
+        var loader = document.getElementById("search-loader");
+        var flightGrid = document.getElementById("flights-grid");
+        var hotelGrid = document.getElementById("hotels-grid");
+        var pkgGrid = document.getElementById("packages-grid");
+
+        // Hide grids, show loader
+        flightGrid.style.display = "none";
+        hotelGrid.style.display = "none";
+        pkgGrid.style.display = "none";
+        loader.style.display = "block";
+
+        // Call Live Backend API
+        fetch(`/api/search_live?departure=${dep}&destination=${dest}&date=${date}`)
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === "error") {
+                    alert("Live API Note: " + data.message);
+                } else {
+                    console.log("Live Flights Fetched:", data.flights);
+                    console.log("Live Hotels Fetched:", data.hotels);
+
+                    // Build Flight Cards dynamically from API data
+                    var flightHTML = "";
+                    if (data.flights && data.flights.length > 0) {
+                        data.flights.forEach(function (f) {
+                            var badgeClass = f.class.toLowerCase().includes("business") ? "biz-badge" : "eco-badge";
+                            var flightObj = JSON.stringify({
+                                id: f.id, type: 'flight', name: f.airline + ' | ' + f.from_city + ' to ' + f.to_city,
+                                detail: f.class + ' | ' + f.stops + ' | ' + f.duration, dest: f.dest_label,
+                                price: f.price_per_person, display: f.price_display
+                            }).replace(/"/g, '&quot;');
+
+                            var stopHTML = f.stops !== 'Non-Stop' ? '<div class="flight-stop-dot"></div>' : '';
+                            var stopsClass = f.stops === 'Non-Stop' ? 'stop-direct' : 'stop-layover';
+                            var featuresHTML = f.features.map(feat => '<span class="hf-feature-chip"><i class="fa-solid fa-check"></i> ' + feat + '</span>').join('');
+
+                            flightHTML += '<div class="hf-card flight-card" data-dest="' + f.dest_label.toLowerCase() + '" data-dep="live">' +
+                                '<div class="flight-card-header">' +
+                                '<div class="flight-airline-badge">' +
+                                '<span class="airline-code">' + f.airline_code + '</span>' +
+                                '<span class="airline-name">' + f.airline + '</span>' +
+                                '</div>' +
+                                '<div class="flight-class-badge ' + badgeClass + '">' + f.class + '</div>' +
+                                '</div>' +
+                                '<div class="flight-route">' +
+                                '<div class="flight-city">' +
+                                '<span class="city-time">' + f.departure + '</span>' +
+                                '<span class="city-code">' + f.from_city.split('(')[1].replace(')', '') + '</span>' +
+                                '<span class="city-name">' + f.from_city.split('(')[0].trim() + '</span>' +
+                                '</div>' +
+                                '<div class="flight-middle">' +
+                                '<span class="flight-duration">' + f.duration + '</span>' +
+                                '<div class="flight-line">' +
+                                '<div class="flight-dot"></div>' +
+                                '<div class="flight-track">' + stopHTML + '</div>' +
+                                '<span style="color:#e94560;">&#9992;</span>' +
+                                '</div>' +
+                                '<span class="flight-stops ' + stopsClass + '">' + f.stops + '</span>' +
+                                '</div>' +
+                                '<div class="flight-city" style="align-items:flex-end;">' +
+                                '<span class="city-time">' + f.arrival + '</span>' +
+                                '<span class="city-code">' + f.to_city.split('(')[1].replace(')', '') + '</span>' +
+                                '<span class="city-name">' + f.to_city.split('(')[0].trim() + '</span>' +
+                                '</div>' +
+                                '</div>' +
+                                '<div class="hf-card-features">' + featuresHTML + '</div>' +
+                                '<div class="hf-card-footer">' +
+                                '<div class="hf-price-block">' +
+                                '<span class="hf-price">' + f.price_display + '</span>' +
+                                '<span class="hf-price-label">per person</span>' +
+                                '</div>' +
+                                '<button class="hf-add-btn" id="btn-' + f.id + '" data-item="' + flightObj + '" onclick="addToCart(JSON.parse(this.dataset.item))">' +
+                                '<i class="fa-solid fa-plus"></i> Add to Cart' +
+                                '</button>' +
+                                '</div>' +
+                                '</div>';
+                        });
+                    } else {
+                        flightHTML = '<div class="hf-empty-state"><i class="fa-solid fa-plane-slash" style="color:#ccc; font-size:3rem; margin-bottom:1rem;"></i><p>No live flights found for this route on this date.</p></div>';
+                    }
+                    flightGrid.innerHTML = flightHTML;
+
+                    // Build Hotel Cards dynamically from API data
+                    var hotelHTML = "";
+                    if (data.hotels && data.hotels.length > 0) {
+                        data.hotels.forEach(function (h) {
+                            var hotelObj = JSON.stringify({
+                                id: h.id, type: 'hotel', name: h.name,
+                                detail: h.stars + ' Star | ' + h.location, dest: h.dest_label,
+                                price: h.price_per_night, display: h.price_display
+                            }).replace(/"/g, '&quot;');
+
+                            var starsHTML = "";
+                            for (var i = 0; i < h.stars; i++) {
+                                starsHTML += '<i class="fa-solid fa-star"></i>';
+                            }
+
+                            var amenitiesHTML = h.amenities.map(am => '<span class="amenity-chip"><i class="fa-solid fa-check"></i> ' + am + '</span>').join('');
+
+                            hotelHTML += '<div class="hf-card hotel-card" data-dest="' + h.dest_label.toLowerCase() + '" data-dep="any">' +
+                                '<div class="hotel-card-image">' +
+                                '<img src="' + h.image + '" alt="' + h.name + '" loading="lazy">' +
+                                '<div class="hotel-stars">' + starsHTML + '</div>' +
+                                '<div class="hotel-dest-tag">' + h.dest_label + '</div>' +
+                                '</div>' +
+                                '<div class="hotel-card-body">' +
+                                '<h3 class="hotel-name">' + h.name + '</h3>' +
+                                '<p class="hotel-location"><i class="fa-solid fa-location-dot"></i> ' + h.location + '</p>' +
+                                '<p class="hotel-highlights">' + h.highlights + '</p>' +
+                                '<div class="hotel-amenities">' + amenitiesHTML + '</div>' +
+                                '</div>' +
+                                '<div class="hf-card-footer">' +
+                                '<div class="hf-price-block">' +
+                                '<span class="hf-price">' + h.price_display + '</span>' +
+                                '<span class="hf-price-label">per night</span>' +
+                                '</div>' +
+                                '<button class="hf-add-btn" id="btn-' + h.id + '" data-item="' + hotelObj + '" onclick="addToCart(JSON.parse(this.dataset.item))">' +
+                                '<i class="fa-solid fa-plus"></i> Add to Cart' +
+                                '</button>' +
+                                '</div>' +
+                                '</div>';
+                        });
+                    } else {
+                        hotelHTML = '<div class="hf-empty-state"><i class="fa-solid fa-hotel" style="color:#ccc; font-size:3rem; margin-bottom:1rem;"></i><p>No live hotels found for this destination on this date.</p></div>';
+                    }
+                    hotelGrid.innerHTML = hotelHTML;
+                }
+
+                // --- Render UI ---
+                loader.style.display = "none";
+                flightGrid.style.display = "";
+                hotelGrid.style.display = "";
+                pkgGrid.style.display = "";
+
+                var flightCount = 0, hotelCount = 0, pkgCount = 0;
+
+                // Since flights and hotels are 100% dynamic now, we just count them directly
+                if (data.status === "success") {
+                    flightCount = document.querySelectorAll("#flights-grid .flight-card").length;
+                    hotelCount = document.querySelectorAll("#hotels-grid .hotel-card").length;
+                } else {
+                    flightCount = 0;
+                    hotelCount = 0;
+                }
+
+                // Filter Packages (Still local mock data as there is no "live package" API)
+                document.querySelectorAll(".pkg-card").forEach(function (card) {
+                    var cDest = card.getAttribute("data-dest");
+                    var matchDest = (dest === "any" || cDest === dest);
+                    if (matchDest) { card.style.display = "flex"; pkgCount++; }
+                    else { card.style.display = "none"; }
+                });
+
+                // Update tab counters
+                document.getElementById("cnt-flights").textContent = flightCount;
+                document.getElementById("cnt-hotels").textContent = hotelCount;
+                document.getElementById("cnt-packages").textContent = pkgCount;
+                document.getElementById("cnt-all").textContent = flightCount + hotelCount + pkgCount;
+
+                if (data.status === "success") {
+                    showToast("Live data successfully fetched from Amadeus!", "success");
+                } else {
+                    showToast("Showing simulated data (API keys missing).", "success");
+                }
+            })
+            .catch(err => {
+                console.error("Live API Error:", err);
+                loader.style.display = "none";
+                flightGrid.style.display = "";
+                hotelGrid.style.display = "";
+                pkgGrid.style.display = "";
+                showToast("Error connecting to Live API.", "error");
+            });
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        renderCart(); updateCartFab();
+        cart.forEach(function (item) { markButton(item.id, true); });
+    });
+</script>
+{% endblock %}

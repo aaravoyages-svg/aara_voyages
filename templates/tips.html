@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block title %}Travel Tips & Advice – Aara Voyages{% endblock %}
+{% block meta_description %}Expert travel tips from Aara Voyages — packing smart, visa guidance, budgeting, safety,
+photography, and flight hacks. Travel better, worry less.{% endblock %}
+
+{% block content %}
+
+<!-- ═══════════════ PAGE HERO ═══════════════ -->
+<section class="page-hero" id="tips-hero">
+    <div class="page-hero-content">
+        <h1>Travel Tips & Advice</h1>
+        <p>Expert advice to make every journey seamless and memorable</p>
+    </div>
+</section>
+
+<!-- ═══════════════ TIPS GRID ═══════════════ -->
+<section class="section-padding" id="tips-content">
+    <div class="container">
+        <h2 class="section-title reveal">Travel Smarter, Not Harder</h2>
+        <p class="section-subtitle reveal">Wisdom from our seasoned travel experts</p>
+
+        <div class="tips-grid">
+            {% for category in tips %}
+            <div class="tip-category-card reveal" id="tip-{{ category.category | lower | replace(' ', '-') }}">
+                <div class="tip-category-header">
+                    <span class="cat-icon">{{ category.icon }}</span>
+                    <h3>{{ category.category }}</h3>
+                </div>
+                <div class="tip-category-body">
+                    <ul>
+                        {% for tip in category.tips %}
+                        <li>{{ tip }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════ BONUS TIPS ═══════════════ -->
+<section class="features-section section-padding" id="bonus-tips">
+    <div class="container">
+        <h2 class="section-title reveal" style="color: var(--white);">Pro Travel Secrets</h2>
+        <p class="section-subtitle reveal">Bonus tips from frequent flyers</p>
+
+        <div class="features-grid">
+            <div class="feature-card reveal">
+                <span class="feature-icon">🗺️</span>
+                <h3>Download Offline Maps</h3>
+                <p>Save Google Maps for offline use before you travel. You'll thank yourself when Wi-Fi is unavailable
+                    in remote areas.</p>
+            </div>
+            <div class="feature-card reveal">
+                <span class="feature-icon">🔌</span>
+                <h3>Universal Adapter</h3>
+                <p>Carry a universal power adapter with USB ports. Different countries use different plug types — be
+                    prepared for all of them.</p>
+            </div>
+            <div class="feature-card reveal">
+                <span class="feature-icon">💊</span>
+                <h3>Mini First-Aid Kit</h3>
+                <p>Pack band-aids, paracetamol, antacids, and any prescription medication. Pharmacies abroad may not
+                    have your usual brands.</p>
+            </div>
+            <div class="feature-card reveal">
+                <span class="feature-icon">📱</span>
+                <h3>Local SIM or eSIM</h3>
+                <p>Buy a local SIM card or activate an eSIM on arrival for affordable data. Avoid expensive roaming
+                    charges from your home carrier.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════ CTA ═══════════════ -->
+<section class="cta-section section-padding" id="tips-cta">
+    <div class="container">
+        <h2 class="reveal">Need Personalised Travel Advice?</h2>
+        <p class="reveal">Our travel experts know every destination inside out. Ask us anything!</p>
+        <div class="reveal" style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+            <a href="{{ brand.whatsapp_link }}?text=Hi!%20I%20need%20some%20travel%20advice.%20Can%20you%20help?"
+                target="_blank" class="btn btn-primary" id="tips-cta-whatsapp"><i
+                    class="fa-regular fa-comment-dots"></i> Ask on WhatsApp</a>
+            <a href="/contact" class="btn btn-outline" style="border-color: rgba(255,255,255,.4);"
+                id="tips-cta-contact"><i class="fa-solid fa-envelope"></i> Email Us</a>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
