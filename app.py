@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, render_template, jsonify, request, Response
 
 app = Flask(__name__)
 
@@ -1897,6 +1897,62 @@ def hotels_live():
             "message": f"Live Hotel API Error: {str(error)}",
             "hotels": []
         })
+
+
+@app.route("/robots.txt")
+def robots_txt():
+    base_url = request.url_root
+    if request.headers.get("X-Forwarded-Proto") == "https" and base_url.startswith("http://"):
+        base_url = "https://" + base_url[len("http://"):]
+    lines = [
+        "User-agent: *",
+        "Allow: /",
+        "Disallow: /api/",
+        "",
+        f"Sitemap: {base_url}sitemap.xml",
+    ]
+    return Response("\n".join(lines), mimetype="text/plain")
+
+
+@app.route("/sitemap.xml")
+def sitemap_xml():
+    base_url = request.url_root.rstrip("/")
+    if request.headers.get("X-Forwarded-Proto") == "https" and base_url.startswith("http://"):
+        base_url = "https://" + base_url[len("http://"):]
+    today = datetime.now().strftime("%Y-%m-%d")
+
+    pages = [
+        ("", "1.0", "weekly"),
+        ("/hotels-flights", "0.9", "daily"),
+        ("/packages/international", "0.9", "weekly"),
+        ("/packages/domestic", "0.9", "weekly"),
+        ("/destinations", "0.8", "weekly"),
+        ("/tips", "0.7", "monthly"),
+        ("/about", "0.6", "monthly"),
+        ("/contact", "0.6", "monthly"),
+    ]
+    for slug in DESTINATIONS:
+        pages.append((f"/destination/{slug}", "0.8", "weekly"))
+        pages.append((f"/hotels-flights/{slug}", "0.7", "weekly"))
+
+    url_entries = []
+    for path, priority, changefreq in pages:
+        url_entries.append(
+            f"  <url>\n"
+            f"    <loc>{base_url}{path or '/'}</loc>\n"
+            f"    <lastmod>{today}</lastmod>\n"
+            f"    <changefreq>{changefreq}</changefreq>\n"
+            f"    <priority>{priority}</priority>\n"
+            f"  </url>"
+        )
+
+    xml = (
+        '<?xml version="1.0" encoding="UTF-8"?>\n'
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+        + "\n".join(url_entries)
+        + "\n</urlset>\n"
+    )
+    return Response(xml, mimetype="application/xml")
 
 
 if __name__ == "__main__":
