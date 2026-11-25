@@ -7,26 +7,93 @@ endblock %}
 {% block content %}
 
 <style>
+    /* ── Light Theme Overrides for Landing Page ─────────────────────────────── */
+    body {
+        background: #ffffff;
+        color: #334155;
+    }
+
+    #main-navbar {
+        background: rgba(255, 255, 255, 0.94);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        box-shadow: 0 2px 18px rgba(15, 23, 42, 0.06);
+    }
+
+    #main-navbar .nav-logo-text .brand-name {
+        color: #0f3460;
+    }
+
+    #main-navbar .nav-links a {
+        color: #1e293b;
+    }
+
+    #main-navbar .nav-links a:hover,
+    #main-navbar .nav-links a.active {
+        color: #e94560;
+    }
+
+    #main-navbar .nav-dropdown-menu {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 12px 30px rgba(15, 23, 42, 0.12);
+    }
+
+    #main-navbar .nav-dropdown-menu a {
+        color: #334155;
+    }
+
+    .hero {
+        background: #f8fafc;
+    }
+
+    .hero-overlay {
+        background: linear-gradient(180deg,
+                rgba(15, 23, 42, 0.22) 0%,
+                rgba(15, 23, 42, 0.28) 55%,
+                rgba(15, 23, 42, 0.42) 100%);
+    }
+
+    .hero h1 {
+        color: #ffffff;
+        text-shadow: 0 3px 18px rgba(15, 23, 42, 0.45);
+    }
+
+    .hero h1 span {
+        color: #ffd166;
+    }
+
+    .hero p {
+        color: rgba(255, 255, 255, 0.95);
+        text-shadow: 0 2px 10px rgba(15, 23, 42, 0.45);
+        font-weight: 500;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
     /* ── Hero Search Bar ──────────────────────────────────────────────────────── */
     .hero-search {
-        background: rgba(255, 255, 255, 0.12);
+        background: rgba(255, 255, 255, 0.96);
         backdrop-filter: blur(12px);
         -webkit-backdrop-filter: blur(12px);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 14px 36px rgba(15, 23, 42, 0.12);
         border-radius: 16px;
         padding: 1.25rem 1.5rem;
         margin-top: 2rem;
+        margin-left: auto;
+        margin-right: auto;
         max-width: 780px;
         width: 100%;
     }
 
     .hero-search-title {
-        color: rgba(255, 255, 255, 0.8);
+        color: #0f3460;
         font-size: 0.78rem;
         letter-spacing: 0.1em;
         text-transform: uppercase;
         margin-bottom: 0.85rem;
-        font-weight: 600;
+        font-weight: 700;
     }
 
     .hero-search-row {
@@ -42,22 +109,23 @@ endblock %}
         min-width: 140px;
         padding: 0.7rem 1rem;
         border-radius: 10px;
-        border: 1px solid rgba(255, 255, 255, 0.25);
-        background: rgba(255, 255, 255, 0.95);
-        color: #1a1a2e;
+        border: 1px solid #cbd5e1;
+        background: #f8fafc;
+        color: #0f3460;
         font-size: 0.85rem;
         font-family: inherit;
         outline: none;
-        transition: border-color 0.2s;
+        transition: border-color 0.2s, background 0.2s;
     }
 
     .hero-search-row input:focus,
     .hero-search-row select:focus {
-        border-color: rgba(255, 255, 255, 0.7);
+        border-color: #e94560;
+        background: #fff;
     }
 
     .hero-search-row .btn-search {
-        background: linear-gradient(135deg, #e94560, #c0392b);
+        background: linear-gradient(135deg, #fe5d5d, #e04848);
         color: #fff;
         border: none;
         padding: 0.72rem 1.5rem;
@@ -74,7 +142,7 @@ endblock %}
 
     .hero-search-row .btn-search:hover {
         transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(233, 69, 96, 0.4);
+        box-shadow: 0 8px 20px rgba(254, 93, 93, 0.4);
     }
 
     /* ── Trust Badges ─────────────────────────────────────────────────────────── */
@@ -141,9 +209,9 @@ endblock %}
 
     .pkg-tab.active,
     .pkg-tab:hover {
-        background: #1a1a2e;
+        background: #004d40;
         color: #fff;
-        border-color: #1a1a2e;
+        border-color: #004d40;
     }
 
     .pkg-grid {
@@ -168,7 +236,7 @@ endblock %}
     .pkg-cat-card:hover {
         transform: translateY(-4px);
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
-        color: #1a1a2e;
+        color: #004d40;
     }
 
     .pkg-cat-icon {
@@ -185,7 +253,7 @@ endblock %}
 
     .pkg-cat-from {
         font-size: 0.75rem;
-        color: #e94560;
+        color: #fe5d5d;
         font-weight: 600;
     }
 
@@ -234,7 +302,7 @@ endblock %}
     .why-card h4 {
         font-size: 0.95rem;
         font-weight: 700;
-        color: #1a1a2e;
+        color: #004d40;
         margin-bottom: 0.5rem;
     }
 
@@ -244,18 +312,57 @@ endblock %}
         line-height: 1.55;
     }
 
-    /* ── Testimonials ─────────────────────────────────────────────────────────── */
+    /* ── Features / USPs (Light Theme) ───────────────────────────────────────── */
+    .features-section {
+        background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%) !important;
+    }
+
+    .features-section .section-title {
+        color: #0f3460 !important;
+    }
+
+    .features-section .section-subtitle {
+        color: #64748b !important;
+    }
+
+    .feature-card {
+        background: #ffffff !important;
+        border: 1px solid #e2e8f0 !important;
+        box-shadow: 0 4px 18px rgba(15, 23, 42, 0.05);
+    }
+
+    .feature-card:hover {
+        background: #ffffff !important;
+        border-color: #e94560 !important;
+        box-shadow: 0 12px 28px rgba(233, 69, 96, 0.12);
+    }
+
+    .feature-icon {
+        color: #e94560;
+    }
+
+    .feature-card h3 {
+        color: #0f3460 !important;
+    }
+
+    .feature-card p {
+        color: #475569 !important;
+    }
+
+    /* ── Testimonials (Light Theme) ──────────────────────────────────────────── */
     .testimonials-section {
-        background: linear-gradient(135deg, #0f3460 0%, #16213e 50%, #1a1a2e 100%);
+        background: #f8fafc;
         padding: 5rem 0;
+        border-top: 1px solid #e2e8f0;
+        border-bottom: 1px solid #e2e8f0;
     }
 
     .testimonials-section .section-title {
-        color: #fff !important;
+        color: #0f3460 !important;
     }
 
     .testimonials-section .section-subtitle {
-        color: rgba(255, 255, 255, 0.6) !important;
+        color: #64748b !important;
     }
 
     .reviews-bar {
@@ -270,17 +377,18 @@ endblock %}
     .reviews-bar .rating-big {
         font-size: 2.5rem;
         font-weight: 800;
-        color: #ffd700;
+        color: #f59e0b;
         line-height: 1;
     }
 
     .reviews-bar .rating-stars {
         font-size: 1.2rem;
+        color: #f59e0b;
         margin-bottom: 0.2rem;
     }
 
     .reviews-bar .rating-meta {
-        color: rgba(255, 255, 255, 0.6);
+        color: #64748b;
         font-size: 0.82rem;
     }
 
@@ -291,11 +399,11 @@ endblock %}
     }
 
     .testimonial-card {
-        background: rgba(255, 255, 255, 0.07);
-        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
         border-radius: 16px;
         padding: 1.75rem;
-        backdrop-filter: blur(6px);
+        box-shadow: 0 4px 18px rgba(15, 23, 42, 0.05);
         transition: all 0.25s;
         display: flex;
         flex-direction: column;
@@ -303,19 +411,21 @@ endblock %}
     }
 
     .testimonial-card:hover {
-        background: rgba(255, 255, 255, 0.11);
+        background: #ffffff;
+        border-color: #cbd5e1;
+        box-shadow: 0 10px 26px rgba(15, 23, 42, 0.09);
         transform: translateY(-3px);
     }
 
     .testimonial-stars {
-        color: #ffd700;
+        color: #f59e0b;
         font-size: 1rem;
         margin-bottom: 0.85rem;
         letter-spacing: 2px;
     }
 
     .testimonial-text {
-        color: rgba(255, 255, 255, 0.82);
+        color: #334155;
         font-size: 0.88rem;
         line-height: 1.65;
         margin-bottom: 1.25rem;
@@ -333,7 +443,7 @@ endblock %}
         width: 42px;
         height: 42px;
         border-radius: 50%;
-        background: linear-gradient(135deg, #e94560, #c0392b);
+        background: linear-gradient(135deg, #fe5d5d, #e04848);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -345,14 +455,37 @@ endblock %}
 
     .author-info .author-name {
         font-weight: 700;
-        color: #fff;
+        color: #0f3460;
         font-size: 0.88rem;
     }
 
     .author-info .author-dest {
         font-size: 0.75rem;
-        color: rgba(255, 255, 255, 0.5);
+        color: #64748b;
         margin-top: 1px;
+    }
+
+    /* ── CTA Section (Light Theme) ───────────────────────────────────────────── */
+    .cta-section {
+        background: linear-gradient(135deg, #fff5f7 0%, #f0f4ff 100%) !important;
+    }
+
+    .cta-section h2 {
+        color: #0f3460 !important;
+    }
+
+    .cta-section p {
+        color: #475569 !important;
+    }
+
+    .cta-section .btn-outline {
+        color: #0f3460 !important;
+        border-color: #0f3460 !important;
+    }
+
+    .cta-section .btn-outline:hover {
+        background: #0f3460 !important;
+        color: #ffffff !important;
     }
 
     /* ── Hero Slideshow ──────────────────────────────────────────────────────── */
@@ -632,7 +765,7 @@ endblock %}
 <!-- ═══════════════ FEATURES / USPs ═══════════════ -->
 <section class="features-section section-padding" id="why-choose-us">
     <div class="container">
-        <h2 class="section-title reveal" style="color: var(--white);">Why Aara Voyages?</h2>
+        <h2 class="section-title reveal">Why Aara Voyages?</h2>
         <p class="section-subtitle reveal">What makes us your perfect travel partner</p>
 
         <div class="features-grid">

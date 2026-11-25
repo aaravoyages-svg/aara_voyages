@@ -1352,7 +1352,7 @@ def packages_international():
         packages=intl_pkgs,
         category="international",
         page_title="International Tour Packages",
-        page_subtitle="Explore 5 countries / 18 handcrafted packages / Complimentary Travel Insurance",
+        page_subtitle=f"Explore {len(dest_slugs)} countries / {len(intl_pkgs)} handcrafted packages / Complimentary Travel Insurance",
         dest_slugs=dest_slugs,
         DESTINATIONS=DESTINATIONS,
     )
@@ -1367,7 +1367,7 @@ def packages_domestic():
         packages=dom_pkgs,
         category="domestic",
         page_title="Domestic Tour Packages",
-        page_subtitle="Explore 5 Indian states / 17 handcrafted packages / Complimentary Travel Insurance",
+        page_subtitle=f"Explore {len(dest_slugs)} Indian states & regions / {len(dom_pkgs)} handcrafted packages / Complimentary Travel Insurance",
         dest_slugs=dest_slugs,
         DESTINATIONS=DESTINATIONS,
     )
