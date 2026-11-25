@@ -1204,23 +1204,23 @@ insurance, 24/7 support.{% endblock %}
         {% for pkg in packages %}
     {
         id: "{{ pkg.id }}",
-            dest: "{{ pkg.destination }}",
-                nights: { { pkg.duration_nights } },
-        price: { { pkg.price_numeric } },
-        themes: { { pkg.theme | tojson } },
-        name: { { pkg.name | tojson } },
-        duration: { { pkg.duration_label | tojson } },
-        country: { { pkg.country | tojson } },
-        priceStr: { { pkg.price_per_person | tojson } },
-        hotel: { { pkg.hotel_category | tojson } },
-        badge: { { (pkg.badge or '') | tojson } },
-        badgeColor: { { (pkg.badge_color or '') | tojson } },
-        highlights: { { pkg.top_highlights | tojson } },
-        inclusions: { { pkg.inclusions | tojson } },
-        image: { { pkg.image | tojson } },
+        dest: "{{ pkg.destination }}",
+        nights: {{ pkg.duration_nights }},
+        price: {{ pkg.price_numeric }},
+        themes: {{ pkg.theme | tojson }},
+        name: {{ pkg.name | tojson }},
+        duration: {{ pkg.duration_label | tojson }},
+        country: {{ pkg.country | tojson }},
+        priceStr: {{ pkg.price_per_person | tojson }},
+        hotel: {{ pkg.hotel_category | tojson }},
+        badge: {{ (pkg.badge or '') | tojson }},
+        badgeColor: {{ (pkg.badge_color or '') | tojson }},
+        highlights: {{ pkg.top_highlights | tojson }},
+        inclusions: {{ pkg.inclusions | tojson }},
+        image: {{ pkg.image | tojson }}
     },
     {% endfor %}
-];
+    ];
 
     // ── State ─────────────────────────────────────────────────────────────────
     let activeFilters = {
@@ -1312,7 +1312,7 @@ insurance, 24/7 support.{% endblock %}
         activeFilters.dest = dest;
         // Update both chip groups
         document.querySelectorAll('.dest-chip').forEach(c => c.classList.remove('active'));
-        document.querySelectorAll(`[data-dest="${dest}"]`).forEach(c => c.classList.add('active'));
+        document.querySelectorAll(`.dest-chip[data-dest="${dest}"]`).forEach(c => c.classList.add('active'));
         applyFilters();
     }
 

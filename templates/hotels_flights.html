@@ -71,6 +71,29 @@ and more.{% endblock %}
     </div>
 </aside>
 
+<!-- UPSELL HOTEL MODAL -->
+<div class="upsell-modal-overlay" id="upsell-modal-overlay" onclick="closeUpsellModal(event)">
+    <div class="upsell-modal" onclick="event.stopPropagation()">
+        <div class="upsell-modal-header">
+            <h3><i class="fa-solid fa-hotel"></i> <span id="upsell-modal-title">Hotels</span></h3>
+            <button class="upsell-modal-close" onclick="closeUpsellModal()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="upsell-modal-search">
+            <div class="upsell-search-input-wrap">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="upsell-hotel-search-input" placeholder="Search hotels by name, area, or city..."
+                    oninput="filterUpsellHotels()"
+                    onkeydown="if(event.key==='Enter'){event.preventDefault();searchLiveUpsellHotels();}">
+            </div>
+            <button class="upsell-search-live-btn" id="upsell-hotel-search-btn" onclick="searchLiveUpsellHotels()">
+                <i class="fa-solid fa-bolt"></i> Search Live
+            </button>
+        </div>
+        <div class="upsell-modal-body" id="upsell-modal-body">
+        </div>
+    </div>
+</div>
+
 <!-- HERO -->
 <section class="hf-hero">
     <div class="hf-hero-bg"></div>
@@ -86,94 +109,119 @@ and more.{% endblock %}
 <section class="hf-search-section" style="background:#fff; padding:1.5rem 0; border-bottom:1px solid #eee;">
     <div class="container">
         <div class="hf-search-box"
-            style="display:flex; flex-wrap:wrap; gap:1rem; align-items:flex-end; background:#f4f6fb; padding:1.5rem; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.03);">
-            <div style="flex:1; min-width:200px;">
-                <label style="display:block; font-size:0.8rem; font-weight:700; color:#555; margin-bottom:0.4rem;"><i
-                        class="fa-solid fa-plane-departure"></i> Departure City</label>
-                <select id="search-departure"
-                    style="width:100%; padding:0.8rem; border:1px solid #dcdcdc; border-radius:8px; outline:none; font-family:inherit; color:#333;">
-                    <option value="any">Any City</option>
-                    <optgroup label="India">
-                        <option value="DEL|Delhi">Delhi (DEL)</option>
-                        <option value="BOM|Mumbai">Mumbai (BOM)</option>
-                        <option value="BLR|Bengaluru">Bengaluru (BLR)</option>
-                        <option value="MAA|Chennai">Chennai (MAA)</option>
-                        <option value="CCU|Kolkata">Kolkata (CCU)</option>
-                        <option value="HYD|Hyderabad">Hyderabad (HYD)</option>
-                        <option value="COK|Kochi">Kochi (COK)</option>
-                        <option value="GOI|Goa">Goa (GOI)</option>
-                        <option value="JAI|Jaipur">Jaipur (JAI)</option>
-                    </optgroup>
-                    <optgroup label="Global">
-                        <option value="DXB|Dubai">Dubai, UAE (DXB)</option>
-                        <option value="LHR|London">London, UK (LHR)</option>
-                        <option value="JFK|New York">New York, USA (JFK)</option>
-                        <option value="CDG|Paris">Paris, France (CDG)</option>
-                        <option value="SIN|Singapore">Singapore (SIN)</option>
-                        <option value="NRT|Tokyo">Tokyo, Japan (NRT)</option>
-                        <option value="SYD|Sydney">Sydney, Australia (SYD)</option>
-                        <option value="FRA|Frankfurt">Frankfurt, Germany (FRA)</option>
-                        <option value="YYZ|Toronto">Toronto, Canada (YYZ)</option>
-                        <option value="BKK|Bangkok">Bangkok, Thailand (BKK)</option>
-                        <option value="KUL|Kuala Lumpur">Kuala Lumpur, Malaysia (KUL)</option>
-                        <option value="DPS|Bali">Bali, Indonesia (DPS)</option>
-                        <option value="SGN|Ho Chi Minh">Ho Chi Minh, Vietnam (SGN)</option>
-                        <option value="IST|Istanbul">Istanbul, Turkey (IST)</option>
-                        <option value="DOH|Doha">Doha, Qatar (DOH)</option>
-                        <option value="AUH|Abu Dhabi">Abu Dhabi, UAE (AUH)</option>
-                    </optgroup>
-                </select>
+            style="background:#f4f6fb; padding:1.5rem; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.03);">
+
+            <!-- TRIP TYPE SELECTOR & PERSONS -->
+            <div class="trip-type-bar">
+                <div class="trip-type-tabs">
+                    <button type="button" class="trip-type-tab active" data-trip="one_way" onclick="setTripType('one_way')">
+                        <i class="fa-solid fa-arrow-right"></i> One Way
+                    </button>
+                    <button type="button" class="trip-type-tab" data-trip="round_trip" onclick="setTripType('round_trip')">
+                        <i class="fa-solid fa-arrows-left-right"></i> Round Trip
+                    </button>
+                    <button type="button" class="trip-type-tab" data-trip="multi_city" onclick="setTripType('multi_city')">
+                        <i class="fa-solid fa-route"></i> Multi-City
+                    </button>
+                </div>
+                <div style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap; margin-left:auto;">
+                    <div id="roundtrip-nights-badge" class="stay-nights-pill" style="display:none;"></div>
+                    <div class="travellers-inline-strip">
+                        <div class="traveller-box" title="Adults (12+ years)">
+                            <span class="traveller-title"><i class="fa-solid fa-user" style="color:#e94560;"></i> Adults</span>
+                            <div class="traveller-counter">
+                                <button type="button" onclick="updateTraveller('adults', -1)">&minus;</button>
+                                <span id="cnt-adults">1</span>
+                                <button type="button" onclick="updateTraveller('adults', 1)">+</button>
+                            </div>
+                        </div>
+                        <div class="traveller-box" title="Children (2-11 years)">
+                            <span class="traveller-title"><i class="fa-solid fa-child" style="color:#e94560;"></i> Child</span>
+                            <div class="traveller-counter">
+                                <button type="button" onclick="updateTraveller('children', -1)">&minus;</button>
+                                <span id="cnt-children">0</span>
+                                <button type="button" onclick="updateTraveller('children', 1)">+</button>
+                            </div>
+                        </div>
+                        <div class="traveller-box" title="Infants (Under 2 years)">
+                            <span class="traveller-title"><i class="fa-solid fa-baby" style="color:#e94560;"></i> Infant</span>
+                            <div class="traveller-counter">
+                                <button type="button" onclick="updateTraveller('infants', -1)">&minus;</button>
+                                <span id="cnt-infants">0</span>
+                                <button type="button" onclick="updateTraveller('infants', 1)">+</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div style="flex:1; min-width:200px;">
-                <label style="display:block; font-size:0.8rem; font-weight:700; color:#555; margin-bottom:0.4rem;"><i
-                        class="fa-solid fa-location-dot"></i> Destination</label>
-                <select id="search-destination"
-                    style="width:100%; padding:0.8rem; border:1px solid #dcdcdc; border-radius:8px; outline:none; font-family:inherit; color:#333;">
-                    <option value="any">Any Destination</option>
-                    <optgroup label="Global Destinations">
-                        <option value="DXB|Dubai">Dubai, UAE (DXB)</option>
-                        <option value="SIN|Singapore">Singapore (SIN)</option>
-                        <option value="DPS|Bali">Bali, Indonesia (DPS)</option>
-                        <option value="KUL|Kuala Lumpur">Kuala Lumpur, Malaysia (KUL)</option>
-                        <option value="SGN|Ho Chi Minh">Ho Chi Minh, Vietnam (SGN)</option>
-                        <option value="LHR|London">London, UK (LHR)</option>
-                        <option value="CDG|Paris">Paris, France (CDG)</option>
-                        <option value="FCO|Rome">Rome, Italy (FCO)</option>
-                        <option value="MAD|Madrid">Madrid, Spain (MAD)</option>
-                        <option value="AMS|Amsterdam">Amsterdam, Netherlands (AMS)</option>
-                        <option value="JFK|New York">New York, USA (JFK)</option>
-                        <option value="LAX|Los Angeles">Los Angeles, USA (LAX)</option>
-                        <option value="YYZ|Toronto">Toronto, Canada (YYZ)</option>
-                        <option value="SYD|Sydney">Sydney, Australia (SYD)</option>
-                        <option value="AKL|Auckland">Auckland, New Zealand (AKL)</option>
-                        <option value="NRT|Tokyo">Tokyo, Japan (NRT)</option>
-                        <option value="HKG|Hong Kong">Hong Kong (HKG)</option>
-                        <option value="BKK|Bangkok">Bangkok, Thailand (BKK)</option>
-                        <option value="MLE|Male">Male, Maldives (MLE)</option>
-                        <option value="CMB|Colombo">Colombo, Sri Lanka (CMB)</option>
-                        <option value="IST|Istanbul">Istanbul, Turkey (IST)</option>
-                    </optgroup>
-                    <optgroup label="Domestic (India)">
-                        <option value="DEL|Delhi">Delhi (DEL)</option>
-                        <option value="BOM|Mumbai">Mumbai (BOM)</option>
-                        <option value="GOI|Goa">Goa (GOI)</option>
-                        <option value="COK|Kochi">Kochi, Kerala (COK)</option>
-                        <option value="JAI|Jaipur">Jaipur, Rajasthan (JAI)</option>
-                        <option value="SXR|Srinagar">Srinagar, Kashmir (SXR)</option>
-                        <option value="IXZ|Port Blair">Port Blair, Andaman (IXZ)</option>
-                    </optgroup>
-                </select>
+
+            <!-- ONE WAY / ROUND TRIP ROW -->
+            <div id="standard-search-row" style="display:flex; flex-wrap:wrap; gap:1rem; align-items:flex-end;">
+                <div style="flex:1; min-width:210px; position:relative;" class="airport-field-group">
+                    <label style="display:block; font-size:0.8rem; font-weight:700; color:#555; margin-bottom:0.4rem;">
+                        <i class="fa-solid fa-plane-departure" style="color:#e94560;"></i> Departure City / Airport
+                    </label>
+                    <div style="position:relative;">
+                        <input type="text" id="departure-input"
+                            placeholder="Type city or airport (e.g. Delhi, DEL, Mumbai...)" autocomplete="off"
+                            style="width:100%; padding:0.8rem 2.4rem 0.8rem 0.85rem; border:1px solid #dcdcdc; border-radius:8px; outline:none; font-family:inherit; color:#333; box-sizing:border-box; background:#fff; font-size:0.9rem; transition:border-color 0.2s, box-shadow 0.2s;">
+                        <i class="fa-solid fa-magnifying-glass"
+                            style="position:absolute; right:12px; top:50%; transform:translateY(-50%); color:#aaa; pointer-events:none; font-size:0.85rem;"></i>
+                    </div>
+                    <input type="hidden" id="search-departure" value="any">
+                    <div id="departure-suggestions" class="airport-suggestions-dropdown"></div>
+                </div>
+
+                <div style="flex:1; min-width:210px; position:relative;" class="airport-field-group">
+                    <label style="display:block; font-size:0.8rem; font-weight:700; color:#555; margin-bottom:0.4rem;">
+                        <i class="fa-solid fa-location-dot" style="color:#e94560;"></i> Destination City / Airport
+                    </label>
+                    <div style="position:relative;">
+                        <input type="text" id="destination-input"
+                            placeholder="Type city or airport (e.g. London, Dubai, Goa...)" autocomplete="off"
+                            style="width:100%; padding:0.8rem 2.4rem 0.8rem 0.85rem; border:1px solid #dcdcdc; border-radius:8px; outline:none; font-family:inherit; color:#333; box-sizing:border-box; background:#fff; font-size:0.9rem; transition:border-color 0.2s, box-shadow 0.2s;">
+                        <i class="fa-solid fa-magnifying-glass"
+                            style="position:absolute; right:12px; top:50%; transform:translateY(-50%); color:#aaa; pointer-events:none; font-size:0.85rem;"></i>
+                    </div>
+                    <input type="hidden" id="search-destination" value="any">
+                    <div id="destination-suggestions" class="airport-suggestions-dropdown"></div>
+                </div>
+
+                <div style="flex:0.8; min-width:165px;">
+                    <label style="display:block; font-size:0.8rem; font-weight:700; color:#555; margin-bottom:0.4rem;"><i
+                            class="fa-regular fa-calendar"></i> Departure Date</label>
+                    <input type="date" id="search-dates" onchange="updateRoundTripNights()"
+                        style="width:100%; padding:0.8rem; border:1px solid #dcdcdc; border-radius:8px; outline:none; font-family:inherit; color:#333; box-sizing:border-box; background:#fff;">
+                </div>
+
+                <div id="return-date-group" style="flex:0.8; min-width:165px; display:none;">
+                    <label style="display:block; font-size:0.8rem; font-weight:700; color:#555; margin-bottom:0.4rem;"><i
+                            class="fa-regular fa-calendar-check" style="color:#e94560;"></i> Return Date</label>
+                    <input type="date" id="search-return-date" onchange="updateRoundTripNights()"
+                        style="width:100%; padding:0.8rem; border:1px solid #dcdcdc; border-radius:8px; outline:none; font-family:inherit; color:#333; box-sizing:border-box; background:#fff;">
+                </div>
+
+                <button onclick="performSearch()"
+                    style="padding:0.8rem 2rem; background:linear-gradient(135deg,#e94560,#c0392b); color:#fff; border:none; border-radius:8px; font-weight:700; cursor:pointer; font-family:inherit; display:flex; align-items:center; gap:0.5rem; transition:transform 0.2s; height:47px;">
+                    <i class="fa-solid fa-magnifying-glass"></i> Search Live
+                </button>
             </div>
-            <div style="flex:1; min-width:200px;">
-                <label style="display:block; font-size:0.8rem; font-weight:700; color:#555; margin-bottom:0.4rem;"><i
-                        class="fa-regular fa-calendar"></i> Travel Date</label>
-                <input type="date" id="search-dates"
-                    style="width:100%; padding:0.8rem; border:1px solid #dcdcdc; border-radius:8px; outline:none; font-family:inherit; color:#333; box-sizing:border-box;">
+
+            <!-- MULTI-CITY SEARCH ROWS -->
+            <div id="multicity-search-rows" style="display:none;">
+                <div id="multicity-legs-container"></div>
+                <div class="mc-actions-bar">
+                    <button type="button" class="mc-add-leg-btn" onclick="addMultiCityLeg()">
+                        <i class="fa-solid fa-plus"></i> Add Another City
+                    </button>
+                    <div id="multicity-nights-summary" class="stay-nights-pill" style="display:none;"></div>
+                    <button type="button" onclick="performSearch()"
+                        style="margin-left:auto; padding:0.8rem 2rem; background:linear-gradient(135deg,#e94560,#c0392b); color:#fff; border:none; border-radius:8px; font-weight:700; cursor:pointer; font-family:inherit; display:flex; align-items:center; gap:0.5rem;">
+                        <i class="fa-solid fa-magnifying-glass"></i> Search Multi-City
+                    </button>
+                </div>
             </div>
-            <button onclick="performSearch()"
-                style="padding:0.8rem 2rem; background:linear-gradient(135deg,#e94560,#c0392b); color:#fff; border:none; border-radius:8px; font-weight:700; cursor:pointer; font-family:inherit; display:flex; align-items:center; gap:0.5rem; transition:transform 0.2s; height:47px;">
-                <i class="fa-solid fa-magnifying-glass"></i> Search Live
-            </button>
+
         </div>
     </div>
 </section>
@@ -1444,6 +1492,779 @@ and more.{% endblock %}
             padding: 4rem 1rem 2rem
         }
     }
+
+    /* ---- AIRPORT AUTOCOMPLETE SUGGESTIONS ---- */
+    .airport-field-group {
+        position: relative;
+    }
+
+    .airport-field-group input:focus {
+        border-color: #e94560 !important;
+        box-shadow: 0 0 0 3px rgba(233, 69, 96, 0.12) !important;
+    }
+
+    .airport-suggestions-dropdown {
+        position: absolute;
+        top: calc(100% + 4px);
+        left: 0;
+        right: 0;
+        background: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        border: 1px solid #e5e7eb;
+        max-height: 290px;
+        overflow-y: auto;
+        z-index: 1050;
+        display: none;
+    }
+
+    .airport-suggestion-header {
+        padding: 0.45rem 0.85rem;
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #94a3b8;
+        background: #f8fafc;
+        border-bottom: 1px solid #f1f5f9;
+    }
+
+    .airport-suggestion-item {
+        padding: 0.65rem 0.85rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+        cursor: pointer;
+        border-bottom: 1px solid #f1f5f9;
+        transition: background 0.12s ease;
+    }
+
+    .airport-suggestion-item:last-child {
+        border-bottom: none;
+    }
+
+    .airport-suggestion-item:hover,
+    .airport-suggestion-item.active {
+        background: #fff1f2;
+    }
+
+    .airport-item-left {
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+        overflow: hidden;
+    }
+
+    .airport-item-icon {
+        color: #e94560;
+        font-size: 0.85rem;
+        width: 16px;
+        text-align: center;
+        flex-shrink: 0;
+    }
+
+    .airport-item-texts {
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    .airport-item-city {
+        font-weight: 700;
+        color: #1e293b;
+        font-size: 0.88rem;
+        line-height: 1.2;
+    }
+
+    .airport-item-country {
+        font-weight: 400;
+        color: #64748b;
+        font-size: 0.78rem;
+    }
+
+    .airport-item-airport {
+        font-size: 0.74rem;
+        color: #94a3b8;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 210px;
+    }
+
+    .airport-item-right {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        flex-shrink: 0;
+    }
+
+    .airport-item-code {
+        background: #f1f5f9;
+        color: #0f172a;
+        font-weight: 800;
+        font-size: 0.8rem;
+        letter-spacing: 0.05em;
+        padding: 0.2rem 0.5rem;
+        border-radius: 6px;
+    }
+
+    .airport-suggestion-item:hover .airport-item-code,
+    .airport-suggestion-item.active .airport-item-code {
+        background: #e94560;
+        color: #fff;
+    }
+
+    .airport-item-type {
+        font-size: 0.68rem;
+        color: #94a3b8;
+        font-weight: 600;
+    }
+
+    .airport-empty-suggestion {
+        padding: 1rem 0.85rem;
+        text-align: center;
+        color: #94a3b8;
+        font-size: 0.85rem;
+    }
+
+    /* ---- UPSELL SUGGESTION PANEL (shown after flight added to cart) ---- */
+    .upsell-panel {
+        background: linear-gradient(135deg, #f0f4ff 0%, #fdf2f8 100%);
+        border: 1px dashed #c7d2fe;
+        border-radius: 14px;
+        padding: 1rem;
+        margin: 0.75rem 0;
+        animation: upsellSlideIn 0.4s ease;
+    }
+
+    @keyframes upsellSlideIn {
+        from {
+            opacity: 0;
+            transform: translateY(12px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .upsell-header {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.82rem;
+        font-weight: 800;
+        color: #4338ca;
+        margin-bottom: 0.6rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+    }
+
+    .upsell-header i {
+        font-size: 1rem;
+        color: #e94560;
+    }
+
+    .upsell-dest-tag {
+        display: inline-block;
+        background: #e94560;
+        color: #fff;
+        font-size: 0.72rem;
+        font-weight: 700;
+        padding: 0.15rem 0.55rem;
+        border-radius: 50px;
+        margin-left: auto;
+    }
+
+    .upsell-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
+    }
+
+    .upsell-btn {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.3rem;
+        padding: 0.7rem 0.4rem;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        background: #fff;
+        cursor: pointer;
+        font-family: inherit;
+        transition: all 0.2s;
+        text-align: center;
+    }
+
+    .upsell-btn:hover {
+        border-color: #e94560;
+        background: #fff5f7;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(233, 69, 96, 0.12);
+    }
+
+    .upsell-btn i {
+        font-size: 1.3rem;
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: #f1f5f9;
+        color: #475569;
+        transition: all 0.2s;
+    }
+
+    .upsell-btn:hover i {
+        background: #e94560;
+        color: #fff;
+    }
+
+    .upsell-btn-label {
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: #334155;
+        line-height: 1.2;
+    }
+
+    .upsell-btn-sub {
+        font-size: 0.62rem;
+        color: #94a3b8;
+        font-weight: 600;
+    }
+
+    /* ---- UPSELL HOTEL MODAL OVERLAY ---- */
+    .upsell-modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.55);
+        z-index: 100001;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        animation: fadeIn 0.25s;
+    }
+
+    .upsell-modal-overlay.open {
+        display: flex;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+
+    .upsell-modal {
+        background: #fff;
+        border-radius: 16px;
+        width: 92%;
+        max-width: 540px;
+        max-height: 80vh;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+        animation: modalSlideUp 0.3s ease;
+    }
+
+    @keyframes modalSlideUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .upsell-modal-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1rem 1.2rem;
+        border-bottom: 1px solid #f1f5f9;
+        background: linear-gradient(135deg, #0f3460, #16213e);
+        color: #fff;
+        border-radius: 16px 16px 0 0;
+    }
+
+    .upsell-modal-header h3 {
+        font-size: 1rem;
+        font-weight: 800;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .upsell-modal-close {
+        background: rgba(255, 255, 255, 0.15);
+        border: none;
+        color: #fff;
+        font-size: 1.1rem;
+        cursor: pointer;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.2s;
+    }
+
+    .upsell-modal-close:hover {
+        background: rgba(255, 255, 255, 0.3);
+    }
+
+    .upsell-modal-search {
+        display: flex;
+        gap: 0.5rem;
+        padding: 0.75rem 1rem;
+        background: #f8fafc;
+        border-bottom: 1px solid #e2e8f0;
+        align-items: center;
+    }
+
+    .upsell-search-input-wrap {
+        position: relative;
+        flex: 1;
+    }
+
+    .upsell-search-input-wrap i {
+        position: absolute;
+        left: 11px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #94a3b8;
+        font-size: 0.82rem;
+        pointer-events: none;
+    }
+
+    .upsell-search-input-wrap input {
+        width: 100%;
+        padding: 0.55rem 0.75rem 0.55rem 2.1rem;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        font-size: 0.84rem;
+        font-family: inherit;
+        outline: none;
+        box-sizing: border-box;
+        background: #fff;
+        color: #1e293b;
+        transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .upsell-search-input-wrap input:focus {
+        border-color: #e94560;
+        box-shadow: 0 0 0 3px rgba(233, 69, 96, 0.12);
+    }
+
+    .upsell-search-live-btn {
+        padding: 0.55rem 0.85rem;
+        background: linear-gradient(135deg, #0f3460, #16213e);
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        font-size: 0.78rem;
+        font-weight: 700;
+        cursor: pointer;
+        font-family: inherit;
+        white-space: nowrap;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        transition: opacity 0.2s, transform 0.15s;
+    }
+
+    .upsell-search-live-btn:hover {
+        opacity: 0.92;
+        transform: translateY(-1px);
+    }
+
+    .upsell-modal-body {
+        overflow-y: auto;
+        padding: 1rem;
+        flex: 1;
+    }
+
+    .upsell-hotel-card {
+        display: flex;
+        gap: 0.8rem;
+        padding: 0.8rem;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        margin-bottom: 0.6rem;
+        background: #fff;
+        transition: all 0.2s;
+    }
+
+    .upsell-hotel-card:hover {
+        border-color: #e94560;
+        box-shadow: 0 4px 12px rgba(233, 69, 96, 0.08);
+    }
+
+    .upsell-hotel-img {
+        width: 80px;
+        height: 80px;
+        border-radius: 10px;
+        object-fit: cover;
+        flex-shrink: 0;
+    }
+
+    .upsell-hotel-info {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .upsell-hotel-name {
+        font-size: 0.85rem;
+        font-weight: 800;
+        color: #1e293b;
+        margin-bottom: 0.15rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .upsell-hotel-loc {
+        font-size: 0.72rem;
+        color: #94a3b8;
+        margin-bottom: 0.2rem;
+    }
+
+    .upsell-hotel-stars {
+        font-size: 0.65rem;
+        color: #f59e0b;
+        margin-bottom: 0.3rem;
+    }
+
+    .upsell-hotel-bottom {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.4rem;
+    }
+
+    .upsell-hotel-price {
+        font-size: 0.82rem;
+        font-weight: 800;
+        color: #e94560;
+    }
+
+    .upsell-hotel-add {
+        padding: 0.3rem 0.7rem;
+        background: linear-gradient(135deg, #e94560, #c0392b);
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        font-size: 0.7rem;
+        font-weight: 700;
+        cursor: pointer;
+        font-family: inherit;
+        transition: transform 0.15s, box-shadow 0.15s;
+        white-space: nowrap;
+    }
+
+    .upsell-hotel-add:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 3px 8px rgba(233, 69, 96, 0.3);
+    }
+
+    .upsell-modal-empty {
+        text-align: center;
+        padding: 2rem 1rem;
+        color: #94a3b8;
+    }
+
+    .upsell-modal-empty i {
+        font-size: 2.5rem;
+        margin-bottom: 0.6rem;
+        color: #cbd5e1;
+    }
+
+    /* ---- ADDON ITEM IN CART (pickup/sightseeing) ---- */
+    .cart-item-icon.icon-addon {
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    }
+
+    /* ---- TRIP TYPE & MULTI-CITY SEARCH UI ---- */
+    .trip-type-bar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+    }
+    .trip-type-tabs {
+        display: inline-flex;
+        background: #e2e8f0;
+        padding: 0.25rem;
+        border-radius: 10px;
+        gap: 0.25rem;
+    }
+    .trip-type-tab {
+        border: none;
+        background: transparent;
+        color: #475569;
+        font-family: inherit;
+        font-size: 0.82rem;
+        font-weight: 700;
+        padding: 0.45rem 0.95rem;
+        border-radius: 8px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        transition: all 0.2s;
+    }
+    .trip-type-tab.active {
+        background: #0f3460;
+        color: #fff;
+        box-shadow: 0 2px 8px rgba(15,52,96,0.2);
+    }
+    .stay-nights-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        background: #fff1f2;
+        border: 1px solid #fecdd3;
+        color: #be123c;
+        font-size: 0.8rem;
+        font-weight: 700;
+        padding: 0.35rem 0.85rem;
+        border-radius: 50px;
+    }
+    .mc-leg-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        align-items: flex-end;
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 0.85rem;
+        margin-bottom: 0.65rem;
+        position: relative;
+    }
+    .mc-leg-badge {
+        background: #0f3460;
+        color: #fff;
+        font-size: 0.72rem;
+        font-weight: 800;
+        padding: 0.25rem 0.6rem;
+        border-radius: 6px;
+        align-self: center;
+        white-space: nowrap;
+    }
+    .mc-remove-btn {
+        background: #fee2e2;
+        color: #dc2626;
+        border: none;
+        width: 36px;
+        height: 42px;
+        border-radius: 8px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.2s;
+    }
+    .mc-remove-btn:hover { background: #fecaca; }
+    .mc-actions-bar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.75rem;
+        margin-top: 0.5rem;
+    }
+    .mc-add-leg-btn {
+        background: #fff;
+        border: 1px dashed #0f3460;
+        color: #0f3460;
+        font-family: inherit;
+        font-size: 0.82rem;
+        font-weight: 700;
+        padding: 0.6rem 1rem;
+        border-radius: 8px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        transition: all 0.2s;
+    }
+    .mc-add-leg-btn:hover { background: #eff6ff; }
+
+    /* ---- HOTEL STAY DURATION & CITY GROUPING ---- */
+    .mc-hotel-city-header {
+        grid-column: 1 / -1;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+        background: linear-gradient(135deg, #0f3460, #16213e);
+        color: #fff;
+        padding: 0.85rem 1.15rem;
+        border-radius: 12px;
+        margin-top: 0.75rem;
+    }
+    .mc-hotel-city-header h3 {
+        margin: 0;
+        font-size: 1.05rem;
+        font-weight: 800;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    .mc-hotel-duration-badge {
+        background: #e94560;
+        color: #fff;
+        font-size: 0.78rem;
+        font-weight: 800;
+        padding: 0.3rem 0.75rem;
+        border-radius: 50px;
+    }
+    .hotel-stay-total-badge {
+        display: inline-block;
+        margin-top: 0.25rem;
+        background: #ecfdf5;
+        color: #047857;
+        border: 1px solid #a7f3d0;
+        font-size: 0.74rem;
+        font-weight: 800;
+        padding: 0.18rem 0.55rem;
+        border-radius: 6px;
+    }
+    .upsell-city-tabs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+        padding: 0.55rem 1rem 0;
+        background: #f8fafc;
+        border-bottom: 1px solid #e2e8f0;
+    }
+    .upsell-city-tab {
+        border: 1px solid #cbd5e1;
+        background: #fff;
+        color: #334155;
+        font-family: inherit;
+        font-size: 0.76rem;
+        font-weight: 700;
+        padding: 0.35rem 0.75rem;
+        border-radius: 50px;
+        cursor: pointer;
+        margin-bottom: 0.5rem;
+    }
+    .upsell-city-tab.active {
+        background: #e94560;
+        border-color: #e94560;
+        color: #fff;
+    }
+    .travellers-inline-strip {
+        display: inline-flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.4rem;
+    }
+    .traveller-box {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        background: #fff;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        padding: 0.28rem 0.55rem;
+    }
+    .traveller-title {
+        font-size: 0.74rem;
+        font-weight: 700;
+        color: #1e293b;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.28rem;
+        white-space: nowrap;
+    }
+    .traveller-counter {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+    }
+    .traveller-counter button {
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        border: 1px solid #cbd5e1;
+        background: #f8fafc;
+        color: #0f3460;
+        font-weight: 800;
+        font-size: 0.8rem;
+        line-height: 1;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.15s;
+        padding: 0;
+    }
+    .traveller-counter button:hover {
+        background: #e94560;
+        border-color: #e94560;
+        color: #fff;
+    }
+    .traveller-counter span {
+        min-width: 14px;
+        text-align: center;
+        font-size: 0.8rem;
+        font-weight: 800;
+        color: #0f3460;
+    }
+    .flight-return-row {
+        margin-top: 0.65rem;
+        padding-top: 0.65rem;
+        border-top: 1px dashed #e2e8f0;
+    }
+    .flight-leg-tag {
+        font-size: 0.68rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: #0f3460;
+        margin-bottom: 0.25rem;
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+    }
+    .flight-leg-tag.return-tag {
+        color: #e94560;
+    }
+
+    @media(max-width:480px) {
+        .upsell-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .upsell-modal {
+            width: 96%;
+            max-height: 85vh;
+        }
+
+        .upsell-hotel-img {
+            width: 60px;
+            height: 60px;
+        }
+    }
 </style>﻿
 <script>
     var cart = JSON.parse(localStorage.getItem("avCart") || "[]");
@@ -1457,9 +2278,9 @@ and more.{% endblock %}
             openCart();
             return;
         }
-        item.quantity = 1;
+        item.quantity = item.quantity || 1;
         cart.push(item); saveCart(); renderCart(); updateCartFab(); markButton(item.id, true);
-        var label = item.type === "flight" ? "Flight" : item.type === "hotel" ? "Hotel" : "Package";
+        var label = item.type === "flight" ? "Flight" : item.type === "hotel" ? "Hotel" : item.type === "addon" ? "Add-on" : "Package";
         showToast(label + " added to cart!", "success");
         openCart();
     }
@@ -1501,6 +2322,9 @@ and more.{% endblock %}
         if (added) { btn.classList.add("added"); btn.innerHTML = '<i class="fa-solid fa-check"></i> Added'; }
         else { btn.classList.remove("added"); btn.innerHTML = '<i class="fa-solid fa-plus"></i> Add to Cart'; }
     }
+    // ---- STATIC HOTELS DATA (from server) for upsell modal ----
+    var ALL_HOTELS = {{ hotels | tojson }};
+
     function renderCart() {
         var list = document.getElementById("cart-items-list");
         var empty = document.getElementById("cart-empty");
@@ -1513,9 +2337,9 @@ and more.{% endblock %}
             var qty = item.quantity || 1;
             total += item.price * qty;
             count += qty;
-            var ic = item.type === "flight" ? "icon-flight" : item.type === "hotel" ? "icon-hotel" : "icon-package";
-            var ii = item.type === "flight" ? "plane-departure" : item.type === "hotel" ? "hotel" : "suitcase-rolling";
-            return "<div class=\"cart-item\" id=\"ci-" + item.id + "\">"
+            var ic = item.type === "flight" ? "icon-flight" : item.type === "hotel" ? "icon-hotel" : item.type === "addon" ? "icon-addon" : "icon-package";
+            var ii = item.type === "flight" ? "plane-departure" : item.type === "hotel" ? "hotel" : item.type === "addon" ? "concierge-bell" : "suitcase-rolling";
+            var html = "<div class=\"cart-item\" id=\"ci-" + item.id + "\">"
                 + "<div class=\"cart-item-icon " + ic + "\"><i class=\"fa-solid fa-" + ii + "\"></i></div>"
                 + "<div class=\"cart-item-info\">"
                 + "<div class=\"cart-item-type\">" + item.type + "</div>"
@@ -1531,9 +2355,432 @@ and more.{% endblock %}
                 + "</div>"
                 + "<button class=\"cart-item-remove\" onclick=\"removeFromCart('" + item.id + "')\" title=\"Remove\"><i class=\"fa-solid fa-trash-can\"></i></button>"
                 + "</div>";
+
+            // Show upsell suggestion panel right after each flight item
+            if (item.type === "flight") {
+                html += buildUpsellPanel(item);
+            }
+            return html;
         }).join("");
         document.getElementById("cart-total").textContent = "Rs." + total.toLocaleString("en-IN");
         document.getElementById("cart-fab-count").textContent = count;
+    }
+
+    // ---- UPSELL: Build the suggestion panel that appears below a flight in cart ----
+    function buildUpsellPanel(flightItem) {
+        var dest = flightItem.dest || "Destination";
+        var destKey = dest.toLowerCase().split(",")[0].trim();
+        var stays = flightItem.stays || [];
+        var nights = flightItem.nights || 1;
+        var stayTag = dest;
+        if (stays.length > 1) {
+            stayTag = stays.map(function (s) { return s.city + " (" + s.nights + "N)"; }).join(" • ");
+        } else if (nights > 1) {
+            stayTag = dest + " (" + nights + " Nights)";
+        }
+        var hotelSub = stays.length > 1 ? "All trip cities" : (nights > 1 ? ("For " + nights + " nights") : "Browse stays");
+        return '<div class="upsell-panel" data-flight-dest="' + destKey + '">'
+            + '<div class="upsell-header">'
+            + '<i class="fa-solid fa-wand-magic-sparkles"></i> Make it a package!'
+            + '<span class="upsell-dest-tag"><i class="fa-solid fa-location-dot" style="margin-right:3px;"></i>' + stayTag + '</span>'
+            + '</div>'
+            + '<div class="upsell-grid">'
+            + '<button class="upsell-btn" onclick="openUpsellHotels(\'' + destKey.replace(/'/g, "\\'") + '\',\'' + dest.replace(/'/g, "\\'") + '\',\'' + flightItem.id + '\')">'
+            + '<i class="fa-solid fa-hotel"></i>'
+            + '<span class="upsell-btn-label">Add Hotel</span>'
+            + '<span class="upsell-btn-sub">' + hotelSub + '</span>'
+            + '</button>'
+            + '<button class="upsell-btn" onclick="addPickupDrop(\'' + destKey.replace(/'/g, "\\'") + '\',\'' + dest.replace(/'/g, "\\'") + '\')">'
+            + '<i class="fa-solid fa-car-side"></i>'
+            + '<span class="upsell-btn-label">Airport Pickup</span>'
+            + '<span class="upsell-btn-sub">& Drop service</span>'
+            + '</button>'
+            + '<button class="upsell-btn" onclick="addSightseeing(\'' + destKey.replace(/'/g, "\\'") + '\',\'' + dest.replace(/'/g, "\\'") + '\')">'
+            + '<i class="fa-solid fa-camera-retro"></i>'
+            + '<span class="upsell-btn-label">Sightseeing</span>'
+            + '<span class="upsell-btn-sub">Top attractions</span>'
+            + '</button>'
+            + '<button class="upsell-btn" onclick="scrollToPackages(\'' + destKey.replace(/'/g, "\\'") + '\')">'
+            + '<i class="fa-solid fa-box-open"></i>'
+            + '<span class="upsell-btn-label">Full Package</span>'
+            + '<span class="upsell-btn-sub">Flight+Hotel+More</span>'
+            + '</button>'
+            + '</div>'
+            + '</div>';
+    }
+
+    // ---- UPSELL: Show hotel list modal for the given destination (supports round-trip nights & multi-city) ----
+    var currentUpsellHotels = [];
+    var currentUpsellDestKey = "";
+    var currentUpsellDestLabel = "";
+    var currentUpsellNights = 1;
+    var currentUpsellStays = [];
+
+    function openUpsellHotels(destKey, destLabel, flightId) {
+        var modal = document.getElementById("upsell-modal-overlay");
+        var body = document.getElementById("upsell-modal-body");
+        var searchInput = document.getElementById("upsell-hotel-search-input");
+
+        // Look up flight item in cart to get stay nights or multi-city stays
+        var flightItem = flightId ? cart.find(function (c) { return c.id === flightId; }) : null;
+        currentUpsellStays = (flightItem && flightItem.stays && flightItem.stays.length > 0) ? flightItem.stays : [];
+        currentUpsellNights = (flightItem && flightItem.nights) ? flightItem.nights : (currentUpsellStays[0] ? currentUpsellStays[0].nights : 1);
+
+        // Render city tabs inside modal if multi-city has 2+ stay cities
+        var existingTabs = document.getElementById("upsell-city-tabs");
+        if (existingTabs) existingTabs.remove();
+        if (currentUpsellStays.length > 1) {
+            var tabsHtml = '<div class="upsell-city-tabs" id="upsell-city-tabs">'
+                + currentUpsellStays.map(function (s, idx) {
+                    return '<button type="button" class="upsell-city-tab' + (idx === 0 ? ' active' : '') + '" onclick="selectUpsellCityTab(' + idx + ', this)">'
+                        + '<i class="fa-solid fa-location-dot"></i> ' + s.city + ' (' + s.nights + 'N)'
+                        + '</button>';
+                }).join("")
+                + '</div>';
+            var searchBar = document.querySelector(".upsell-modal-search");
+            if (searchBar) searchBar.insertAdjacentHTML("afterend", tabsHtml);
+            destLabel = currentUpsellStays[0].city;
+            destKey = destLabel.toLowerCase();
+            currentUpsellNights = currentUpsellStays[0].nights;
+        }
+
+        currentUpsellDestKey = destKey;
+        currentUpsellDestLabel = destLabel;
+        document.getElementById("upsell-modal-title").textContent = "Hotels in " + destLabel + (currentUpsellNights > 1 ? " (" + currentUpsellNights + " Nights)" : "");
+        if (searchInput) {
+            searchInput.value = "";
+            searchInput.placeholder = "Search hotels in " + destLabel + " (name, area, or city)...";
+        }
+
+        // Show loading spinner while fetching live hotels
+        body.innerHTML = '<div class="upsell-modal-empty">'
+            + '<i class="fa-solid fa-spinner fa-spin" style="color:#e94560;"></i>'
+            + '<p style="margin-top:0.5rem;font-weight:700;color:#334155;">Fetching live hotels in ' + destLabel + '...</p>'
+            + '</div>';
+        modal.classList.add("open");
+
+        fetchLiveUpsellHotels(destLabel, destKey, destLabel, currentUpsellNights);
+    }
+
+    function selectUpsellCityTab(idx, btnEl) {
+        var stay = currentUpsellStays[idx];
+        if (!stay) return;
+        document.querySelectorAll(".upsell-city-tab").forEach(function (b) { b.classList.remove("active"); });
+        if (btnEl) btnEl.classList.add("active");
+        currentUpsellDestLabel = stay.city;
+        currentUpsellDestKey = stay.city.toLowerCase();
+        currentUpsellNights = stay.nights || 1;
+        document.getElementById("upsell-modal-title").textContent = "Hotels in " + stay.city + " (" + currentUpsellNights + " Nights)";
+        var body = document.getElementById("upsell-modal-body");
+        body.innerHTML = '<div class="upsell-modal-empty">'
+            + '<i class="fa-solid fa-spinner fa-spin" style="color:#e94560;"></i>'
+            + '<p style="margin-top:0.5rem;font-weight:700;color:#334155;">Fetching live hotels in ' + stay.city + ' (' + currentUpsellNights + ' nights)...</p>'
+            + '</div>';
+        fetchLiveUpsellHotels(stay.city, currentUpsellDestKey, stay.city, currentUpsellNights);
+    }
+
+    // Fetch live hotels via /api/hotels_live and merge with any static hotels for the destination
+    function fetchLiveUpsellHotels(query, destKey, destLabel, nights) {
+        var stayNights = nights || currentUpsellNights || 1;
+        var body = document.getElementById("upsell-modal-body");
+        var dateEl = document.getElementById("search-dates");
+        var dateParam = dateEl ? dateEl.value : "";
+
+        // Also grab matching static hotels as backup/supplement
+        var staticMatched = ALL_HOTELS.filter(function (h) {
+            var hDest = (h.destination || "").toLowerCase();
+            var hLabel = (h.dest_label || "").toLowerCase();
+            return destKey && (hDest.indexOf(destKey) !== -1 || hLabel.indexOf(destKey) !== -1 || destKey.indexOf(hDest) !== -1);
+        }).map(function (h) {
+            var copy = Object.assign({}, h);
+            copy.source = "static";
+            copy.nights = stayNights;
+            return copy;
+        });
+
+        fetch("/api/hotels_live?q=" + encodeURIComponent(query) + "&date=" + encodeURIComponent(dateParam))
+            .then(function (res) { return res.json(); })
+            .then(function (data) {
+                var liveHotels = (data.status === "success" && data.hotels) ? data.hotels.map(function (h) {
+                    h.source = "live";
+                    h.nights = stayNights;
+                    return h;
+                }) : [];
+
+                // Combine live hotels first, then any static hotels not already listed
+                var combined = liveHotels.slice();
+                staticMatched.forEach(function (sh) {
+                    var dup = combined.some(function (lh) {
+                        return lh.name.toLowerCase() === sh.name.toLowerCase();
+                    });
+                    if (!dup) combined.push(sh);
+                });
+
+                currentUpsellHotels = combined;
+                if (combined.length > 0) {
+                    renderUpsellHotelCards(combined);
+                } else {
+                    body.innerHTML = '<div class="upsell-modal-empty">'
+                        + '<i class="fa-solid fa-hotel"></i>'
+                        + '<p>No hotels found for <strong>' + query + '</strong>.</p>'
+                        + '<p style="font-size:0.78rem;color:#94a3b8;">Try typing a different city or hotel name above and click <strong>Search Live</strong>.</p>'
+                        + '</div>';
+                }
+            })
+            .catch(function () {
+                currentUpsellHotels = staticMatched;
+                if (staticMatched.length > 0) {
+                    renderUpsellHotelCards(staticMatched);
+                } else {
+                    body.innerHTML = '<div class="upsell-modal-empty">'
+                        + '<i class="fa-solid fa-triangle-exclamation" style="color:#f59e0b;"></i>'
+                        + '<p>Could not fetch live hotels. Try clicking <strong>Search Live</strong> again.</p>'
+                        + '</div>';
+                }
+            });
+    }
+
+    // Filter currently loaded hotels in real-time as the user types
+    function filterUpsellHotels() {
+        var input = document.getElementById("upsell-hotel-search-input");
+        var q = (input ? input.value : "").trim().toLowerCase();
+        var body = document.getElementById("upsell-modal-body");
+
+        if (!q) {
+            if (currentUpsellHotels.length > 0) {
+                renderUpsellHotelCards(currentUpsellHotels);
+            }
+            return;
+        }
+
+        var filtered = currentUpsellHotels.filter(function (h) {
+            return (h.name || "").toLowerCase().indexOf(q) !== -1 ||
+                (h.location || "").toLowerCase().indexOf(q) !== -1 ||
+                (h.dest_label || "").toLowerCase().indexOf(q) !== -1 ||
+                (h.highlights || "").toLowerCase().indexOf(q) !== -1;
+        });
+
+        if (filtered.length > 0) {
+            renderUpsellHotelCards(filtered);
+        } else {
+            body.innerHTML = '<div class="upsell-modal-empty">'
+                + '<i class="fa-solid fa-magnifying-glass"></i>'
+                + '<p>No loaded hotels match "<strong>' + q.replace(/</g, "&lt;") + '</strong>".</p>'
+                + '<button class="upsell-search-live-btn" style="margin-top:0.6rem;" onclick="searchLiveUpsellHotels()">'
+                + '<i class="fa-solid fa-bolt"></i> Search Live for "' + q.replace(/</g, "&lt;").replace(/"/g, "&quot;") + '"'
+                + '</button>'
+                + '</div>';
+        }
+    }
+
+    // Trigger a fresh live SerpApi hotel search from the modal search bar
+    function searchLiveUpsellHotels() {
+        var input = document.getElementById("upsell-hotel-search-input");
+        var rawQ = (input ? input.value : "").trim();
+        var query = rawQ || currentUpsellDestLabel || "Dubai";
+        // If user typed a hotel/area name without the destination city, include destination context
+        if (rawQ && currentUpsellDestLabel && rawQ.toLowerCase().indexOf(currentUpsellDestKey) === -1 && rawQ.indexOf(" ") === -1) {
+            query = rawQ + " " + currentUpsellDestLabel;
+        }
+        var body = document.getElementById("upsell-modal-body");
+        body.innerHTML = '<div class="upsell-modal-empty">'
+            + '<i class="fa-solid fa-spinner fa-spin" style="color:#e94560;"></i>'
+            + '<p style="margin-top:0.5rem;font-weight:700;color:#334155;">Searching live hotels for "' + query.replace(/</g, "&lt;") + '"...</p>'
+            + '</div>';
+        fetchLiveUpsellHotels(query, currentUpsellDestKey, currentUpsellDestLabel);
+    }
+
+    // Render hotel cards inside the upsell modal (works for both static & live hotel data)
+    function renderUpsellHotelCards(hotels) {
+        var body = document.getElementById("upsell-modal-body");
+        body.innerHTML = hotels.map(function (h) {
+            var starsHTML = "";
+            var starCount = h.stars || 0;
+            for (var i = 0; i < starCount; i++) starsHTML += '<i class="fa-solid fa-star"></i>';
+
+            var isLive = h.source === "live" || h.is_external_image || (h.image && h.image.indexOf("http") === 0) || (h.image && h.image.indexOf("/static/") === 0);
+            var imgSrc = isLive ? (h.image || "/static/images/dubai.jpg") : "/static/images/" + (h.image || "dubai.jpg");
+            var pricePerNight = h.price_per_night || 0;
+            var nights = h.nights || currentUpsellNights || 1;
+            var priceDisplay = h.price_display || ("₹" + pricePerNight.toLocaleString("en-IN") + "/night");
+            var totalDisplay = (pricePerNight && nights > 1) ? ("₹" + (pricePerNight * nights).toLocaleString("en-IN") + " for " + nights + " nights") : "";
+            var location = h.location || "";
+            var hId = h.id || ("live-hotel-" + h.name.replace(/[^a-zA-Z0-9]/g, "-").toLowerCase());
+            var destLabel = h.dest_label || currentUpsellDestLabel || "";
+
+            var alreadyInCart = cart.some(function (c) { return c.id === hId; });
+            var btnText = alreadyInCart ? '<i class="fa-solid fa-check"></i> Added' : '<i class="fa-solid fa-plus"></i> Add' + (nights > 1 ? ' (' + nights + 'N)' : '');
+            var btnStyle = alreadyInCart ? 'opacity:0.6;pointer-events:none;' : '';
+
+            // Store hotel data as a JSON attribute for the add button
+            var hotelData = JSON.stringify({
+                id: hId, name: h.name, stars: starCount, location: location,
+                dest_label: destLabel, price_per_night: pricePerNight,
+                price_display: priceDisplay, nights: nights, image: h.image || ""
+            }).replace(/"/g, '&quot;');
+
+            return '<div class="upsell-hotel-card">'
+                + '<img class="upsell-hotel-img" src="' + imgSrc + '" alt="' + h.name.replace(/"/g, '&quot;') + '" loading="lazy" onerror="this.style.display=\'none\'">'
+                + '<div class="upsell-hotel-info">'
+                + '<div class="upsell-hotel-name">' + h.name + '</div>'
+                + '<div class="upsell-hotel-loc"><i class="fa-solid fa-location-dot"></i> ' + location + '</div>'
+                + '<div class="upsell-hotel-stars">' + starsHTML + '</div>'
+                + (totalDisplay ? '<div class="hotel-stay-total-badge"><i class="fa-solid fa-moon"></i> ' + totalDisplay + '</div>' : '')
+                + '<div class="upsell-hotel-bottom">'
+                + '<span class="upsell-hotel-price">' + priceDisplay + '</span>'
+                + '<button class="upsell-hotel-add" style="' + btnStyle + '" data-hotel="' + hotelData + '" onclick="addHotelFromUpsell(this)">' + btnText + '</button>'
+                + '</div>'
+                + '</div>'
+                + '</div>';
+        }).join("");
+    }
+
+    function addHotelFromUpsell(btnEl) {
+        var hData;
+        var raw = btnEl.getAttribute("data-hotel");
+        if (raw) {
+            hData = JSON.parse(raw);
+        } else {
+            return;
+        }
+        var stayNights = hData.nights || 1;
+        addToCart({
+            id: hData.id,
+            type: "hotel",
+            name: hData.name,
+            detail: (hData.stars || 0) + " Star | " + (hData.location || "") + (stayNights > 1 ? " | " + stayNights + " Nights" : ""),
+            dest: hData.dest_label || "",
+            price: hData.price_per_night || 0,
+            quantity: stayNights,
+            display: hData.price_display || ""
+        });
+        btnEl.innerHTML = '<i class="fa-solid fa-check"></i> Added';
+        btnEl.style.opacity = "0.6";
+        btnEl.style.pointerEvents = "none";
+    }
+
+    function closeUpsellModal(e) {
+        if (e && e.target !== document.getElementById("upsell-modal-overlay")) return;
+        document.getElementById("upsell-modal-overlay").classList.remove("open");
+    }
+
+    // ---- UPSELL: Add Airport Pickup & Drop add-on to cart ----
+    function addPickupDrop(destKey, destLabel) {
+        var addonId = "addon-pickup-" + destKey.replace(/\s+/g, "-");
+        var already = cart.find(function (c) { return c.id === addonId; });
+        if (already) {
+            showToast("Airport Pickup & Drop already in cart!", "info");
+            return;
+        }
+        addToCart({
+            id: addonId,
+            type: "addon",
+            name: "Airport Pickup & Drop",
+            detail: "Round-trip airport transfer at " + destLabel,
+            dest: destLabel,
+            price: 2500,
+            display: "₹2,500"
+        });
+    }
+
+    // ---- UPSELL: Add Sightseeing add-on to cart ----
+    function addSightseeing(destKey, destLabel) {
+        var addonId = "addon-sights-" + destKey.replace(/\s+/g, "-");
+        var already = cart.find(function (c) { return c.id === addonId; });
+        if (already) {
+            showToast("Sightseeing package already in cart!", "info");
+            return;
+        }
+        addToCart({
+            id: addonId,
+            type: "addon",
+            name: "Sightseeing Tour – " + destLabel,
+            detail: "Full-day guided tour of top attractions in " + destLabel,
+            dest: destLabel,
+            price: 3500,
+            display: "₹3,500"
+        });
+    }
+
+    // ---- UPSELL: Map flight destination cities/states to package destination keys ----
+    var CITY_TO_PKG_DEST = {
+        "mumbai": "maharashtra", "pune": "maharashtra", "nagpur": "maharashtra", "aurangabad": "maharashtra", "shirdi": "maharashtra", "nashik": "maharashtra", "maharashtra": "maharashtra",
+        "delhi": "delhi", "new delhi": "delhi", "agra": "delhi",
+        "kochi": "kerala", "cochin": "kerala", "thiruvananthapuram": "kerala", "trivandrum": "kerala", "kozhikode": "kerala", "calicut": "kerala", "kannur": "kerala", "kerala": "kerala",
+        "jaipur": "rajasthan", "udaipur": "rajasthan", "jodhpur": "rajasthan", "jaisalmer": "rajasthan", "rajasthan": "rajasthan",
+        "goa": "goa", "dabolim": "goa", "mopa": "goa",
+        "srinagar": "kashmir", "jammu": "kashmir", "kashmir": "kashmir",
+        "leh": "ladakh", "ladakh": "ladakh",
+        "port blair": "andaman", "andaman": "andaman",
+        "dehradun": "uttarakhand", "rishikesh": "uttarakhand", "pantnagar": "uttarakhand", "uttarakhand": "uttarakhand",
+        "shimla": "himachal", "kullu": "himachal", "manali": "himachal", "dharamshala": "himachal", "himachal": "himachal",
+        "bengaluru": "karnataka", "bangalore": "karnataka", "mangaluru": "karnataka", "mysuru": "karnataka", "karnataka": "karnataka",
+        "chennai": "tamilnadu", "coimbatore": "tamilnadu", "madurai": "tamilnadu", "tiruchirappalli": "tamilnadu", "tamil nadu": "tamilnadu",
+        "kolkata": "westbengal", "bagdogra": "westbengal", "darjeeling": "westbengal", "gangtok": "westbengal", "west bengal": "westbengal",
+        "varanasi": "uttarpradesh", "lucknow": "uttarpradesh", "ayodhya": "uttarpradesh", "prayagraj": "uttarpradesh", "gorakhpur": "uttarpradesh", "uttar pradesh": "uttarpradesh",
+        "hyderabad": "telangana", "visakhapatnam": "telangana", "vijayawada": "telangana", "tirupati": "telangana", "telangana": "telangana",
+        "ahmedabad": "gujarat", "surat": "gujarat", "vadodara": "gujarat", "rajkot": "gujarat", "bhuj": "gujarat", "gujarat": "gujarat",
+        "guwahati": "assam", "dibrugarh": "assam", "shillong": "assam", "imphal": "assam", "agartala": "assam", "assam": "assam",
+        "dubai": "dubai", "abu dhabi": "dubai", "sharjah": "dubai",
+        "singapore": "singapore",
+        "bali": "bali", "denpasar": "bali", "jakarta": "bali",
+        "kuala lumpur": "malaysia", "penang": "malaysia", "langkawi": "malaysia", "malaysia": "malaysia",
+        "hanoi": "vietnam", "ho chi minh": "vietnam", "da nang": "vietnam", "vietnam": "vietnam",
+        "bangkok": "thailand", "phuket": "thailand", "krabi": "thailand", "chiang mai": "thailand", "thailand": "thailand",
+        "male": "maldives", "maldives": "maldives",
+        "london": "europe", "paris": "europe", "rome": "europe", "zurich": "europe", "frankfurt": "europe", "amsterdam": "europe", "barcelona": "europe", "madrid": "europe", "milan": "europe", "munich": "europe", "vienna": "europe", "europe": "europe",
+        "tokyo": "japan", "osaka": "japan", "japan": "japan",
+        "colombo": "srilanka", "sri lanka": "srilanka",
+        "istanbul": "turkey", "ankara": "turkey", "turkey": "turkey",
+        "doha": "qatar", "qatar": "qatar"
+    };
+
+    function matchesPackageDest(card, destKey) {
+        if (!destKey || destKey === "any") return true;
+        var cDest = (card.getAttribute("data-dest") || "").toLowerCase().trim();
+        var mappedDest = CITY_TO_PKG_DEST[destKey] || destKey;
+        if (cDest === mappedDest || cDest === destKey) return true;
+        if (cDest.indexOf(destKey) !== -1 || destKey.indexOf(cDest) !== -1) return true;
+        var cardText = (card.textContent || "").toLowerCase();
+        if (cardText.indexOf(destKey) !== -1) return true;
+        return false;
+    }
+
+    // ---- UPSELL: Scroll to packages section filtered by destination ----
+    function scrollToPackages(destKey) {
+        closeCart();
+        setTimeout(function () {
+            switchTab("packages");
+            var section = document.getElementById("section-packages");
+            if (section) section.scrollIntoView({ behavior: "smooth", block: "start" });
+
+            var cards = document.querySelectorAll(".pkg-card");
+            var matchedCards = [];
+            cards.forEach(function (card) {
+                if (matchesPackageDest(card, destKey)) {
+                    matchedCards.push(card);
+                }
+            });
+
+            if (matchedCards.length > 0) {
+                cards.forEach(function (card) {
+                    if (matchedCards.indexOf(card) !== -1) {
+                        card.style.display = "flex";
+                        card.style.boxShadow = "0 0 0 3px #e94560";
+                        setTimeout(function () { card.style.boxShadow = ""; }, 3500);
+                    } else {
+                        card.style.display = "none";
+                    }
+                });
+                document.getElementById("cnt-packages").textContent = matchedCards.length;
+                showToast("Showing " + matchedCards.length + " package(s) for " + destKey.toUpperCase(), "success");
+            } else {
+                // Never leave user with empty screen — show all available packages
+                cards.forEach(function (card) { card.style.display = "flex"; });
+                document.getElementById("cnt-packages").textContent = cards.length;
+                showToast("Showing all " + cards.length + " packages — contact us to customise!", "info");
+            }
+        }, 350);
     }
     function updateCartFab() {
         var cnt = document.getElementById("cart-fab-count");
@@ -1621,133 +2868,1062 @@ and more.{% endblock %}
         setTimeout(function () { if (toast.parentNode) toast.remove(); }, 3000);
     }
 
-    function performSearch() {
-        var dep = document.getElementById("search-departure").value.toLowerCase();
-        var dest = document.getElementById("search-destination").value.toLowerCase();
-        var date = document.getElementById("search-dates").value;
+    // ---- AIRPORTS DATASET FOR AUTOCOMPLETE WITH STATE MAPPING ----
+    var ALL_AIRPORTS = [
+        // Domestic - Metros & Hubs
+        { code: "DEL", city: "Delhi", name: "Indira Gandhi International Airport", state: "Delhi", country: "India", type: "Domestic", popular: true },
+        { code: "BOM", city: "Mumbai", name: "Chhatrapati Shivaji Maharaj International Airport", state: "Maharashtra", country: "India", type: "Domestic", popular: true },
+        { code: "BLR", city: "Bengaluru", name: "Kempegowda International Airport", state: "Karnataka", country: "India", type: "Domestic", popular: true },
+        { code: "HYD", city: "Hyderabad", name: "Rajiv Gandhi International Airport", state: "Telangana", country: "India", type: "Domestic", popular: true },
+        { code: "MAA", city: "Chennai", name: "Chennai International Airport", state: "Tamil Nadu", country: "India", type: "Domestic", popular: true },
+        { code: "CCU", city: "Kolkata", name: "Netaji Subhash Chandra Bose International Airport", state: "West Bengal", country: "India", type: "Domestic", popular: true },
+        { code: "AMD", city: "Ahmedabad", name: "Sardar Vallabhbhai Patel International Airport", state: "Gujarat", country: "India", type: "Domestic", popular: true },
+        { code: "PNQ", city: "Pune", name: "Pune International Airport", state: "Maharashtra", country: "India", type: "Domestic", popular: true },
 
+        // Domestic - Popular Leisure, Hills & Islands
+        { code: "GOI", city: "Goa", name: "Dabolim International Airport", state: "Goa", country: "India", type: "Domestic", popular: true },
+        { code: "GOX", city: "Goa", name: "Manohar International Airport, Mopa", state: "Goa", country: "India", type: "Domestic", popular: true },
+        { code: "COK", city: "Kochi", name: "Cochin International Airport", state: "Kerala", country: "India", type: "Domestic", popular: true },
+        { code: "TRV", city: "Thiruvananthapuram", name: "Trivandrum International Airport", state: "Kerala", country: "India", type: "Domestic", popular: false },
+        { code: "SXR", city: "Srinagar", name: "Sheikh ul-Alam International Airport", state: "Jammu and Kashmir", country: "India", type: "Domestic", popular: true },
+        { code: "IXL", city: "Leh", name: "Kushok Bakula Rimpochee Airport", state: "Ladakh", country: "India", type: "Domestic", popular: true },
+        { code: "IXZ", city: "Port Blair", name: "Veer Savarkar International Airport", state: "Andaman and Nicobar", country: "India", type: "Domestic", popular: true },
+        { code: "AGX", city: "Lakshadweep", name: "Agatti Island Airport", state: "Lakshadweep", country: "India", type: "Domestic", popular: false },
+        { code: "IXB", city: "Bagdogra", name: "Bagdogra Airport (Siliguri/Darjeeling)", state: "West Bengal", country: "India", type: "Domestic", popular: true },
+        { code: "DED", city: "Dehradun", name: "Jolly Grant Airport (Rishikesh/Mussoorie)", state: "Uttarakhand", country: "India", type: "Domestic", popular: true },
+        { code: "DHM", city: "Dharamshala", name: "Gaggal Airport (Kangra/McLeod Ganj)", state: "Himachal Pradesh", country: "India", type: "Domestic", popular: false },
+        { code: "SLV", city: "Shimla", name: "Shimla Airport (Jubbarhatti)", state: "Himachal Pradesh", country: "India", type: "Domestic", popular: false },
+        { code: "KUU", city: "Kullu", name: "Bhuntar Airport (Kullu-Manali)", state: "Himachal Pradesh", country: "India", type: "Domestic", popular: false },
+        { code: "UDR", city: "Udaipur", name: "Maharana Pratap Airport", state: "Rajasthan", country: "India", type: "Domestic", popular: true },
+        { code: "JDH", city: "Jodhpur", name: "Jodhpur Civil Airport", state: "Rajasthan", country: "India", type: "Domestic", popular: false },
+        { code: "JSA", city: "Jaisalmer", name: "Jaisalmer Airport", state: "Rajasthan", country: "India", type: "Domestic", popular: false },
+
+        // Domestic - Northern Region
+        { code: "JAI", city: "Jaipur", name: "Jaipur International Airport", state: "Rajasthan", country: "India", type: "Domestic", popular: true },
+        { code: "LKO", city: "Lucknow", name: "Chaudhary Charan Singh International Airport", state: "Uttar Pradesh", country: "India", type: "Domestic", popular: true },
+        { code: "VNS", city: "Varanasi", name: "Lal Bahadur Shastri International Airport", state: "Uttar Pradesh", country: "India", type: "Domestic", popular: true },
+        { code: "AYJ", city: "Ayodhya", name: "Maharishi Valmiki International Airport", state: "Uttar Pradesh", country: "India", type: "Domestic", popular: true },
+        { code: "ATQ", city: "Amritsar", name: "Sri Guru Ram Dass Jee International Airport", state: "Punjab", country: "India", type: "Domestic", popular: false },
+        { code: "IXC", city: "Chandigarh", name: "Shaheed Bhagat Singh International Airport", state: "Chandigarh", country: "India", type: "Domestic", popular: true },
+        { code: "IXJ", city: "Jammu", name: "Jammu Civil Enclave", state: "Jammu and Kashmir", country: "India", type: "Domestic", popular: false },
+        { code: "IXD", city: "Prayagraj", name: "Prayagraj Airport (Allahabad)", state: "Uttar Pradesh", country: "India", type: "Domestic", popular: false },
+        { code: "GOP", city: "Gorakhpur", name: "Mahayogi Gorakhnath Airport", state: "Uttar Pradesh", country: "India", type: "Domestic", popular: false },
+        { code: "AGR", city: "Agra", name: "Kheria Civil Airport", state: "Uttar Pradesh", country: "India", type: "Domestic", popular: false },
+        { code: "KNU", city: "Kanpur", name: "Chakeri Airport", state: "Uttar Pradesh", country: "India", type: "Domestic", popular: false },
+        { code: "BEK", city: "Bareilly", name: "Bareilly Civil Enclave", state: "Uttar Pradesh", country: "India", type: "Domestic", popular: false },
+        { code: "BKB", city: "Bikaner", name: "Nal Airport", state: "Rajasthan", country: "India", type: "Domestic", popular: false },
+        { code: "KQH", city: "Ajmer", name: "Kishangarh Airport (Ajmer/Pushkar)", state: "Rajasthan", country: "India", type: "Domestic", popular: false },
+        { code: "PGH", city: "Pantnagar", name: "Pantnagar Airport (Nainital)", state: "Uttarakhand", country: "India", type: "Domestic", popular: false },
+        { code: "HDO", city: "Hindon", name: "Hindon Civil Airport (Ghaziabad/NCR)", state: "Uttar Pradesh", country: "India", type: "Domestic", popular: false },
+
+        // Domestic - Western & Central Region
+        { code: "STV", city: "Surat", name: "Surat International Airport", state: "Gujarat", country: "India", type: "Domestic", popular: false },
+        { code: "BDQ", city: "Vadodara", name: "Vadodara Airport", state: "Gujarat", country: "India", type: "Domestic", popular: false },
+        { code: "HSR", city: "Rajkot", name: "Rajkot International Airport (Hirasar)", state: "Gujarat", country: "India", type: "Domestic", popular: false },
+        { code: "BHU", city: "Bhavnagar", name: "Bhavnagar Airport", state: "Gujarat", country: "India", type: "Domestic", popular: false },
+        { code: "JGA", city: "Jamnagar", name: "Jamnagar Civil Airport", state: "Gujarat", country: "India", type: "Domestic", popular: false },
+        { code: "BHJ", city: "Bhuj", name: "Bhuj Airport (Kutch)", state: "Gujarat", country: "India", type: "Domestic", popular: false },
+        { code: "PBD", city: "Porbandar", name: "Porbandar Airport", state: "Gujarat", country: "India", type: "Domestic", popular: false },
+        { code: "IXK", city: "Keshod", name: "Keshod Airport (Junagadh)", state: "Gujarat", country: "India", type: "Domestic", popular: false },
+        { code: "IDR", city: "Indore", name: "Devi Ahilyabai Holkar International Airport", state: "Madhya Pradesh", country: "India", type: "Domestic", popular: true },
+        { code: "BHO", city: "Bhopal", name: "Raja Bhoj International Airport", state: "Madhya Pradesh", country: "India", type: "Domestic", popular: false },
+        { code: "NAG", city: "Nagpur", name: "Dr. Babasaheb Ambedkar International Airport", state: "Maharashtra", country: "India", type: "Domestic", popular: false },
+        { code: "RPR", city: "Raipur", name: "Swami Vivekananda Airport", state: "Chhattisgarh", country: "India", type: "Domestic", popular: false },
+        { code: "PAB", city: "Bilaspur", name: "Bilasa Devi Kevat Airport", state: "Chhattisgarh", country: "India", type: "Domestic", popular: false },
+        { code: "JGB", city: "Jagdalpur", name: "Maa Danteshwari Airport (Bastar)", state: "Chhattisgarh", country: "India", type: "Domestic", popular: false },
+        { code: "GWL", city: "Gwalior", name: "Rajmata Vijaya Raje Scindia Airport", state: "Madhya Pradesh", country: "India", type: "Domestic", popular: false },
+        { code: "JLR", city: "Jabalpur", name: "Dumna Airport", state: "Madhya Pradesh", country: "India", type: "Domestic", popular: false },
+        { code: "HJR", city: "Khajuraho", name: "Khajuraho Airport", state: "Madhya Pradesh", country: "India", type: "Domestic", popular: false },
+        { code: "SAG", city: "Shirdi", name: "Shirdi International Airport", state: "Maharashtra", country: "India", type: "Domestic", popular: false },
+        { code: "IXU", city: "Aurangabad", name: "Chhatrapati Sambhaji Nagar Airport", state: "Maharashtra", country: "India", type: "Domestic", popular: false },
+        { code: "KLH", city: "Kolhapur", name: "Chhatrapati Rajaram Maharaj Airport", state: "Maharashtra", country: "India", type: "Domestic", popular: false },
+        { code: "NDC", city: "Nanded", name: "Shri Guru Gobind Singh Ji Airport", state: "Maharashtra", country: "India", type: "Domestic", popular: false },
+        { code: "SDW", city: "Sindhudurg", name: "Sindhudurg Airport (Chipi)", state: "Maharashtra", country: "India", type: "Domestic", popular: false },
+
+        // Domestic - Southern Region
+        { code: "CCJ", city: "Kozhikode", name: "Calicut International Airport", state: "Kerala", country: "India", type: "Domestic", popular: false },
+        { code: "CNN", city: "Kannur", name: "Kannur International Airport", state: "Kerala", country: "India", type: "Domestic", popular: false },
+        { code: "CJB", city: "Coimbatore", name: "Coimbatore International Airport", state: "Tamil Nadu", country: "India", type: "Domestic", popular: false },
+        { code: "IXM", city: "Madurai", name: "Madurai Airport", state: "Tamil Nadu", country: "India", type: "Domestic", popular: false },
+        { code: "TRZ", city: "Tiruchirappalli", name: "Tiruchirappalli International Airport", state: "Tamil Nadu", country: "India", type: "Domestic", popular: false },
+        { code: "TCR", city: "Tuticorin", name: "Tuticorin Airport (Thoothukudi)", state: "Tamil Nadu", country: "India", type: "Domestic", popular: false },
+        { code: "SXV", city: "Salem", name: "Salem Airport", state: "Tamil Nadu", country: "India", type: "Domestic", popular: false },
+        { code: "PNY", city: "Puducherry", name: "Puducherry Airport", state: "Puducherry", country: "India", type: "Domestic", popular: false },
+        { code: "IXE", city: "Mangaluru", name: "Mangaluru International Airport", state: "Karnataka", country: "India", type: "Domestic", popular: false },
+        { code: "HBX", city: "Hubballi", name: "Hubballi Airport (Hubli)", state: "Karnataka", country: "India", type: "Domestic", popular: false },
+        { code: "IXG", city: "Belagavi", name: "Belagavi Airport (Belgaum)", state: "Karnataka", country: "India", type: "Domestic", popular: false },
+        { code: "MYQ", city: "Mysuru", name: "Mysore Airport (Mandakalli)", state: "Karnataka", country: "India", type: "Domestic", popular: false },
+        { code: "GBI", city: "Kalaburagi", name: "Kalaburagi Airport (Gulbarga)", state: "Karnataka", country: "India", type: "Domestic", popular: false },
+        { code: "RQY", city: "Shivamogga", name: "Rashtrakavi Kuvempu Airport", state: "Karnataka", country: "India", type: "Domestic", popular: false },
+        { code: "IXX", city: "Bidar", name: "Bidar Civil Airport", state: "Karnataka", country: "India", type: "Domestic", popular: false },
+        { code: "VTZ", city: "Visakhapatnam", name: "Visakhapatnam International Airport", state: "Andhra Pradesh", country: "India", type: "Domestic", popular: false },
+        { code: "VGA", city: "Vijayawada", name: "Vijayawada International Airport", state: "Andhra Pradesh", country: "India", type: "Domestic", popular: false },
+        { code: "TIR", city: "Tirupati", name: "Tirupati International Airport", state: "Andhra Pradesh", country: "India", type: "Domestic", popular: false },
+        { code: "RJA", city: "Rajahmundry", name: "Rajahmundry Airport", state: "Andhra Pradesh", country: "India", type: "Domestic", popular: false },
+        { code: "CDP", city: "Kadapa", name: "Kadapa Airport", state: "Andhra Pradesh", country: "India", type: "Domestic", popular: false },
+        { code: "KJB", city: "Kurnool", name: "Uyyalawada Narasimha Reddy Airport", state: "Andhra Pradesh", country: "India", type: "Domestic", popular: false },
+
+        // Domestic - Eastern & North-Eastern Region
+        { code: "BBI", city: "Bhubaneswar", name: "Biju Patnaik International Airport", state: "Odisha", country: "India", type: "Domestic", popular: true },
+        { code: "JRG", city: "Jharsuguda", name: "Veer Surendra Sai Airport", state: "Odisha", country: "India", type: "Domestic", popular: false },
+        { code: "PAT", city: "Patna", name: "Jay Prakash Narayan International Airport", state: "Bihar", country: "India", type: "Domestic", popular: true },
+        { code: "GAY", city: "Gaya", name: "Gaya International Airport", state: "Bihar", country: "India", type: "Domestic", popular: false },
+        { code: "DBR", city: "Darbhanga", name: "Darbhanga Civil Airport", state: "Bihar", country: "India", type: "Domestic", popular: false },
+        { code: "IXR", city: "Ranchi", name: "Birsa Munda Airport", state: "Jharkhand", country: "India", type: "Domestic", popular: false },
+        { code: "DGO", city: "Deoghar", name: "Baba Baidyanath Airport", state: "Jharkhand", country: "India", type: "Domestic", popular: false },
+        { code: "RDP", city: "Durgapur", name: "Kazi Nazrul Islam Airport", state: "West Bengal", country: "India", type: "Domestic", popular: false },
+        { code: "GAU", city: "Guwahati", name: "Lokpriya Gopinath Bordoloi International Airport", state: "Assam", country: "India", type: "Domestic", popular: true },
+        { code: "DIB", city: "Dibrugarh", name: "Dibrugarh Airport (Mohanbari)", state: "Assam", country: "India", type: "Domestic", popular: false },
+        { code: "IXS", city: "Silchar", name: "Silchar Airport (Kumbhirgram)", state: "Assam", country: "India", type: "Domestic", popular: false },
+        { code: "JRH", city: "Jorhat", name: "Jorhat Airport (Rowriah)", state: "Assam", country: "India", type: "Domestic", popular: false },
+        { code: "TEZ", city: "Tezpur", name: "Tezpur Airport (Salonibari)", state: "Assam", country: "India", type: "Domestic", popular: false },
+        { code: "RUP", city: "Rupsi", name: "Rupsi Airport", state: "Assam", country: "India", type: "Domestic", popular: false },
+        { code: "IXA", city: "Agartala", name: "Maharaja Bir Bikram Airport", state: "Tripura", country: "India", type: "Domestic", popular: false },
+        { code: "IMF", city: "Imphal", name: "Bir Tikendrajit International Airport", state: "Manipur", country: "India", type: "Domestic", popular: false },
+        { code: "SHL", city: "Shillong", name: "Shillong Airport (Umroi)", state: "Meghalaya", country: "India", type: "Domestic", popular: false },
+        { code: "DMU", city: "Dimapur", name: "Dimapur Airport", state: "Nagaland", country: "India", type: "Domestic", popular: false },
+        { code: "AJL", city: "Aizawl", name: "Lengpui Airport", state: "Mizoram", country: "India", type: "Domestic", popular: false },
+        { code: "HGI", city: "Itanagar", name: "Donyi Polo Airport (Hollongi)", state: "Arunachal Pradesh", country: "India", type: "Domestic", popular: false },
+        { code: "IXT", city: "Pasighat", name: "Pasighat Airport", state: "Arunachal Pradesh", country: "India", type: "Domestic", popular: false },
+
+        // International - Middle East & Gulf
+        { code: "DXB", city: "Dubai", name: "Dubai International Airport", state: "Dubai", country: "UAE", type: "International", popular: true },
+        { code: "AUH", city: "Abu Dhabi", name: "Zayed International Airport", state: "Abu Dhabi", country: "UAE", type: "International", popular: true },
+        { code: "SHJ", city: "Sharjah", name: "Sharjah International Airport", state: "Sharjah", country: "UAE", type: "International", popular: false },
+        { code: "DOH", city: "Doha", name: "Hamad International Airport", state: "Doha", country: "Qatar", type: "International", popular: true },
+        { code: "RUH", city: "Riyadh", name: "King Khalid International Airport", state: "Riyadh", country: "Saudi Arabia", type: "International", popular: false },
+        { code: "JED", city: "Jeddah", name: "King Abdulaziz International Airport", state: "Makkah", country: "Saudi Arabia", type: "International", popular: false },
+        { code: "DMM", city: "Dammam", name: "King Fahd International Airport", state: "Eastern Province", country: "Saudi Arabia", type: "International", popular: false },
+        { code: "MED", city: "Medina", name: "Prince Mohammad Bin Abdulaziz Airport", state: "Medina", country: "Saudi Arabia", type: "International", popular: false },
+        { code: "MCT", city: "Muscat", name: "Muscat International Airport", state: "Muscat", country: "Oman", type: "International", popular: false },
+        { code: "SLL", city: "Salalah", name: "Salalah International Airport", state: "Dhofar", country: "Oman", type: "International", popular: false },
+        { code: "KWI", city: "Kuwait City", name: "Kuwait International Airport", state: "Al Farwaniyah", country: "Kuwait", type: "International", popular: false },
+        { code: "BAH", city: "Bahrain", name: "Bahrain International Airport", state: "Muharraq", country: "Bahrain", type: "International", popular: false },
+        { code: "TLV", city: "Tel Aviv", name: "Ben Gurion International Airport", state: "Central District", country: "Israel", type: "International", popular: false },
+        { code: "AMM", city: "Amman", name: "Queen Alia International Airport", state: "Amman", country: "Jordan", type: "International", popular: false },
+        { code: "BEY", city: "Beirut", name: "Beirut-Rafic Hariri International Airport", state: "Beirut", country: "Lebanon", type: "International", popular: false },
+
+        // International - Southeast Asia
+        { code: "SIN", city: "Singapore", name: "Singapore Changi Airport", state: "Singapore", country: "Singapore", type: "International", popular: true },
+        { code: "BKK", city: "Bangkok", name: "Suvarnabhumi Airport", state: "Bangkok", country: "Thailand", type: "International", popular: true },
+        { code: "DMK", city: "Bangkok", name: "Don Mueang International Airport", state: "Bangkok", country: "Thailand", type: "International", popular: false },
+        { code: "HKT", city: "Phuket", name: "Phuket International Airport", state: "Phuket", country: "Thailand", type: "International", popular: true },
+        { code: "USM", city: "Koh Samui", name: "Samui International Airport", state: "Surat Thani", country: "Thailand", type: "International", popular: false },
+        { code: "KBV", city: "Krabi", name: "Krabi International Airport", state: "Krabi", country: "Thailand", type: "International", popular: false },
+        { code: "CNX", city: "Chiang Mai", name: "Chiang Mai International Airport", state: "Chiang Mai", country: "Thailand", type: "International", popular: false },
+        { code: "KUL", city: "Kuala Lumpur", name: "Kuala Lumpur International Airport", state: "Selangor", country: "Malaysia", type: "International", popular: true },
+        { code: "PEN", city: "Penang", name: "Penang International Airport", state: "Penang", country: "Malaysia", type: "International", popular: false },
+        { code: "LGK", city: "Langkawi", name: "Langkawi International Airport", state: "Kedah", country: "Malaysia", type: "International", popular: false },
+        { code: "DPS", city: "Bali", name: "Ngurah Rai International Airport (Denpasar)", state: "Bali", country: "Indonesia", type: "International", popular: true },
+        { code: "CGK", city: "Jakarta", name: "Soekarno-Hatta International Airport", state: "Jakarta", country: "Indonesia", type: "International", popular: false },
+        { code: "SGN", city: "Ho Chi Minh", name: "Tan Son Nhat International Airport", state: "Ho Chi Minh", country: "Vietnam", type: "International", popular: true },
+        { code: "HAN", city: "Hanoi", name: "Noi Bai International Airport", state: "Hanoi", country: "Vietnam", type: "International", popular: true },
+        { code: "DAD", city: "Da Nang", name: "Da Nang International Airport", state: "Da Nang", country: "Vietnam", type: "International", popular: false },
+        { code: "PQC", city: "Phu Quoc", name: "Phu Quoc International Airport", state: "Kien Giang", country: "Vietnam", type: "International", popular: false },
+        { code: "MNL", city: "Manila", name: "Ninoy Aquino International Airport", state: "Metro Manila", country: "Philippines", type: "International", popular: false },
+        { code: "CEB", city: "Cebu", name: "Mactan-Cebu International Airport", state: "Cebu", country: "Philippines", type: "International", popular: false },
+        { code: "SAI", city: "Siem Reap", name: "Siem Reap-Angkor International Airport", state: "Siem Reap", country: "Cambodia", type: "International", popular: false },
+        { code: "PNH", city: "Phnom Penh", name: "Phnom Penh International Airport", state: "Phnom Penh", country: "Cambodia", type: "International", popular: false },
+
+        // International - South Asia & Indian Ocean
+        { code: "MLE", city: "Male", name: "Velana International Airport", state: "Kaafu Atoll", country: "Maldives", type: "International", popular: true },
+        { code: "CMB", city: "Colombo", name: "Bandaranaike International Airport", state: "Western Province", country: "Sri Lanka", type: "International", popular: true },
+        { code: "KTM", city: "Kathmandu", name: "Tribhuvan International Airport", state: "Bagmati", country: "Nepal", type: "International", popular: true },
+        { code: "PBH", city: "Paro", name: "Paro International Airport (Thimphu)", state: "Paro", country: "Bhutan", type: "International", popular: false },
+        { code: "DAC", city: "Dhaka", name: "Hazrat Shahjalal International Airport", state: "Dhaka", country: "Bangladesh", type: "International", popular: false },
+        { code: "MRU", city: "Mauritius", name: "Sir Seewoosagur Ramgoolam Airport", state: "Grand Port", country: "Mauritius", type: "International", popular: true },
+        { code: "SEZ", city: "Seychelles", name: "Seychelles International Airport (Mahe)", state: "Mahe", country: "Seychelles", type: "International", popular: false },
+
+        // International - East & Central Asia
+        { code: "HND", city: "Tokyo", name: "Tokyo Haneda Airport", state: "Tokyo", country: "Japan", type: "International", popular: true },
+        { code: "NRT", city: "Tokyo", name: "Narita International Airport", state: "Chiba", country: "Japan", type: "International", popular: true },
+        { code: "KIX", city: "Osaka", name: "Kansai International Airport", state: "Osaka", country: "Japan", type: "International", popular: false },
+        { code: "ICN", city: "Seoul", name: "Incheon International Airport", state: "Incheon", country: "South Korea", type: "International", popular: true },
+        { code: "HKG", city: "Hong Kong", name: "Hong Kong International Airport", state: "Hong Kong", country: "Hong Kong", type: "International", popular: true },
+        { code: "MFM", city: "Macau", name: "Macau International Airport", state: "Macau", country: "Macau", type: "International", popular: false },
+        { code: "TPE", city: "Taipei", name: "Taiwan Taoyuan International Airport", state: "Taoyuan", country: "Taiwan", type: "International", popular: false },
+        { code: "PEK", city: "Beijing", name: "Beijing Capital International Airport", state: "Beijing", country: "China", type: "International", popular: false },
+        { code: "PKX", city: "Beijing", name: "Beijing Daxing International Airport", state: "Beijing", country: "China", type: "International", popular: false },
+        { code: "PVG", city: "Shanghai", name: "Shanghai Pudong International Airport", state: "Shanghai", country: "China", type: "International", popular: false },
+        { code: "CAN", city: "Guangzhou", name: "Guangzhou Baiyun International Airport", state: "Guangdong", country: "China", type: "International", popular: false },
+        { code: "ALA", city: "Almaty", name: "Almaty International Airport", state: "Almaty", country: "Kazakhstan", type: "International", popular: true },
+        { code: "TAS", city: "Tashkent", name: "Islam Karimov Tashkent International Airport", state: "Tashkent", country: "Uzbekistan", type: "International", popular: false },
+        { code: "GYD", city: "Baku", name: "Heydar Aliyev International Airport", state: "Baku", country: "Azerbaijan", type: "International", popular: true },
+        { code: "TBS", city: "Tbilisi", name: "Shota Rustaveli Tbilisi International Airport", state: "Tbilisi", country: "Georgia", type: "International", popular: true },
+        { code: "EVN", city: "Yerevan", name: "Zvartnots International Airport", state: "Yerevan", country: "Armenia", type: "International", popular: false },
+
+        // International - Europe & United Kingdom
+        { code: "LHR", city: "London", name: "Heathrow Airport", state: "England", country: "United Kingdom", type: "International", popular: true },
+        { code: "LGW", city: "London", name: "Gatwick Airport", state: "England", country: "United Kingdom", type: "International", popular: false },
+        { code: "MAN", city: "Manchester", name: "Manchester Airport", state: "England", country: "United Kingdom", type: "International", popular: false },
+        { code: "EDI", city: "Edinburgh", name: "Edinburgh Airport", state: "Scotland", country: "United Kingdom", type: "International", popular: false },
+        { code: "CDG", city: "Paris", name: "Charles de Gaulle Airport", state: "Ile-de-France", country: "France", type: "International", popular: true },
+        { code: "ORY", city: "Paris", name: "Orly Airport", state: "Ile-de-France", country: "France", type: "International", popular: false },
+        { code: "NCE", city: "Nice", name: "Nice Cote d'Azur Airport", state: "Provence-Alpes-Cote d'Azur", country: "France", type: "International", popular: false },
+        { code: "FRA", city: "Frankfurt", name: "Frankfurt Airport", state: "Hesse", country: "Germany", type: "International", popular: true },
+        { code: "MUC", city: "Munich", name: "Munich Airport", state: "Bavaria", country: "Germany", type: "International", popular: false },
+        { code: "BER", city: "Berlin", name: "Berlin Brandenburg Airport", state: "Brandenburg", country: "Germany", type: "International", popular: false },
+        { code: "AMS", city: "Amsterdam", name: "Amsterdam Airport Schiphol", state: "North Holland", country: "Netherlands", type: "International", popular: true },
+        { code: "BRU", city: "Brussels", name: "Brussels Airport", state: "Flemish Brabant", country: "Belgium", type: "International", popular: false },
+        { code: "ZRH", city: "Zurich", name: "Zurich Airport", state: "Zurich", country: "Switzerland", type: "International", popular: true },
+        { code: "GVA", city: "Geneva", name: "Geneva Airport", state: "Geneva", country: "Switzerland", type: "International", popular: false },
+        { code: "VIE", city: "Vienna", name: "Vienna International Airport", state: "Lower Austria", country: "Austria", type: "International", popular: false },
+        { code: "FCO", city: "Rome", name: "Leonardo da Vinci-Fiumicino Airport", state: "Lazio", country: "Italy", type: "International", popular: true },
+        { code: "MXP", city: "Milan", name: "Milan Malpensa Airport", state: "Lombardy", country: "Italy", type: "International", popular: false },
+        { code: "VCE", city: "Venice", name: "Venice Marco Polo Airport", state: "Veneto", country: "Italy", type: "International", popular: false },
+        { code: "MAD", city: "Madrid", name: "Adolfo Suarez Madrid-Barajas Airport", state: "Madrid", country: "Spain", type: "International", popular: false },
+        { code: "BCN", city: "Barcelona", name: "Josep Tarradellas Barcelona-El Prat", state: "Catalonia", country: "Spain", type: "International", popular: true },
+        { code: "LIS", city: "Lisbon", name: "Humberto Delgado Airport", state: "Lisbon", country: "Portugal", type: "International", popular: false },
+        { code: "DUB", city: "Dublin", name: "Dublin Airport", state: "Leinster", country: "Ireland", type: "International", popular: false },
+        { code: "ATH", city: "Athens", name: "Athens International Airport", state: "Attica", country: "Greece", type: "International", popular: true },
+        { code: "JTR", city: "Santorini", name: "Santorini National Airport", state: "South Aegean", country: "Greece", type: "International", popular: true },
+        { code: "IST", city: "Istanbul", name: "Istanbul Airport", state: "Istanbul", country: "Turkey", type: "International", popular: true },
+        { code: "SAW", city: "Istanbul", name: "Sabiha Gokcen International Airport", state: "Istanbul", country: "Turkey", type: "International", popular: false },
+        { code: "AYT", city: "Antalya", name: "Antalya Airport", state: "Antalya", country: "Turkey", type: "International", popular: false },
+        { code: "PRG", city: "Prague", name: "Vaclav Havel Airport Prague", state: "Prague", country: "Czech Republic", type: "International", popular: false },
+        { code: "BUD", city: "Budapest", name: "Budapest Ferenc Liszt International", state: "Budapest", country: "Hungary", type: "International", popular: false },
+        { code: "WAW", city: "Warsaw", name: "Warsaw Chopin Airport", state: "Masovian", country: "Poland", type: "International", popular: false },
+        { code: "CPH", city: "Copenhagen", name: "Copenhagen Airport", state: "Capital Region", country: "Denmark", type: "International", popular: false },
+        { code: "ARN", city: "Stockholm", name: "Stockholm Arlanda Airport", state: "Stockholm", country: "Sweden", type: "International", popular: false },
+        { code: "OSL", city: "Oslo", name: "Oslo Airport Gardermoen", state: "Viken", country: "Norway", type: "International", popular: false },
+        { code: "HEL", city: "Helsinki", name: "Helsinki Airport", state: "Uusimaa", country: "Finland", type: "International", popular: false },
+
+        // International - North America
+        { code: "JFK", city: "New York", name: "John F. Kennedy International Airport", state: "New York", country: "USA", type: "International", popular: true },
+        { code: "EWR", city: "New York", name: "Newark Liberty International Airport", state: "New Jersey", country: "USA", type: "International", popular: false },
+        { code: "LAX", city: "Los Angeles", name: "Los Angeles International Airport", state: "California", country: "USA", type: "International", popular: true },
+        { code: "SFO", city: "San Francisco", name: "San Francisco International Airport", state: "California", country: "USA", type: "International", popular: true },
+        { code: "ORD", city: "Chicago", name: "O'Hare International Airport", state: "Illinois", country: "USA", type: "International", popular: false },
+        { code: "ATL", city: "Atlanta", name: "Hartsfield-Jackson Atlanta International", state: "Georgia", country: "USA", type: "International", popular: false },
+        { code: "DFW", city: "Dallas", name: "Dallas/Fort Worth International Airport", state: "Texas", country: "USA", type: "International", popular: false },
+        { code: "MIA", city: "Miami", name: "Miami International Airport", state: "Florida", country: "USA", type: "International", popular: false },
+        { code: "MCO", city: "Orlando", name: "Orlando International Airport", state: "Florida", country: "USA", type: "International", popular: false },
+        { code: "IAD", city: "Washington", name: "Washington Dulles International Airport", state: "Virginia", country: "USA", type: "International", popular: false },
+        { code: "BOS", city: "Boston", name: "Boston Logan International Airport", state: "Massachusetts", country: "USA", type: "International", popular: false },
+        { code: "SEA", city: "Seattle", name: "Seattle-Tacoma International Airport", state: "Washington", country: "USA", type: "International", popular: false },
+        { code: "LAS", city: "Las Vegas", name: "Harry Reid International Airport", state: "Nevada", country: "USA", type: "International", popular: false },
+        { code: "IAH", city: "Houston", name: "George Bush Intercontinental Airport", state: "Texas", country: "USA", type: "International", popular: false },
+        { code: "YYZ", city: "Toronto", name: "Toronto Pearson International Airport", state: "Ontario", country: "Canada", type: "International", popular: true },
+        { code: "YVR", city: "Vancouver", name: "Vancouver International Airport", state: "British Columbia", country: "Canada", type: "International", popular: true },
+        { code: "YUL", city: "Montreal", name: "Montreal-Trudeau International Airport", state: "Quebec", country: "Canada", type: "International", popular: false },
+        { code: "YYC", city: "Calgary", name: "Calgary International Airport", state: "Alberta", country: "Canada", type: "International", popular: false },
+        { code: "MEX", city: "Mexico City", name: "Mexico City International Airport", state: "CDMX", country: "Mexico", type: "International", popular: false },
+        { code: "CUN", city: "Cancun", name: "Cancun International Airport", state: "Quintana Roo", country: "Mexico", type: "International", popular: false },
+
+        // International - Oceania & Pacific
+        { code: "SYD", city: "Sydney", name: "Sydney Kingsford Smith Airport", state: "New South Wales", country: "Australia", type: "International", popular: true },
+        { code: "MEL", city: "Melbourne", name: "Melbourne Airport (Tullamarine)", state: "Victoria", country: "Australia", type: "International", popular: true },
+        { code: "BNE", city: "Brisbane", name: "Brisbane Airport", state: "Queensland", country: "Australia", type: "International", popular: false },
+        { code: "PER", city: "Perth", name: "Perth Airport", state: "Western Australia", country: "Australia", type: "International", popular: false },
+        { code: "ADL", city: "Adelaide", name: "Adelaide Airport", state: "South Australia", country: "Australia", type: "International", popular: false },
+        { code: "AKL", city: "Auckland", name: "Auckland Airport", state: "Auckland", country: "New Zealand", type: "International", popular: true },
+        { code: "CHC", city: "Christchurch", name: "Christchurch International Airport", state: "Canterbury", country: "New Zealand", type: "International", popular: false },
+        { code: "ZQN", city: "Queenstown", name: "Queenstown Airport", state: "Otago", country: "New Zealand", type: "International", popular: false },
+        { code: "NAN", city: "Fiji", name: "Nadi International Airport", state: "Western Division", country: "Fiji", type: "International", popular: false },
+
+        // International - Africa & South America
+        { code: "CAI", city: "Cairo", name: "Cairo International Airport", state: "Cairo Governorate", country: "Egypt", type: "International", popular: true },
+        { code: "JNB", city: "Johannesburg", name: "O.R. Tambo International Airport", state: "Gauteng", country: "South Africa", type: "International", popular: true },
+        { code: "CPT", city: "Cape Town", name: "Cape Town International Airport", state: "Western Cape", country: "South Africa", type: "International", popular: true },
+        { code: "NBO", city: "Nairobi", name: "Jomo Kenyatta International Airport", state: "Nairobi County", country: "Kenya", type: "International", popular: false },
+        { code: "CMN", city: "Casablanca", name: "Mohammed V International Airport", state: "Casablanca-Settat", country: "Morocco", type: "International", popular: false },
+        { code: "RAK", city: "Marrakech", name: "Marrakech Menara Airport", state: "Marrakesh-Safi", country: "Morocco", type: "International", popular: false },
+        { code: "ADD", city: "Addis Ababa", name: "Addis Ababa Bole International Airport", state: "Addis Ababa", country: "Ethiopia", type: "International", popular: false },
+        { code: "ZNZ", city: "Zanzibar", name: "Abeid Amani Karume International Airport", state: "Unguja", country: "Tanzania", type: "International", popular: false },
+        { code: "GRU", city: "Sao Paulo", name: "Sao Paulo/Guarulhos International Airport", state: "Sao Paulo", country: "Brazil", type: "International", popular: false },
+        { code: "GIG", city: "Rio de Janeiro", name: "Rio de Janeiro/Galeao International Airport", state: "Rio de Janeiro", country: "Brazil", type: "International", popular: false },
+        { code: "EZE", city: "Buenos Aires", name: "Ministro Pistarini International Airport", state: "Buenos Aires", country: "Argentina", type: "International", popular: false },
+        { code: "SCL", city: "Santiago", name: "Arturo Merino Benitez International Airport", state: "Santiago Metropolitan", country: "Chile", type: "International", popular: false },
+        { code: "BOG", city: "Bogota", name: "El Dorado International Airport", state: "Capital District", country: "Colombia", type: "International", popular: false },
+        { code: "LIM", city: "Lima", name: "Jorge Chavez International Airport", state: "Callao", country: "Peru", type: "International", popular: false }
+    ];
+
+    // Common state aliases, typos & abbreviations
+    var STATE_ALIASES = {
+        "kerla": "kerala",
+        "keral": "kerala",
+        "keralam": "kerala",
+        "rajastan": "rajasthan",
+        "raj": "rajasthan",
+        "gujrat": "gujarat",
+        "guj": "gujarat",
+        "maha": "maharashtra",
+        "mh": "maharashtra",
+        "up": "uttar pradesh",
+        "mp": "madhya pradesh",
+        "ap": "andhra pradesh",
+        "andhra": "andhra pradesh",
+        "tn": "tamil nadu",
+        "tamilnadu": "tamil nadu",
+        "tamil": "tamil nadu",
+        "kar": "karnataka",
+        "karnatka": "karnataka",
+        "karnatak": "karnataka",
+        "wb": "west bengal",
+        "bengal": "west bengal",
+        "uk": "uttarakhand",
+        "uttrakhand": "uttarakhand",
+        "uttaranchal": "uttarakhand",
+        "hp": "himachal pradesh",
+        "himachal": "himachal pradesh",
+        "j&k": "jammu and kashmir",
+        "kashmir": "jammu and kashmir",
+        "jk": "jammu and kashmir",
+        "jammu": "jammu and kashmir",
+        "orissa": "odisha",
+        "odisa": "odisha",
+        "chattisgarh": "chhattisgarh",
+        "chhatisgarh": "chhattisgarh",
+        "cg": "chhattisgarh",
+        "del": "delhi",
+        "ncr": "delhi",
+        "goa": "goa",
+        "punjab": "punjab",
+        "bihar": "bihar",
+        "assam": "assam",
+        "jharkhand": "jharkhand",
+        "andaman": "andaman and nicobar",
+        "lakshadweep": "lakshadweep"
+    };
+
+    function searchAirports(q) {
+        q = (q || "").trim().toLowerCase();
+        if (!q) {
+            return ALL_AIRPORTS.filter(function (a) { return a.popular; }).slice(0, 8);
+        }
+
+        // Check if query or its parts match state alias/typo (e.g. "kerla" -> "kerala")
+        var normalizedState = STATE_ALIASES[q] || q;
+
+        var matches = [];
+        for (var i = 0; i < ALL_AIRPORTS.length; i++) {
+            var a = ALL_AIRPORTS[i];
+            var codeLower = a.code.toLowerCase();
+            var cityLower = a.city.toLowerCase();
+            var nameLower = a.name.toLowerCase();
+            var countryLower = a.country.toLowerCase();
+            var stateLower = (a.state || "").toLowerCase();
+
+            var codeMatch = codeLower.indexOf(q) !== -1;
+            var cityMatch = cityLower.indexOf(q) !== -1;
+            var nameMatch = nameLower.indexOf(q) !== -1;
+            var countryMatch = countryLower.indexOf(q) !== -1;
+            var stateMatch = stateLower && (stateLower.indexOf(q) !== -1 || stateLower.indexOf(normalizedState) !== -1 || normalizedState.indexOf(stateLower) !== -1);
+
+            if (codeMatch || cityMatch || nameMatch || countryMatch || stateMatch) {
+                var score = 100;
+                // Direct exact code match
+                if (codeLower === q) score = 0;
+                // Direct city exact match
+                else if (cityLower === q) score = 1;
+                // Exact state match or alias match (e.g. entering "kerla" or "kerala")
+                else if (stateMatch && (stateLower === normalizedState || stateLower === q)) score = 2;
+                // Code prefix
+                else if (codeLower.indexOf(q) === 0) score = 3;
+                // City prefix
+                else if (cityLower.indexOf(q) === 0) score = 4;
+                // State prefix
+                else if (stateMatch && (stateLower.indexOf(normalizedState) === 0 || stateLower.indexOf(q) === 0)) score = 5;
+                // City substring
+                else if (cityMatch) score = 6;
+                // State substring
+                else if (stateMatch) score = 7;
+                // Code substring
+                else if (codeMatch) score = 8;
+                // Airport name
+                else if (nameMatch) score = 9;
+                else score = 10;
+
+                matches.push({ airport: a, score: score });
+            }
+        }
+
+        matches.sort(function (x, y) { return x.score - y.score; });
+        // Return up to 25 items so that all airports in a state (e.g. Kerala, UP, Maharashtra) are included
+        return matches.slice(0, 25).map(function (m) { return m.airport; });
+    }
+
+    function setupAirportAutocomplete(inputId, hiddenId, dropdownId, defaultIcon) {
+        var input = document.getElementById(inputId);
+        var hidden = document.getElementById(hiddenId);
+        var dropdown = document.getElementById(dropdownId);
+        if (!input || !hidden || !dropdown) return;
+        var activeIdx = -1;
+
+        function render(list, isDefault) {
+            if (!list || list.length === 0) {
+                dropdown.innerHTML = '<div class="airport-empty-suggestion"><i class="fa-solid fa-plane-slash" style="margin-right:6px;"></i> No airports found matching your search</div>';
+                dropdown.style.display = 'block';
+                return;
+            }
+            var qVal = input.value.trim().toLowerCase();
+            var normQ = STATE_ALIASES[qVal] || qVal;
+            var isStateSearch = normQ && list.some(function (a) {
+                return (a.state || "").toLowerCase() === normQ || (a.state || "").toLowerCase().indexOf(normQ) === 0;
+            });
+
+            var html = '';
+            if (isDefault) {
+                html = '<div class="airport-suggestion-header">Popular Destinations</div>';
+            } else if (isStateSearch) {
+                var matchedStateName = list[0].state || "State";
+                html = '<div class="airport-suggestion-header"><i class="fa-solid fa-map-location-dot" style="margin-right:5px;color:#e94560;"></i> All Airports in ' + matchedStateName + ' (' + list.length + ')</div>';
+            }
+
+            html += list.map(function (a, idx) {
+                var locationText = a.state ? (a.state + ', ' + a.country) : a.country;
+                var stateBadge = a.state ? a.state : a.type;
+                return '<div class="airport-suggestion-item" data-idx="' + idx + '" data-code="' + a.code + '" data-city="' + a.city + '">'
+                    + '<div class="airport-item-left">'
+                    + '<i class="' + defaultIcon + ' airport-item-icon"></i>'
+                    + '<div class="airport-item-texts">'
+                    + '<div class="airport-item-city">' + a.city + ' <span class="airport-item-country">(' + locationText + ')</span></div>'
+                    + '<div class="airport-item-airport">' + a.name + '</div>'
+                    + '</div>'
+                    + '</div>'
+                    + '<div class="airport-item-right">'
+                    + '<span class="airport-item-code">' + a.code + '</span>'
+                    + '<span class="airport-item-type">' + stateBadge + '</span>'
+                    + '</div>'
+                    + '</div>';
+            }).join('');
+            dropdown.innerHTML = html;
+            dropdown.style.display = 'block';
+            activeIdx = -1;
+
+            dropdown.querySelectorAll('.airport-suggestion-item').forEach(function (el) {
+                el.addEventListener('mousedown', function (e) {
+                    e.preventDefault();
+                    selectAirport(el.getAttribute('data-code'), el.getAttribute('data-city'));
+                });
+            });
+        }
+
+        function selectAirport(code, city) {
+            input.value = city + ' (' + code + ')';
+            hidden.value = code + '|' + city;
+            dropdown.style.display = 'none';
+            activeIdx = -1;
+        }
+
+        input.addEventListener('focus', function () {
+            var q = input.value.trim();
+            var results = searchAirports(q);
+            render(results, !q);
+        });
+
+        input.addEventListener('input', function () {
+            var q = input.value.trim();
+            if (!q) {
+                hidden.value = 'any';
+                render(searchAirports(''), true);
+            } else {
+                hidden.value = q;
+                render(searchAirports(q), false);
+            }
+        });
+
+        input.addEventListener('keydown', function (e) {
+            var items = dropdown.querySelectorAll('.airport-suggestion-item');
+            if (!items.length || dropdown.style.display === 'none') {
+                if (e.key === 'ArrowDown') {
+                    render(searchAirports(input.value.trim()), !input.value.trim());
+                }
+                return;
+            }
+
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                activeIdx = (activeIdx + 1) % items.length;
+                updateActive(items);
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                activeIdx = (activeIdx - 1 + items.length) % items.length;
+                updateActive(items);
+            } else if (e.key === 'Enter') {
+                e.preventDefault();
+                if (activeIdx >= 0 && activeIdx < items.length) {
+                    var el = items[activeIdx];
+                    selectAirport(el.getAttribute('data-code'), el.getAttribute('data-city'));
+                } else if (items.length > 0) {
+                    var first = items[0];
+                    selectAirport(first.getAttribute('data-code'), first.getAttribute('data-city'));
+                }
+            } else if (e.key === 'Escape') {
+                dropdown.style.display = 'none';
+            }
+        });
+
+        function updateActive(items) {
+            items.forEach(function (it, i) {
+                if (i === activeIdx) {
+                    it.classList.add('active');
+                    it.scrollIntoView({ block: 'nearest' });
+                } else {
+                    it.classList.remove('active');
+                }
+            });
+        }
+
+        input.addEventListener('blur', function () {
+            setTimeout(function () {
+                dropdown.style.display = 'none';
+                var val = input.value.trim();
+                if (!val) {
+                    hidden.value = 'any';
+                } else if (!hidden.value || hidden.value === val || hidden.value === 'any') {
+                    var found = searchAirports(val);
+                    if (found.length > 0) {
+                        selectAirport(found[0].code, found[0].city);
+                    }
+                }
+            }, 200);
+        });
+    }
+
+    // ---- TRIP TYPE & MULTI-CITY LEG MANAGEMENT ----
+    var currentTripType = "one_way";
+    var mcLegCounter = 0;
+
+    function setTripType(type) {
+        currentTripType = type;
+        document.querySelectorAll(".trip-type-tab").forEach(function (t) {
+            t.classList.toggle("active", t.getAttribute("data-trip") === type);
+        });
+        var stdRow = document.getElementById("standard-search-row");
+        var retGrp = document.getElementById("return-date-group");
+        var mcRows = document.getElementById("multicity-search-rows");
+        var rtBadge = document.getElementById("roundtrip-nights-badge");
+
+        if (type === "multi_city") {
+            stdRow.style.display = "none";
+            mcRows.style.display = "block";
+            if (rtBadge) rtBadge.style.display = "none";
+            var container = document.getElementById("multicity-legs-container");
+            if (container && container.children.length === 0) {
+                addMultiCityLeg("DEL|Delhi", "Delhi (DEL)", "DXB|Dubai", "Dubai (DXB)", 7);
+                addMultiCityLeg("DXB|Dubai", "Dubai (DXB)", "SIN|Singapore", "Singapore (SIN)", 11);
+            }
+            updateMultiCitySummary();
+        } else {
+            stdRow.style.display = "flex";
+            mcRows.style.display = "none";
+            if (type === "round_trip") {
+                retGrp.style.display = "block";
+                ensureDefaultDates();
+                updateRoundTripNights();
+            } else {
+                retGrp.style.display = "none";
+                if (rtBadge) rtBadge.style.display = "none";
+            }
+        }
+    }
+
+    function formatDateOffset(daysFromNow) {
+        var d = new Date();
+        d.setDate(d.getDate() + daysFromNow);
+        return d.toISOString().split("T")[0];
+    }
+
+    function ensureDefaultDates() {
+        var depDateEl = document.getElementById("search-dates");
+        var retDateEl = document.getElementById("search-return-date");
+        if (depDateEl && !depDateEl.value) {
+            depDateEl.value = formatDateOffset(7);
+        }
+        if (retDateEl && (!retDateEl.value || retDateEl.value <= depDateEl.value)) {
+            var base = depDateEl && depDateEl.value ? new Date(depDateEl.value) : new Date();
+            base.setDate(base.getDate() + 4);
+            retDateEl.value = base.toISOString().split("T")[0];
+        }
+    }
+
+    function updateRoundTripNights() {
+        var badge = document.getElementById("roundtrip-nights-badge");
+        if (!badge || currentTripType !== "round_trip") return;
+        var depVal = document.getElementById("search-dates").value;
+        var retVal = document.getElementById("search-return-date").value;
+        if (!depVal || !retVal) { badge.style.display = "none"; return; }
+        var d1 = new Date(depVal);
+        var d2 = new Date(retVal);
+        var nights = Math.round((d2 - d1) / (1000 * 60 * 60 * 24));
+        if (nights > 0) {
+            var destTxt = (document.getElementById("destination-input").value || "").split("(")[0].trim() || "Destination";
+            badge.innerHTML = '<i class="fa-solid fa-moon"></i> ' + nights + ' Night' + (nights > 1 ? 's' : '') + ' Stay in ' + destTxt;
+            badge.style.display = "inline-flex";
+        } else {
+            badge.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Return date must be after departure';
+            badge.style.display = "inline-flex";
+        }
+    }
+
+    function addMultiCityLeg(defFromVal, defFromText, defToVal, defToText, offsetDays) {
+        var container = document.getElementById("multicity-legs-container");
+        if (!container) return;
+        if (container.children.length >= 5) {
+            showToast("Maximum 5 flight legs supported.", "info");
+            return;
+        }
+        mcLegCounter++;
+        var idx = mcLegCounter;
+
+        // Auto-chain From city from previous leg's To city if not provided
+        if (!defFromVal && container.children.length > 0) {
+            var prevRow = container.children[container.children.length - 1];
+            var prevToHid = prevRow.querySelector(".mc-to-hidden");
+            var prevToInp = prevRow.querySelector(".mc-to-input");
+            if (prevToHid && prevToHid.value && prevToHid.value !== "any") {
+                defFromVal = prevToHid.value;
+                defFromText = prevToInp ? prevToInp.value : "";
+            }
+        }
+        var defaultDate = offsetDays ? formatDateOffset(offsetDays) : formatDateOffset(7 + container.children.length * 4);
+        if (!offsetDays && container.children.length > 0) {
+            var prevDateEl = container.children[container.children.length - 1].querySelector(".mc-date-input");
+            if (prevDateEl && prevDateEl.value) {
+                var pd = new Date(prevDateEl.value);
+                pd.setDate(pd.getDate() + 3);
+                defaultDate = pd.toISOString().split("T")[0];
+            }
+        }
+
+        var row = document.createElement("div");
+        row.className = "mc-leg-row";
+        row.id = "mc-leg-" + idx;
+        row.innerHTML = ''
+            + '<span class="mc-leg-badge">Flight ' + (container.children.length + 1) + '</span>'
+            + '<div style="flex:1; min-width:190px; position:relative;" class="airport-field-group">'
+            + '<label style="display:block;font-size:0.74rem;font-weight:700;color:#555;margin-bottom:0.3rem;"><i class="fa-solid fa-plane-departure" style="color:#e94560;"></i> From</label>'
+            + '<input type="text" class="mc-from-input" id="mc-from-inp-' + idx + '" value="' + (defFromText || '') + '" placeholder="City or airport..." autocomplete="off" style="width:100%;padding:0.65rem 0.75rem;border:1px solid #cbd5e1;border-radius:8px;font-size:0.85rem;font-family:inherit;box-sizing:border-box;">'
+            + '<input type="hidden" class="mc-from-hidden" id="mc-from-hid-' + idx + '" value="' + (defFromVal || 'any') + '">'
+            + '<div id="mc-from-sug-' + idx + '" class="airport-suggestions-dropdown"></div>'
+            + '</div>'
+            + '<div style="flex:1; min-width:190px; position:relative;" class="airport-field-group">'
+            + '<label style="display:block;font-size:0.74rem;font-weight:700;color:#555;margin-bottom:0.3rem;"><i class="fa-solid fa-location-dot" style="color:#e94560;"></i> To</label>'
+            + '<input type="text" class="mc-to-input" id="mc-to-inp-' + idx + '" value="' + (defToText || '') + '" placeholder="City or airport..." autocomplete="off" style="width:100%;padding:0.65rem 0.75rem;border:1px solid #cbd5e1;border-radius:8px;font-size:0.85rem;font-family:inherit;box-sizing:border-box;">'
+            + '<input type="hidden" class="mc-to-hidden" id="mc-to-hid-' + idx + '" value="' + (defToVal || 'any') + '">'
+            + '<div id="mc-to-sug-' + idx + '" class="airport-suggestions-dropdown"></div>'
+            + '</div>'
+            + '<div style="flex:0.7; min-width:150px;">'
+            + '<label style="display:block;font-size:0.74rem;font-weight:700;color:#555;margin-bottom:0.3rem;"><i class="fa-regular fa-calendar"></i> Date</label>'
+            + '<input type="date" class="mc-date-input" value="' + defaultDate + '" onchange="updateMultiCitySummary()" style="width:100%;padding:0.65rem;border:1px solid #cbd5e1;border-radius:8px;font-size:0.85rem;font-family:inherit;box-sizing:border-box;">'
+            + '</div>'
+            + '<button type="button" class="mc-remove-btn" onclick="removeMultiCityLeg(' + idx + ')" title="Remove leg"><i class="fa-solid fa-trash"></i></button>';
+
+        container.appendChild(row);
+        setupAirportAutocomplete("mc-from-inp-" + idx, "mc-from-hid-" + idx, "mc-from-sug-" + idx, "fa-solid fa-plane-departure");
+        setupAirportAutocomplete("mc-to-inp-" + idx, "mc-to-hid-" + idx, "mc-to-sug-" + idx, "fa-solid fa-location-dot");
+
+        // Update summary when To input changes
+        var toInpEl = document.getElementById("mc-to-inp-" + idx);
+        if (toInpEl) toInpEl.addEventListener("blur", function () { setTimeout(updateMultiCitySummary, 250); });
+        renumberMultiCityLegs();
+        updateMultiCitySummary();
+    }
+
+    function removeMultiCityLeg(idx) {
+        var container = document.getElementById("multicity-legs-container");
+        if (!container || container.children.length <= 2) {
+            showToast("Multi-city requires at least 2 flights.", "info");
+            return;
+        }
+        var row = document.getElementById("mc-leg-" + idx);
+        if (row) row.remove();
+        renumberMultiCityLegs();
+        updateMultiCitySummary();
+    }
+
+    function renumberMultiCityLegs() {
+        var rows = document.querySelectorAll("#multicity-legs-container .mc-leg-row");
+        rows.forEach(function (r, i) {
+            var badge = r.querySelector(".mc-leg-badge");
+            if (badge) badge.textContent = "Flight " + (i + 1);
+            var rm = r.querySelector(".mc-remove-btn");
+            if (rm) rm.style.visibility = rows.length > 2 ? "visible" : "hidden";
+        });
+    }
+
+    function collectMultiCityLegs() {
+        var rows = document.querySelectorAll("#multicity-legs-container .mc-leg-row");
+        var legs = [];
+        rows.forEach(function (r) {
+            var fromInp = r.querySelector(".mc-from-input").value.trim();
+            var fromHid = r.querySelector(".mc-from-hidden");
+            if (fromInp && (!fromHid.value || fromHid.value === "any" || fromHid.value.indexOf("|") === -1)) {
+                var ff = searchAirports(fromInp);
+                if (ff.length > 0) fromHid.value = ff[0].code + "|" + ff[0].city;
+            }
+            var toInp = r.querySelector(".mc-to-input").value.trim();
+            var toHid = r.querySelector(".mc-to-hidden");
+            if (toInp && (!toHid.value || toHid.value === "any" || toHid.value.indexOf("|") === -1)) {
+                var tf = searchAirports(toInp);
+                if (tf.length > 0) toHid.value = tf[0].code + "|" + tf[0].city;
+            }
+            var dt = r.querySelector(".mc-date-input").value;
+            legs.push({
+                departure: fromHid.value || "DEL|Delhi",
+                destination: toHid.value || "DXB|Dubai",
+                date: dt
+            });
+        });
+        return legs;
+    }
+
+    function updateMultiCitySummary() {
+        var summaryEl = document.getElementById("multicity-nights-summary");
+        if (!summaryEl) return;
+        var rows = document.querySelectorAll("#multicity-legs-container .mc-leg-row");
+        if (rows.length < 2) { summaryEl.style.display = "none"; return; }
+        var parts = [];
+        for (var i = 0; i < rows.length - 1; i++) {
+            var toHid = rows[i].querySelector(".mc-to-hidden").value;
+            var toInp = rows[i].querySelector(".mc-to-input").value.split("(")[0].trim();
+            var city = (toHid.indexOf("|") !== -1 ? toHid.split("|")[1] : toInp) || ("Stop " + (i + 1));
+            var d1 = rows[i].querySelector(".mc-date-input").value;
+            var d2 = rows[i + 1].querySelector(".mc-date-input").value;
+            if (d1 && d2) {
+                var nights = Math.max(1, Math.round((new Date(d2) - new Date(d1)) / (1000 * 60 * 60 * 24)));
+                parts.push(city + " (" + nights + "N)");
+            }
+        }
+        if (parts.length > 0) {
+            summaryEl.innerHTML = '<i class="fa-solid fa-hotel"></i> Stays: ' + parts.join(" &rarr; ");
+            summaryEl.style.display = "inline-flex";
+        } else {
+            summaryEl.style.display = "none";
+        }
+    }
+
+    // ---- TRAVELLERS COUNTER (Adults, Children, Infants) ----
+    var travellerCounts = { adults: 1, children: 0, infants: 0 };
+
+    function updateTraveller(type, delta) {
+        if (type === "adults") {
+            travellerCounts.adults = Math.max(1, Math.min(9, travellerCounts.adults + delta));
+            if (travellerCounts.infants > travellerCounts.adults) {
+                travellerCounts.infants = travellerCounts.adults;
+                showToast("Infants cannot exceed number of adults.", "info");
+            }
+        } else if (type === "children") {
+            travellerCounts.children = Math.max(0, Math.min(8, travellerCounts.children + delta));
+        } else if (type === "infants") {
+            travellerCounts.infants = Math.max(0, Math.min(travellerCounts.adults, travellerCounts.infants + delta));
+        }
+        document.getElementById("cnt-adults").textContent = travellerCounts.adults;
+        document.getElementById("cnt-children").textContent = travellerCounts.children;
+        document.getElementById("cnt-infants").textContent = travellerCounts.infants;
+    }
+
+    function getPaxSummaryText() {
+        var parts = [travellerCounts.adults + " Adult" + (travellerCounts.adults > 1 ? "s" : "")];
+        if (travellerCounts.children > 0) parts.push(travellerCounts.children + " Child" + (travellerCounts.children > 1 ? "ren" : ""));
+        if (travellerCounts.infants > 0) parts.push(travellerCounts.infants + " Infant" + (travellerCounts.infants > 1 ? "s" : ""));
+        return parts.join(", ");
+    }
+
+    function buildFlightCardHtml(f, staysData) {
+        var badgeClass = (f.class || "").toLowerCase().includes("business") ? "biz-badge" : "eco-badge";
+        var paxSummary = f.pax_summary || getPaxSummaryText();
+        var totalAll = f.total_price_all || f.price_per_person || 0;
+        var pricePerAdult = f.price_per_person || 0;
+        var totalPersons = f.persons || (travellerCounts.adults + travellerCounts.children + travellerCounts.infants);
+        var returnSummary = f.return_departure
+            ? (' | Return ' + (f.return_date || '') + ': ' + f.return_departure + '-' + f.return_arrival)
+            : '';
+        var flightObj = JSON.stringify({
+            id: f.id, type: 'flight', name: f.airline + ' | ' + f.from_city + ' to ' + f.to_city,
+            detail: f.class + ' | ' + f.stops + ' | ' + f.duration + ' | ' + paxSummary + (f.trip_type ? ' | ' + f.trip_type : '') + returnSummary,
+            dest: f.dest_label,
+            nights: f.nights || 1,
+            stays: staysData || [],
+            quantity: 1,
+            price: totalAll,
+            display: f.price_display + ' (' + paxSummary + ')'
+        }).replace(/"/g, '&quot;');
+
+        var stopHTML = f.stops !== 'Non-Stop' ? '<div class="flight-stop-dot"></div>' : '';
+        var stopsClass = f.stops === 'Non-Stop' ? 'stop-direct' : 'stop-layover';
+        var featuresHTML = (f.features || []).map(function (feat) {
+            return '<span class="hf-feature-chip"><i class="fa-solid fa-check"></i> ' + feat + '</span>';
+        }).join('');
+
+        var returnHTML = '';
+        if (f.return_departure) {
+            var retStopHTML = f.return_stops !== 'Non-Stop' ? '<div class="flight-stop-dot"></div>' : '';
+            var retStopsClass = f.return_stops === 'Non-Stop' ? 'stop-direct' : 'stop-layover';
+            returnHTML = '<div class="flight-return-row">' +
+                '<div class="flight-leg-tag return-tag"><i class="fa-solid fa-plane-arrival"></i> Return (' + (f.return_date || '') + ') &bull; ' + (f.return_airline || f.airline) + '</div>' +
+                '<div class="flight-route">' +
+                '<div class="flight-city">' +
+                '<span class="city-time">' + f.return_departure + '</span>' +
+                '<span class="city-code">' + f.to_city.split('(')[1].replace(')', '') + '</span>' +
+                '<span class="city-name">' + f.to_city.split('(')[0].trim() + '</span>' +
+                '</div>' +
+                '<div class="flight-middle">' +
+                '<span class="flight-duration">' + f.return_duration + '</span>' +
+                '<div class="flight-line">' +
+                '<div class="flight-dot"></div>' +
+                '<div class="flight-track">' + retStopHTML + '</div>' +
+                '<span style="color:#e94560;">&#9992;</span>' +
+                '</div>' +
+                '<span class="flight-stops ' + retStopsClass + '">' + f.return_stops + '</span>' +
+                '</div>' +
+                '<div class="flight-city" style="align-items:flex-end;">' +
+                '<span class="city-time">' + f.return_arrival + '</span>' +
+                '<span class="city-code">' + f.from_city.split('(')[1].replace(')', '') + '</span>' +
+                '<span class="city-name">' + f.from_city.split('(')[0].trim() + '</span>' +
+                '</div>' +
+                '</div>' +
+                '</div>';
+        }
+
+        var priceSubLabel = totalPersons > 1 && pricePerAdult
+            ? ('Total for ' + paxSummary + ' (~₹' + pricePerAdult.toLocaleString('en-IN') + '/pax)')
+            : ('Total for ' + paxSummary);
+
+        return '<div class="hf-card flight-card" data-dest="' + (f.dest_label || '').toLowerCase() + '" data-dep="live">' +
+            '<div class="flight-card-header">' +
+            '<div class="flight-airline-badge">' +
+            '<span class="airline-code">' + f.airline_code + '</span>' +
+            '<span class="airline-name">' + f.airline + '</span>' +
+            '</div>' +
+            '<div class="flight-class-badge ' + badgeClass + '">' + (f.trip_type || f.class) + '</div>' +
+            '</div>' +
+            (f.return_departure ? '<div class="flight-leg-tag"><i class="fa-solid fa-plane-departure"></i> Outbound (' + (f.checkin || '') + ')</div>' : '') +
+            '<div class="flight-route">' +
+            '<div class="flight-city">' +
+            '<span class="city-time">' + f.departure + '</span>' +
+            '<span class="city-code">' + f.from_city.split('(')[1].replace(')', '') + '</span>' +
+            '<span class="city-name">' + f.from_city.split('(')[0].trim() + '</span>' +
+            '</div>' +
+            '<div class="flight-middle">' +
+            '<span class="flight-duration">' + f.duration + '</span>' +
+            '<div class="flight-line">' +
+            '<div class="flight-dot"></div>' +
+            '<div class="flight-track">' + stopHTML + '</div>' +
+            '<span style="color:#e94560;">&#9992;</span>' +
+            '</div>' +
+            '<span class="flight-stops ' + stopsClass + '">' + f.stops + '</span>' +
+            '</div>' +
+            '<div class="flight-city" style="align-items:flex-end;">' +
+            '<span class="city-time">' + f.arrival + '</span>' +
+            '<span class="city-code">' + f.to_city.split('(')[1].replace(')', '') + '</span>' +
+            '<span class="city-name">' + f.to_city.split('(')[0].trim() + '</span>' +
+            '</div>' +
+            '</div>' +
+            returnHTML +
+            '<div class="hf-card-features">' + featuresHTML + '</div>' +
+            '<div class="hf-card-footer">' +
+            '<div class="hf-price-block">' +
+            '<span class="hf-price">' + f.price_display + '</span>' +
+            '<span class="hf-price-label">' + priceSubLabel + '</span>' +
+            '</div>' +
+            '<button class="hf-add-btn" id="btn-' + f.id + '" data-item="' + flightObj + '" onclick="addToCart(JSON.parse(this.dataset.item))">' +
+            '<i class="fa-solid fa-plus"></i> Add to Cart' +
+            '</button>' +
+            '</div>' +
+            '</div>';
+    }
+
+    function buildHotelCardHtml(h) {
+        var nights = h.nights || 1;
+        var totalPrice = h.total_price || (h.price_per_night ? h.price_per_night * nights : 0);
+        var totalDisplay = h.total_display || (totalPrice ? "₹" + totalPrice.toLocaleString("en-IN") : "");
+        var hotelObj = JSON.stringify({
+            id: h.id, type: 'hotel', name: h.name,
+            detail: h.stars + ' Star | ' + h.location + (nights > 1 ? ' | ' + nights + ' Nights' : ''),
+            dest: h.dest_label,
+            price: h.price_per_night,
+            quantity: nights,
+            display: h.price_display
+        }).replace(/"/g, '&quot;');
+
+        var starsHTML = "";
+        for (var i = 0; i < h.stars; i++) {
+            starsHTML += '<i class="fa-solid fa-star"></i>';
+        }
+        var amenitiesHTML = (h.amenities || []).map(function (am) {
+            return '<span class="amenity-chip"><i class="fa-solid fa-check"></i> ' + am + '</span>';
+        }).join('');
+
+        var stayBadge = (nights > 1 && totalDisplay && totalDisplay !== "Price unavailable")
+            ? '<div class="hotel-stay-total-badge"><i class="fa-solid fa-moon"></i> Suggested: ' + totalDisplay + ' for ' + nights + ' nights</div>'
+            : '';
+
+        return '<div class="hf-card hotel-card" data-dest="' + (h.dest_label || '').toLowerCase() + '" data-dep="any">' +
+            '<div class="hotel-card-image">' +
+            '<img src="' + h.image + '" alt="' + h.name + '" loading="lazy">' +
+            '<div class="hotel-stars">' + starsHTML + '</div>' +
+            '<div class="hotel-dest-tag">' + h.dest_label + (nights > 1 ? ' • ' + nights + 'N' : '') + '</div>' +
+            '</div>' +
+            '<div class="hotel-card-body">' +
+            '<h3 class="hotel-name">' + h.name + '</h3>' +
+            '<p class="hotel-location"><i class="fa-solid fa-location-dot"></i> ' + h.location + '</p>' +
+            stayBadge +
+            '<p class="hotel-highlights">' + h.highlights + '</p>' +
+            '<div class="hotel-amenities">' + amenitiesHTML + '</div>' +
+            '</div>' +
+            '<div class="hf-card-footer">' +
+            '<div class="hf-price-block">' +
+            '<span class="hf-price">' + h.price_display + '</span>' +
+            '<span class="hf-price-label">' + (nights > 1 ? ('per night (' + nights + 'N = ' + totalDisplay + ')') : 'per night') + '</span>' +
+            '</div>' +
+            '<button class="hf-add-btn" id="btn-' + h.id + '" data-item="' + hotelObj + '" onclick="addToCart(JSON.parse(this.dataset.item))">' +
+            '<i class="fa-solid fa-plus"></i> Add to Cart' + (nights > 1 ? ' (' + nights + 'N)' : '') +
+            '</button>' +
+            '</div>' +
+            '</div>';
+    }
+
+    function performSearch() {
         var loader = document.getElementById("search-loader");
         var flightGrid = document.getElementById("flights-grid");
         var hotelGrid = document.getElementById("hotels-grid");
         var pkgGrid = document.getElementById("packages-grid");
 
-        // Hide grids, show loader
         flightGrid.style.display = "none";
         hotelGrid.style.display = "none";
         pkgGrid.style.display = "none";
         loader.style.display = "block";
 
+        if (currentTripType === "multi_city") {
+            var legs = collectMultiCityLegs();
+            fetch("/api/search_multicity", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    legs: legs,
+                    adults: travellerCounts.adults,
+                    children: travellerCounts.children,
+                    infants: travellerCounts.infants
+                })
+            })
+            .then(function (res) { return res.json(); })
+            .then(function (data) {
+                loader.style.display = "none";
+                flightGrid.style.display = "";
+                hotelGrid.style.display = "";
+                pkgGrid.style.display = "";
+
+                if (data.status === "error") {
+                    showToast(data.message || "Multi-city search error", "error");
+                    return;
+                }
+
+                var stays = data.stays || [];
+                var flightHTML = (data.flights && data.flights.length > 0)
+                    ? data.flights.map(function (f) { return buildFlightCardHtml(f, stays); }).join("")
+                    : '<div class="hf-empty-state"><i class="fa-solid fa-plane-slash" style="color:#ccc; font-size:3rem; margin-bottom:1rem;"></i><p>No live multi-city flights found.</p></div>';
+                flightGrid.innerHTML = flightHTML;
+
+                var hotelHTML = "";
+                if (data.hotel_groups && data.hotel_groups.length > 0) {
+                    data.hotel_groups.forEach(function (grp) {
+                        hotelHTML += '<div class="mc-hotel-city-header">'
+                            + '<h3><i class="fa-solid fa-hotel"></i> Hotels in ' + grp.city + '</h3>'
+                            + '<span class="mc-hotel-duration-badge"><i class="fa-solid fa-moon"></i> ' + grp.nights + ' Night' + (grp.nights > 1 ? 's' : '') + ' (' + grp.checkin + ' to ' + grp.checkout + ')</span>'
+                            + '</div>';
+                        if (grp.hotels && grp.hotels.length > 0) {
+                            hotelHTML += grp.hotels.map(buildHotelCardHtml).join("");
+                        } else {
+                            hotelHTML += '<div class="hf-empty-state" style="grid-column:1/-1;"><p>No live hotels found in ' + grp.city + '.</p></div>';
+                        }
+                    });
+                } else {
+                    hotelHTML = '<div class="hf-empty-state"><p>No hotels found for multi-city stops.</p></div>';
+                }
+                hotelGrid.innerHTML = hotelHTML;
+
+                var flightCount = document.querySelectorAll("#flights-grid .flight-card").length;
+                var hotelCount = document.querySelectorAll("#hotels-grid .hotel-card").length;
+
+                // Show packages matching any of the stay cities
+                var pkgCount = 0;
+                var allPkgCards = document.querySelectorAll(".pkg-card");
+                allPkgCards.forEach(function (card) {
+                    var matchedAny = stays.some(function (s) { return matchesPackageDest(card, s.city.toLowerCase()); });
+                    if (matchedAny) { card.style.display = "flex"; pkgCount++; }
+                    else { card.style.display = "none"; }
+                });
+                if (pkgCount === 0 && allPkgCards.length > 0) {
+                    allPkgCards.forEach(function (card) { card.style.display = "flex"; });
+                    pkgCount = allPkgCards.length;
+                }
+
+                document.getElementById("cnt-flights").textContent = flightCount;
+                document.getElementById("cnt-hotels").textContent = hotelCount;
+                document.getElementById("cnt-packages").textContent = pkgCount;
+                document.getElementById("cnt-all").textContent = flightCount + hotelCount + pkgCount;
+                showToast("Multi-city flights & city-wise hotels loaded!", "success");
+            })
+            .catch(function (err) {
+                console.error("Multi-City API Error:", err);
+                loader.style.display = "none";
+                flightGrid.style.display = "";
+                hotelGrid.style.display = "";
+                pkgGrid.style.display = "";
+                showToast("Error connecting to Multi-City API.", "error");
+            });
+            return;
+        }
+
+        // Standard One-Way / Round-Trip search
+        var depInp = (document.getElementById("departure-input") ? document.getElementById("departure-input").value.trim() : "");
+        var destInp = (document.getElementById("destination-input") ? document.getElementById("destination-input").value.trim() : "");
+        var depEl = document.getElementById("search-departure");
+        var destEl = document.getElementById("search-destination");
+
+        if (depInp && depEl && (depEl.value === "any" || depEl.value.indexOf("|") === -1)) {
+            var depFound = searchAirports(depInp);
+            if (depFound.length > 0) depEl.value = depFound[0].code + "|" + depFound[0].city;
+        } else if (!depInp && depEl) {
+            depEl.value = "any";
+        }
+
+        if (destInp && destEl && (destEl.value === "any" || destEl.value.indexOf("|") === -1)) {
+            var destFound = searchAirports(destInp);
+            if (destFound.length > 0) destEl.value = destFound[0].code + "|" + destFound[0].city;
+        } else if (!destInp && destEl) {
+            destEl.value = "any";
+        }
+
+        var dep = depEl.value.toLowerCase();
+        var dest = destEl.value.toLowerCase();
+        var date = document.getElementById("search-dates").value;
+        var retDate = (currentTripType === "round_trip" && document.getElementById("search-return-date"))
+            ? document.getElementById("search-return-date").value : "";
+
         // Call Live Backend API
-        fetch(`/api/search_live?departure=${dep}&destination=${dest}&date=${date}`)
-            .then(res => res.json())
-            .then(data => {
+        fetch('/api/search_live?departure=' + encodeURIComponent(dep) + '&destination=' + encodeURIComponent(dest) + '&date=' + encodeURIComponent(date) + '&trip_type=' + encodeURIComponent(currentTripType) + '&return_date=' + encodeURIComponent(retDate) + '&adults=' + travellerCounts.adults + '&children=' + travellerCounts.children + '&infants=' + travellerCounts.infants)
+            .then(function (res) { return res.json(); })
+            .then(function (data) {
                 if (data.status === "error") {
                     alert("Live API Note: " + data.message);
                 } else {
-                    console.log("Live Flights Fetched:", data.flights);
-                    console.log("Live Hotels Fetched:", data.hotels);
+                    var staysData = [{
+                        city: (dest.indexOf("|") !== -1 ? dest.split("|")[1] : dest),
+                        nights: data.nights || 1,
+                        checkin: data.checkin || date,
+                        checkout: data.checkout || retDate
+                    }];
 
-                    // Build Flight Cards dynamically from API data
                     var flightHTML = "";
                     if (data.flights && data.flights.length > 0) {
-                        data.flights.forEach(function (f) {
-                            var badgeClass = f.class.toLowerCase().includes("business") ? "biz-badge" : "eco-badge";
-                            var flightObj = JSON.stringify({
-                                id: f.id, type: 'flight', name: f.airline + ' | ' + f.from_city + ' to ' + f.to_city,
-                                detail: f.class + ' | ' + f.stops + ' | ' + f.duration, dest: f.dest_label,
-                                price: f.price_per_person, display: f.price_display
-                            }).replace(/"/g, '&quot;');
-
-                            var stopHTML = f.stops !== 'Non-Stop' ? '<div class="flight-stop-dot"></div>' : '';
-                            var stopsClass = f.stops === 'Non-Stop' ? 'stop-direct' : 'stop-layover';
-                            var featuresHTML = f.features.map(feat => '<span class="hf-feature-chip"><i class="fa-solid fa-check"></i> ' + feat + '</span>').join('');
-
-                            flightHTML += '<div class="hf-card flight-card" data-dest="' + f.dest_label.toLowerCase() + '" data-dep="live">' +
-                                '<div class="flight-card-header">' +
-                                '<div class="flight-airline-badge">' +
-                                '<span class="airline-code">' + f.airline_code + '</span>' +
-                                '<span class="airline-name">' + f.airline + '</span>' +
-                                '</div>' +
-                                '<div class="flight-class-badge ' + badgeClass + '">' + f.class + '</div>' +
-                                '</div>' +
-                                '<div class="flight-route">' +
-                                '<div class="flight-city">' +
-                                '<span class="city-time">' + f.departure + '</span>' +
-                                '<span class="city-code">' + f.from_city.split('(')[1].replace(')', '') + '</span>' +
-                                '<span class="city-name">' + f.from_city.split('(')[0].trim() + '</span>' +
-                                '</div>' +
-                                '<div class="flight-middle">' +
-                                '<span class="flight-duration">' + f.duration + '</span>' +
-                                '<div class="flight-line">' +
-                                '<div class="flight-dot"></div>' +
-                                '<div class="flight-track">' + stopHTML + '</div>' +
-                                '<span style="color:#e94560;">&#9992;</span>' +
-                                '</div>' +
-                                '<span class="flight-stops ' + stopsClass + '">' + f.stops + '</span>' +
-                                '</div>' +
-                                '<div class="flight-city" style="align-items:flex-end;">' +
-                                '<span class="city-time">' + f.arrival + '</span>' +
-                                '<span class="city-code">' + f.to_city.split('(')[1].replace(')', '') + '</span>' +
-                                '<span class="city-name">' + f.to_city.split('(')[0].trim() + '</span>' +
-                                '</div>' +
-                                '</div>' +
-                                '<div class="hf-card-features">' + featuresHTML + '</div>' +
-                                '<div class="hf-card-footer">' +
-                                '<div class="hf-price-block">' +
-                                '<span class="hf-price">' + f.price_display + '</span>' +
-                                '<span class="hf-price-label">per person</span>' +
-                                '</div>' +
-                                '<button class="hf-add-btn" id="btn-' + f.id + '" data-item="' + flightObj + '" onclick="addToCart(JSON.parse(this.dataset.item))">' +
-                                '<i class="fa-solid fa-plus"></i> Add to Cart' +
-                                '</button>' +
-                                '</div>' +
-                                '</div>';
-                        });
+                        flightHTML = data.flights.map(function (f) { return buildFlightCardHtml(f, staysData); }).join("");
                     } else {
                         flightHTML = '<div class="hf-empty-state"><i class="fa-solid fa-plane-slash" style="color:#ccc; font-size:3rem; margin-bottom:1rem;"></i><p>No live flights found for this route on this date.</p></div>';
                     }
                     flightGrid.innerHTML = flightHTML;
 
-                    // Build Hotel Cards dynamically from API data
                     var hotelHTML = "";
                     if (data.hotels && data.hotels.length > 0) {
-                        data.hotels.forEach(function (h) {
-                            var hotelObj = JSON.stringify({
-                                id: h.id, type: 'hotel', name: h.name,
-                                detail: h.stars + ' Star | ' + h.location, dest: h.dest_label,
-                                price: h.price_per_night, display: h.price_display
-                            }).replace(/"/g, '&quot;');
-
-                            var starsHTML = "";
-                            for (var i = 0; i < h.stars; i++) {
-                                starsHTML += '<i class="fa-solid fa-star"></i>';
-                            }
-
-                            var amenitiesHTML = h.amenities.map(am => '<span class="amenity-chip"><i class="fa-solid fa-check"></i> ' + am + '</span>').join('');
-
-                            hotelHTML += '<div class="hf-card hotel-card" data-dest="' + h.dest_label.toLowerCase() + '" data-dep="any">' +
-                                '<div class="hotel-card-image">' +
-                                '<img src="' + h.image + '" alt="' + h.name + '" loading="lazy">' +
-                                '<div class="hotel-stars">' + starsHTML + '</div>' +
-                                '<div class="hotel-dest-tag">' + h.dest_label + '</div>' +
-                                '</div>' +
-                                '<div class="hotel-card-body">' +
-                                '<h3 class="hotel-name">' + h.name + '</h3>' +
-                                '<p class="hotel-location"><i class="fa-solid fa-location-dot"></i> ' + h.location + '</p>' +
-                                '<p class="hotel-highlights">' + h.highlights + '</p>' +
-                                '<div class="hotel-amenities">' + amenitiesHTML + '</div>' +
-                                '</div>' +
-                                '<div class="hf-card-footer">' +
-                                '<div class="hf-price-block">' +
-                                '<span class="hf-price">' + h.price_display + '</span>' +
-                                '<span class="hf-price-label">per night</span>' +
-                                '</div>' +
-                                '<button class="hf-add-btn" id="btn-' + h.id + '" data-item="' + hotelObj + '" onclick="addToCart(JSON.parse(this.dataset.item))">' +
-                                '<i class="fa-solid fa-plus"></i> Add to Cart' +
-                                '</button>' +
-                                '</div>' +
-                                '</div>';
-                        });
+                        if (data.nights && data.nights > 1) {
+                            hotelHTML += '<div class="mc-hotel-city-header">'
+                                + '<h3><i class="fa-solid fa-hotel"></i> Hotels for your ' + data.nights + '-Night Stay</h3>'
+                                + '<span class="mc-hotel-duration-badge"><i class="fa-solid fa-moon"></i> ' + data.checkin + ' to ' + data.checkout + '</span>'
+                                + '</div>';
+                        }
+                        hotelHTML += data.hotels.map(buildHotelCardHtml).join("");
                     } else {
                         hotelHTML = '<div class="hf-empty-state"><i class="fa-solid fa-hotel" style="color:#ccc; font-size:3rem; margin-bottom:1rem;"></i><p>No live hotels found for this destination on this date.</p></div>';
                     }
@@ -1762,36 +3938,39 @@ and more.{% endblock %}
 
                 var flightCount = 0, hotelCount = 0, pkgCount = 0;
 
-                // Since flights and hotels are 100% dynamic now, we just count them directly
                 if (data.status === "success") {
                     flightCount = document.querySelectorAll("#flights-grid .flight-card").length;
                     hotelCount = document.querySelectorAll("#hotels-grid .hotel-card").length;
-                } else {
-                    flightCount = 0;
-                    hotelCount = 0;
                 }
 
-                // Filter Packages (Still local mock data as there is no "live package" API)
-                document.querySelectorAll(".pkg-card").forEach(function (card) {
-                    var cDest = card.getAttribute("data-dest");
-                    var matchDest = (dest === "any" || cDest === dest);
-                    if (matchDest) { card.style.display = "flex"; pkgCount++; }
-                    else { card.style.display = "none"; }
+                // Filter Packages (using city-to-state/country mapping)
+                var destCity = (dest.indexOf('|') !== -1) ? dest.split('|')[1].toLowerCase().trim() : dest.toLowerCase().trim();
+                var allPkgCards = document.querySelectorAll(".pkg-card");
+                allPkgCards.forEach(function (card) {
+                    if (matchesPackageDest(card, destCity)) {
+                        card.style.display = "flex";
+                        pkgCount++;
+                    } else {
+                        card.style.display = "none";
+                    }
                 });
+                if (pkgCount === 0 && allPkgCards.length > 0) {
+                    allPkgCards.forEach(function (card) { card.style.display = "flex"; });
+                    pkgCount = allPkgCards.length;
+                }
 
-                // Update tab counters
                 document.getElementById("cnt-flights").textContent = flightCount;
                 document.getElementById("cnt-hotels").textContent = hotelCount;
                 document.getElementById("cnt-packages").textContent = pkgCount;
                 document.getElementById("cnt-all").textContent = flightCount + hotelCount + pkgCount;
 
                 if (data.status === "success") {
-                    showToast("Live data successfully fetched from Amadeus!", "success");
+                    showToast("Live data successfully fetched!", "success");
                 } else {
                     showToast("Showing simulated data (API keys missing).", "success");
                 }
             })
-            .catch(err => {
+            .catch(function (err) {
                 console.error("Live API Error:", err);
                 loader.style.display = "none";
                 flightGrid.style.display = "";
@@ -1804,6 +3983,26 @@ and more.{% endblock %}
     document.addEventListener("DOMContentLoaded", function () {
         renderCart(); updateCartFab();
         cart.forEach(function (item) { markButton(item.id, true); });
+
+        // Set initial package count on tab badge
+        var initialPkgCount = document.querySelectorAll(".pkg-card").length;
+        var cntPkgEl = document.getElementById("cnt-packages");
+        var cntAllEl = document.getElementById("cnt-all");
+        if (cntPkgEl) cntPkgEl.textContent = initialPkgCount;
+        if (cntAllEl) cntAllEl.textContent = initialPkgCount;
+
+        // Initialize live airport autocomplete suggestions for departure and destination
+        setupAirportAutocomplete('departure-input', 'search-departure', 'departure-suggestions', 'fa-solid fa-plane-departure');
+        setupAirportAutocomplete('destination-input', 'search-destination', 'destination-suggestions', 'fa-solid fa-location-dot');
+
+        // Close dropdowns on outside click
+        document.addEventListener('click', function (e) {
+            if (!e.target.closest('.airport-field-group')) {
+                document.querySelectorAll('.airport-suggestions-dropdown').forEach(function (el) {
+                    el.style.display = 'none';
+                });
+            }
+        });
     });
 </script>
 {% endblock %}

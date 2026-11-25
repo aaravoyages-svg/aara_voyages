@@ -1299,6 +1299,47 @@ PACKAGES = [
     {"id":"andaman-4n5d-standard","destination":"andaman","category":"domestic","country":"Andaman & Nicobar, India","flag":"IN","name":"Andaman Island Escape","duration_nights":4,"duration_label":"4 Nights / 5 Days","price_per_person":"Rs.26,000","price_numeric":26000,"hotel_category":"3 Star","theme":["beach","nature"],"badge":None,"badge_color":None,"image":"andaman.jpg","top_highlights":["Radhanagar Beach (Asia Best Beach)","Cellular Jail Light & Sound Show","Havelock Island Day Trip","Scuba Diving"],"inclusions":["3-Star Hotel (4N)","Daily Breakfast","Airport Transfers","Ferry Tickets","Scuba Intro Dive","Travel Insurance"]},
     {"id":"andaman-5n6d-deluxe","destination":"andaman","category":"domestic","country":"Andaman & Nicobar, India","flag":"IN","name":"Andaman Coral Paradise","duration_nights":5,"duration_label":"5 Nights / 6 Days","price_per_person":"Rs.34,000","price_numeric":34000,"hotel_category":"4 Star","theme":["beach","adventure","honeymoon"],"badge":"Best Seller","badge_color":"#e94560","image":"andaman.jpg","top_highlights":["Havelock Island (2N)","Scuba Diving & Snorkelling at Elephant Beach","Neil Island Day Trip","Glass Bottom Boat Ride","Radhanagar Beach Sunset"],"inclusions":["4-Star Hotels (5N)","Daily Breakfast","Airport Transfers","Ferry Tickets","Scuba Diving","Glass Boat Ride","Travel Insurance"]},
     {"id":"andaman-6n7d-adventure","destination":"andaman","category":"domestic","country":"Andaman & Nicobar, India","flag":"IN","name":"Andaman Deep Sea Adventure","duration_nights":6,"duration_label":"6 Nights / 7 Days","price_per_person":"Rs.46,000","price_numeric":46000,"hotel_category":"4 Star","theme":["beach","adventure"],"badge":"Top Rated","badge_color":"#f57c00","image":"andaman.jpg","top_highlights":["Havelock (3N) + Neil Island (1N)","PADI Open Water Scuba Certification","Sea Walk Underwater","Deep Sea Fishing","Jolly Buoy Snorkelling"],"inclusions":["4-Star Resorts (6N)","Daily Breakfast","All Ferry Tickets","PADI Dive Course","Sea Walk","All Tours","Travel Insurance"]},
+    # Maharashtra
+    {"id":"maharashtra-3n4d-mumbai","destination":"maharashtra","category":"domestic","country":"Maharashtra, India","flag":"IN","name":"Mumbai & Lonavala Getaway","duration_nights":3,"duration_label":"3 Nights / 4 Days","price_per_person":"Rs.15,500","price_numeric":15500,"hotel_category":"4 Star","theme":["city","nature"],"badge":"Best Seller","badge_color":"#e94560","image":"hero_bg.jpg","top_highlights":["Gateway of India & Marine Drive","Elephanta Caves Ferry Tour","Lonavala & Khandala Hills","Pune Heritage Walk"],"inclusions":["4-Star Hotel (3N)","Daily Breakfast","Airport Transfers","Sightseeing Cab","Travel Insurance"]},
+    {"id":"maharashtra-4n5d-hill","destination":"maharashtra","category":"domestic","country":"Maharashtra, India","flag":"IN","name":"Mahabaleshwar & Shirdi Explorer","duration_nights":4,"duration_label":"4 Nights / 5 Days","price_per_person":"Rs.19,000","price_numeric":19000,"hotel_category":"4 Star","theme":["nature","culture"],"badge":"Family Favourite","badge_color":"#1565c0","image":"about_bg.jpg","top_highlights":["Mahabaleshwar Strawberry Farms","Venna Lake Boating","Shirdi Sai Baba Darshan","Ajanta & Ellora Caves Option"],"inclusions":["4-Star Resorts (4N)","Daily Breakfast","Private AC Cab","All Sightseeing","Travel Insurance"]},
+    # Delhi & Golden Triangle
+    {"id":"delhi-3n4d-triangle","destination":"delhi","category":"domestic","country":"Delhi & Agra, India","flag":"IN","name":"Delhi Agra Golden Triangle","duration_nights":3,"duration_label":"3 Nights / 4 Days","price_per_person":"Rs.16,000","price_numeric":16000,"hotel_category":"4 Star","theme":["heritage","culture"],"badge":"Best Seller","badge_color":"#e94560","image":"rajasthan.jpg","top_highlights":["Taj Mahal Sunrise Tour","Red Fort & Qutub Minar","India Gate & Humayun Tomb","Agra Fort Visit"],"inclusions":["4-Star Hotels (3N)","Daily Breakfast","Airport Transfers","Private AC Car","Monument Guide","Travel Insurance"]},
+    # Himachal Pradesh
+    {"id":"himachal-5n6d-manali","destination":"himachal","category":"domestic","country":"Himachal Pradesh, India","flag":"IN","name":"Shimla & Manali Himalayan Escape","duration_nights":5,"duration_label":"5 Nights / 6 Days","price_per_person":"Rs.21,000","price_numeric":21000,"hotel_category":"4 Star","theme":["nature","adventure","honeymoon"],"badge":"Best Seller","badge_color":"#e94560","image":"kashmir.jpg","top_highlights":["Solang Valley Snow Activities","Atal Tunnel & Rohtang Pass","Shimla Mall Road & Kufri","Hadimba Devi Temple"],"inclusions":["4-Star Hotels (5N)","Breakfast & Dinner","Volvo / Private Cab Transfers","Local Sightseeing","Travel Insurance"]},
+    # Uttarakhand
+    {"id":"uttarakhand-4n5d-hills","destination":"uttarakhand","category":"domestic","country":"Uttarakhand, India","flag":"IN","name":"Rishikesh, Mussoorie & Nainital Tour","duration_nights":4,"duration_label":"4 Nights / 5 Days","price_per_person":"Rs.18,500","price_numeric":18500,"hotel_category":"4 Star","theme":["nature","adventure"],"badge":"Top Rated","badge_color":"#f57c00","image":"kashmir.jpg","top_highlights":["Ganga Aarti at Rishikesh","Kempty Falls Mussoorie","Naini Lake Boating","River Rafting & Adventure"],"inclusions":["4-Star Hotels (4N)","Daily Breakfast","Airport Transfers (Dehradun)","All Hill Transfers","Travel Insurance"]},
+    # Ladakh
+    {"id":"ladakh-5n6d-pangong","destination":"ladakh","category":"domestic","country":"Ladakh, India","flag":"IN","name":"Leh Ladakh & Pangong Expedition","duration_nights":5,"duration_label":"5 Nights / 6 Days","price_per_person":"Rs.29,500","price_numeric":29500,"hotel_category":"4 Star + Camp","theme":["adventure","nature"],"badge":"Adventure Pick","badge_color":"#e94560","image":"kashmir.jpg","top_highlights":["Pangong Tso Lake Overnight Camp","Nubra Valley Camel Safari","Khardung La Pass Drive","Shanti Stupa & Magnetic Hill"],"inclusions":["Hotels (4N) + Lake Camp (1N)","Breakfast & Dinner","Airport Transfers","Inner Line Permits","Oxygen Cylinder Backup"]},
+    # Karnataka
+    {"id":"karnataka-4n5d-coorg","destination":"karnataka","category":"domestic","country":"Karnataka, India","flag":"IN","name":"Bengaluru, Mysuru & Coorg Retreat","duration_nights":4,"duration_label":"4 Nights / 5 Days","price_per_person":"Rs.19,500","price_numeric":19500,"hotel_category":"4 Star","theme":["nature","culture"],"badge":"Nature Pick","badge_color":"#2e7d32","image":"kerala.jpg","top_highlights":["Mysore Palace Illumination","Coorg Coffee Estate Stay","Abbey Falls & Raja Seat","Bengaluru Botanical Gardens"],"inclusions":["4-Star Hotels & Estate Stay (4N)","Daily Breakfast","Airport Transfers","Private Cab","Travel Insurance"]},
+    # Tamil Nadu
+    {"id":"tamilnadu-4n5d-ooty","destination":"tamilnadu","category":"domestic","country":"Tamil Nadu, India","flag":"IN","name":"Chennai, Pondicherry & Ooty Tour","duration_nights":4,"duration_label":"4 Nights / 5 Days","price_per_person":"Rs.18,000","price_numeric":18000,"hotel_category":"4 Star","theme":["culture","nature"],"badge":None,"badge_color":None,"image":"kerala.jpg","top_highlights":["Ooty Nilgiri Mountain Railway","Pondicherry French Quarter","Mahabalipuram Shore Temple","Botanical Gardens"],"inclusions":["4-Star Hotels (4N)","Daily Breakfast","Airport Transfers","Sightseeing Cab","Travel Insurance"]},
+    # West Bengal & Sikkim
+    {"id":"westbengal-5n6d-darjeeling","destination":"westbengal","category":"domestic","country":"West Bengal & Sikkim, India","flag":"IN","name":"Darjeeling & Gangtok Himalayan Tour","duration_nights":5,"duration_label":"5 Nights / 6 Days","price_per_person":"Rs.24,500","price_numeric":24500,"hotel_category":"4 Star","theme":["nature","culture"],"badge":"Best Seller","badge_color":"#e94560","image":"kashmir.jpg","top_highlights":["Tiger Hill Kanchenjunga Sunrise","Tsomgo Lake & Baba Mandir","Darjeeling Toy Train Ride","Tea Garden Visit"],"inclusions":["4-Star Hotels (5N)","Daily Breakfast","Bagdogra Airport Transfers","All Permits & Tours","Travel Insurance"]},
+    # Uttar Pradesh
+    {"id":"up-3n4d-spiritual","destination":"uttarpradesh","category":"domestic","country":"Uttar Pradesh, India","flag":"IN","name":"Varanasi & Ayodhya Spiritual Circuit","duration_nights":3,"duration_label":"3 Nights / 4 Days","price_per_person":"Rs.16,500","price_numeric":16500,"hotel_category":"4 Star","theme":["culture","heritage"],"badge":"Popular","badge_color":"#f57c00","image":"rajasthan.jpg","top_highlights":["Kashi Vishwanath & Ganga Aarti","Morning Boat Ride on Ganga","Ayodhya Ram Mandir Darshan","Sarnath Buddhist Stupa"],"inclusions":["4-Star Hotels (3N)","Daily Breakfast","Airport Transfers","Private AC Cab","Boat Ride","Travel Insurance"]},
+    # Telangana
+    {"id":"telangana-3n4d-hyd","destination":"telangana","category":"domestic","country":"Telangana, India","flag":"IN","name":"Hyderabad Royal & Ramoji Tour","duration_nights":3,"duration_label":"3 Nights / 4 Days","price_per_person":"Rs.14,500","price_numeric":14500,"hotel_category":"4 Star","theme":["city","heritage"],"badge":"Budget Pick","badge_color":"#2e7d32","image":"rajasthan.jpg","top_highlights":["Ramoji Film City Full Day","Charminar & Golconda Fort","Hussain Sagar Lake Cruise","Authentic Hyderabadi Cuisine"],"inclusions":["4-Star Hotel (3N)","Daily Breakfast","Airport Transfers","Ramoji Entry Tickets","Travel Insurance"]},
+    # Gujarat
+    {"id":"gujarat-4n5d-gir","destination":"gujarat","category":"domestic","country":"Gujarat, India","flag":"IN","name":"Gujarat Gir, Somnath & Dwarka Tour","duration_nights":4,"duration_label":"4 Nights / 5 Days","price_per_person":"Rs.21,500","price_numeric":21500,"hotel_category":"4 Star","theme":["culture","nature"],"badge":"Family Favourite","badge_color":"#1565c0","image":"rajasthan.jpg","top_highlights":["Gir National Park Lion Safari","Somnath Temple Sunset Aarti","Dwarkadhish Temple","Sabarmati Riverfront Ahmedabad"],"inclusions":["4-Star Hotels (4N)","Daily Breakfast","Airport Transfers","Gir Safari Permit","Travel Insurance"]},
+    # Northeast / Assam & Meghalaya
+    {"id":"assam-5n6d-meghalaya","destination":"assam","category":"domestic","country":"Assam & Meghalaya, India","flag":"IN","name":"Guwahati, Shillong & Cherrapunji","duration_nights":5,"duration_label":"5 Nights / 6 Days","price_per_person":"Rs.26,500","price_numeric":26500,"hotel_category":"4 Star","theme":["nature","adventure"],"badge":"Top Rated","badge_color":"#f57c00","image":"kerala.jpg","top_highlights":["Living Root Bridges Cherrapunji","Dawki Crystal Clear River Boating","Kaziranga Rhino Safari","Umiam Lake Shillong"],"inclusions":["4-Star Hotels (5N)","Daily Breakfast","Guwahati Airport Transfers","Jeep Safari","Travel Insurance"]},
+    # =================== MORE INTERNATIONAL ===================
+    # Thailand
+    {"id":"thailand-4n5d-bangkok","destination":"thailand","category":"international","country":"Thailand","flag":"TH","name":"Bangkok & Pattaya Coral Island","duration_nights":4,"duration_label":"4 Nights / 5 Days","price_per_person":"Rs.34,000","price_numeric":34000,"hotel_category":"4 Star","theme":["beach","city"],"badge":"Best Seller","badge_color":"#e94560","image":"bali.jpg","top_highlights":["Coral Island Speedboat & Lunch","Alcazar Cabaret Show","Bangkok Temple & City Tour","Chao Phraya Dinner Cruise"],"inclusions":["4-Star Hotels (4N)","Daily Breakfast","Airport Transfers","Island Tour","Travel Insurance"]},
+    {"id":"thailand-5n6d-phuket","destination":"thailand","category":"international","country":"Thailand","flag":"TH","name":"Phuket & Krabi Phi Phi Island","duration_nights":5,"duration_label":"5 Nights / 6 Days","price_per_person":"Rs.46,000","price_numeric":46000,"hotel_category":"4 Star","theme":["beach","honeymoon"],"badge":"Honeymoon Pick","badge_color":"#7b1fa2","image":"bali.jpg","top_highlights":["Phi Phi Island Speedboat Tour","James Bond Island Cruise","Krabi 4-Island Hopping","Patong Beach Sunset"],"inclusions":["4-Star Resorts (5N)","Daily Breakfast","Airport Transfers","Island Speedboat Tours","Travel Insurance"]},
+    # Maldives
+    {"id":"maldives-4n5d-villa","destination":"maldives","category":"international","country":"Maldives","flag":"MV","name":"Maldives Overwater Villa Escape","duration_nights":4,"duration_label":"4 Nights / 5 Days","price_per_person":"Rs.78,000","price_numeric":78000,"hotel_category":"5 Star Water Villa","theme":["beach","honeymoon","luxury"],"badge":"Honeymoon Pick","badge_color":"#7b1fa2","image":"andaman.jpg","top_highlights":["Overwater Villa with Lagoon Access","Speedboat Resort Transfers","Snorkelling & Dolphin Cruise","Candlelight Beach Dinner"],"inclusions":["5-Star Water Villa (4N)","All Meals Included","Speedboat Transfers","Water Sports","Travel Insurance"]},
+    # Europe & UK
+    {"id":"europe-6n7d-classic","destination":"europe","category":"international","country":"UK & Europe","flag":"EU","name":"London, Paris & Swiss Highlights","duration_nights":6,"duration_label":"6 Nights / 7 Days","price_per_person":"Rs.1,35,000","price_numeric":135000,"hotel_category":"4 Star","theme":["city","luxury","culture"],"badge":"Top Rated","badge_color":"#f57c00","image":"singapore.jpg","top_highlights":["London Eye & Thames Cruise","Eiffel Tower & Seine River Cruise","Mt. Titlis Swiss Alps Cable Car","Eurostar High-Speed Rail"],"inclusions":["4-Star Hotels (6N)","Daily Breakfast","Airport & Rail Transfers","Sightseeing Passes","Travel Insurance"]},
+    # Japan
+    {"id":"japan-6n7d-tokyo","destination":"japan","category":"international","country":"Japan","flag":"JP","name":"Tokyo, Mt. Fuji & Kyoto Discovery","duration_nights":6,"duration_label":"6 Nights / 7 Days","price_per_person":"Rs.1,42,000","price_numeric":142000,"hotel_category":"4 Star","theme":["city","culture"],"badge":"Trending","badge_color":"#1565c0","image":"vietnam.jpg","top_highlights":["Shinkansen Bullet Train Ride","Mt. Fuji 5th Station & Lake Ashi","Kyoto Fushimi Inari & Bamboo Grove","Tokyo Shibuya & Senso-ji"],"inclusions":["4-Star Hotels (6N)","Daily Breakfast","JR Rail Pass","Airport Transfers","Travel Insurance"]},
+    # Sri Lanka
+    {"id":"srilanka-4n5d-island","destination":"srilanka","category":"international","country":"Sri Lanka","flag":"LK","name":"Sri Lanka Cultural & Beach Trail","duration_nights":4,"duration_label":"4 Nights / 5 Days","price_per_person":"Rs.32,000","price_numeric":32000,"hotel_category":"4 Star","theme":["culture","beach"],"badge":"Budget Pick","badge_color":"#2e7d32","image":"kerala.jpg","top_highlights":["Kandy Temple of the Tooth","Nuwara Eliya Tea Plantations","Bentota Beach & Turtle Hatchery","Colombo City Tour"],"inclusions":["4-Star Hotels (4N)","Daily Breakfast","Airport Transfers","Private AC Vehicle","Travel Insurance"]},
+    # Turkey
+    {"id":"turkey-6n7d-istanbul","destination":"turkey","category":"international","country":"Turkey","flag":"TR","name":"Istanbul & Cappadocia Hot Air Balloon","duration_nights":6,"duration_label":"6 Nights / 7 Days","price_per_person":"Rs.88,000","price_numeric":88000,"hotel_category":"4 Star Cave Hotel","theme":["culture","adventure","honeymoon"],"badge":"Best Seller","badge_color":"#e94560","image":"dubai.jpg","top_highlights":["Cappadocia Hot Air Balloon Sunrise","Bosphorus Dinner Cruise Istanbul","Hagia Sophia & Grand Bazaar","Goreme Cave Hotel Stay"],"inclusions":["4-Star Hotels & Cave Stay (6N)","Daily Breakfast","Domestic Flight & Transfers","City Tours","Travel Insurance"]},
+    # Qatar
+    {"id":"qatar-3n4d-doha","destination":"qatar","category":"international","country":"Qatar","flag":"QA","name":"Doha Luxury Stopover & Desert","duration_nights":3,"duration_label":"3 Nights / 4 Days","price_per_person":"Rs.44,000","price_numeric":44000,"hotel_category":"5 Star","theme":["city","luxury"],"badge":"Stopover Pick","badge_color":"#7b1fa2","image":"dubai.jpg","top_highlights":["Souq Waqif & Museum of Islamic Art","Inland Sea Desert Safari","The Pearl-Qatar Marina","Katara Cultural Village"],"inclusions":["5-Star Hotel (3N)","Daily Breakfast","Airport Transfers","Desert Safari","Travel Insurance"]},
 ]
 
 
@@ -1340,6 +1381,7 @@ def page_not_found(e):
 
 import requests
 from datetime import datetime, timedelta
+from concurrent.futures import ThreadPoolExecutor
 
 # ── Live API Integration (SerpApi) ──────────────────────────────────────────
 # Using Google Flights API via SerpApi
@@ -1351,15 +1393,33 @@ SERPAPI_KEY = '46c9a9dd7ab268b224f9b08814f903b48ddfe57f36feea36c59d46a36050a5ed'
 def search_live():
     departure = request.args.get('departure', 'any').lower()
     destination = request.args.get('destination', 'any').lower()
+    trip_type = request.args.get('trip_type', 'one_way').lower()
+    return_date = request.args.get('return_date', '').strip()
+    try:
+        adults = max(1, min(9, int(request.args.get('adults', request.args.get('persons', 1)))))
+    except (TypeError, ValueError):
+        adults = 1
+    try:
+        children = max(0, min(8, int(request.args.get('children', 0))))
+    except (TypeError, ValueError):
+        children = 0
+    try:
+        infants = max(0, min(adults, int(request.args.get('infants', 0))))
+    except (TypeError, ValueError):
+        infants = 0
+    persons = adults + children + infants
     
-    # Use selected date, fallback to next month if empty
-    date_val = request.args.get('date', '')
+    # Use selected date, fallback to 7 days from today if empty or in the past
+    today_str = datetime.now().strftime("%Y-%m-%d")
+    default_future = (datetime.now() + timedelta(days=7)).strftime("%Y-%m-%d")
+    date_val = request.args.get('date', '').strip()
     if not date_val:
-        date_val = "2026-11"
-        
+        date_val = default_future
     # SerpApi Google Flights requires YYYY-MM-DD
-    if len(date_val) == 7: 
+    if len(date_val) == 7:
         date_val += "-01"
+    if date_val < today_str:
+        date_val = default_future
     # Parse IATA|CityName
     dep_parts = departure.split('|')
     dest_parts = destination.split('|')
@@ -1369,14 +1429,71 @@ def search_live():
     
     dest_iata = dest_parts[0].upper() if len(dest_parts) > 0 and dest_parts[0] != 'any' else 'DXB'
     dest_name = dest_parts[1].title() if len(dest_parts) > 1 else 'Dubai'
+
+    # Compute nights for round trip
+    nights = 1
+    checkin_dt = datetime.strptime(date_val, "%Y-%m-%d")
+    is_valid_round_trip = False
+    if trip_type == 'round_trip' and return_date:
+        try:
+            ret_dt = datetime.strptime(return_date, "%Y-%m-%d")
+            if ret_dt > checkin_dt:
+                nights = (ret_dt - checkin_dt).days
+                checkout_date = return_date
+                is_valid_round_trip = True
+            else:
+                checkout_date = (checkin_dt + timedelta(days=1)).strftime("%Y-%m-%d")
+        except ValueError:
+            checkout_date = (checkin_dt + timedelta(days=1)).strftime("%Y-%m-%d")
+    else:
+        checkout_date = (checkin_dt + timedelta(days=1)).strftime("%Y-%m-%d")
     
     try:
-        url_flights = f"https://serpapi.com/search.json?engine=google_flights&departure_id={dep_iata}&arrival_id={dest_iata}&outbound_date={date_val}&currency=INR&hl=en&type=2&api_key={SERPAPI_KEY}"
-        resp_f = requests.get(url_flights)
-        data = resp_f.json()
+        traveller_qs = f"&adults={adults}" + (f"&children={children}" if children > 0 else "") + (f"&infants_on_lap={infants}" if infants > 0 else "")
+        hotel_traveller_qs = f"&adults={adults}" + (f"&children={children}" if children > 0 else "")
+        if is_valid_round_trip:
+            url_flights = f"https://serpapi.com/search.json?engine=google_flights&departure_id={dep_iata}&arrival_id={dest_iata}&outbound_date={date_val}&return_date={return_date}{traveller_qs}&currency=INR&hl=en&type=1&api_key={SERPAPI_KEY}"
+            url_return = f"https://serpapi.com/search.json?engine=google_flights&departure_id={dest_iata}&arrival_id={dep_iata}&outbound_date={return_date}{traveller_qs}&currency=INR&hl=en&type=2&api_key={SERPAPI_KEY}"
+        else:
+            url_flights = f"https://serpapi.com/search.json?engine=google_flights&departure_id={dep_iata}&arrival_id={dest_iata}&outbound_date={date_val}{traveller_qs}&currency=INR&hl=en&type=2&api_key={SERPAPI_KEY}"
+            url_return = None
+
+        url_hotels = f"https://serpapi.com/search.json?engine=google_hotels&q={requests.utils.quote(dest_name)}&check_in_date={date_val}&check_out_date={checkout_date}{hotel_traveller_qs}&currency=INR&hl=en&api_key={SERPAPI_KEY}"
+
+        def fetch_json(u):
+            return requests.get(u, timeout=15).json() if u else {}
+
+        with ThreadPoolExecutor(max_workers=3) as pool:
+            fut_f = pool.submit(fetch_json, url_flights)
+            fut_r = pool.submit(fetch_json, url_return)
+            fut_h = pool.submit(fetch_json, url_hotels)
+            data = fut_f.result()
+            data_ret = fut_r.result()
+            data_h = fut_h.result()
         
         if "error" in data:
             return jsonify({"status": "error", "message": data["error"]})
+
+        # Parse return flight timings if round trip
+        return_options = []
+        if is_valid_round_trip:
+            ret_list = data_ret.get("best_flights", []) + data_ret.get("other_flights", [])
+            for rf in ret_list[:10]:
+                r_legs = rf.get("flights", [])
+                if not r_legs:
+                    continue
+                r_first = r_legs[0]
+                r_last = r_legs[-1]
+                r_dep_raw = r_first.get("departure_airport", {}).get("time", "16:00")
+                r_arr_raw = r_last.get("arrival_airport", {}).get("time", "19:00")
+                r_mins = rf.get("total_duration", 180)
+                return_options.append({
+                    "airline": r_first.get("airline", "Multiple Airlines"),
+                    "departure": r_dep_raw[-5:] if " " in r_dep_raw else r_dep_raw,
+                    "arrival": r_arr_raw[-5:] if " " in r_arr_raw else r_arr_raw,
+                    "duration": f"{r_mins // 60}h {r_mins % 60}m",
+                    "stops": "Non-Stop" if len(r_legs) == 1 else f"{len(r_legs)-1} Stop(s)"
+                })
             
         # Parse the 'best_flights' from SerpApi to match our mock FLIGHTS structure
         parsed_flights = []
@@ -1406,10 +1523,25 @@ def search_live():
             airline = first_leg.get("airline", "Multiple Airlines")
             airline_code = airline[:2].upper()
             
-            price = f.get("price", 0)
-            
-            parsed_flights.append({
-                "id": f"f-live-{idx}",
+            raw_price = f.get("price", 0)
+            paying_pax = max(1, adults + children)
+            price_per_person = round(raw_price / paying_pax) if raw_price else 0
+            trip_label = f"Round Trip ({nights}N)" if is_valid_round_trip else "One Way"
+            pax_parts = [f"{adults} Adult{'s' if adults > 1 else ''}"]
+            if children > 0:
+                pax_parts.append(f"{children} Child{'ren' if children > 1 else ''}")
+            if infants > 0:
+                pax_parts.append(f"{infants} Infant{'s' if infants > 1 else ''}")
+            pax_summary = ", ".join(pax_parts)
+
+            # Match return flight timing for round trip
+            ret_match = None
+            if is_valid_round_trip and return_options:
+                same_airline = next((ro for ro in return_options if ro["airline"].lower() == airline.lower()), None)
+                ret_match = same_airline or return_options[idx % len(return_options)]
+
+            flight_entry = {
+                "id": f"f-live-{dep_iata.lower()}-{dest_iata.lower()}-{date_val}-{trip_type}-{adults}a{children}c{infants}i-{idx}",
                 "from_city": f"{dep_name} ({dep_iata})",
                 "to_city": f"{dest_name} ({dest_iata})",
                 "airline": airline,
@@ -1419,49 +1551,69 @@ def search_live():
                 "arrival": arr_time,
                 "stops": stops,
                 "class": f.get("type", "Economy"),
-                "price_per_person": price,
-                "price_display": f"₹{price:,}/person" if price else "Price unavailable",
-                "features": ["Live Pricing", "Google Flights", "Web Check-in"],
+                "trip_type": trip_label,
+                "adults": adults,
+                "children": children,
+                "infants": infants,
+                "persons": persons,
+                "pax_summary": pax_summary,
+                "nights": nights,
+                "checkin": date_val,
+                "checkout": checkout_date,
+                "price_per_person": price_per_person,
+                "total_price_all": raw_price,
+                "price_display": f"₹{raw_price:,}" if raw_price else "Price unavailable",
+                "features": [trip_label, pax_summary, "Google Flights"],
                 "dest_label": dest_name
-            })
+            }
+            if ret_match:
+                flight_entry["return_date"] = return_date
+                flight_entry["return_departure"] = ret_match["departure"]
+                flight_entry["return_arrival"] = ret_match["arrival"]
+                flight_entry["return_duration"] = ret_match["duration"]
+                flight_entry["return_stops"] = ret_match["stops"]
+                flight_entry["return_airline"] = ret_match["airline"]
+            parsed_flights.append(flight_entry)
             
-        # -- Live Hotel Search --
-        checkin_dt = datetime.strptime(date_val, "%Y-%m-%d")
-        checkout_dt = checkin_dt + timedelta(days=1)
-        checkout_date = checkout_dt.strftime("%Y-%m-%d")
-        
-        url_hotels = f"https://serpapi.com/search.json?engine=google_hotels&q={dest_name.replace(' ', '+')}&check_in_date={date_val}&check_out_date={checkout_date}&currency=INR&hl=en&api_key={SERPAPI_KEY}"
-        resp_h = requests.get(url_hotels)
-        data_h = resp_h.json()
-        
         parsed_hotels = []
         hotels_list = data_h.get("properties", [])
         
         for idx, h in enumerate(hotels_list[:10]):
             price = h.get("rate_per_night", {}).get("extracted_lowest", 0)
             rating = h.get("overall_rating", 0.0)
-            stars = min(5, max(1, int(round(rating))))
+            stars = min(5, max(1, int(round(rating)))) if rating else 4
             
             images = h.get("images", [])
             # Fallback to local image if missing
             img_url = images[0].get("original_image") if images else "/static/images/dubai.jpg"
+            total_price = price * nights if price else 0
             
             parsed_hotels.append({
-                "id": f"h-live-{idx}",
+                "id": f"h-live-{dest_iata.lower()}-{date_val}-{checkout_date}-{idx}",
                 "name": h.get("name", "Premium Hotel"),
                 "location": h.get("description", "City Center")[:40] + "...",
                 "stars": stars,
                 "dest_label": dest_name,
                 "price_per_night": price,
                 "price_display": f"₹{price:,}/night" if price else "Price unavailable",
+                "nights": nights,
+                "total_price": total_price,
+                "total_display": f"₹{total_price:,}" if total_price else "Price unavailable",
+                "checkin": date_val,
+                "checkout": checkout_date,
                 "highlights": "Live Booking via Google Hotels",
-                "amenities": ["Free WiFi", "Live Pricing", "Google Hotels"],
+                "amenities": ["Free WiFi", f"{nights} Night{'s' if nights > 1 else ''} Stay", "Google Hotels"],
                 "image": img_url,
                 "is_external_image": True
             })
             
         return jsonify({
             "status": "success",
+            "trip_type": trip_type,
+            "persons": persons,
+            "nights": nights,
+            "checkin": date_val,
+            "checkout": checkout_date,
             "flights": parsed_flights,
             "hotels": parsed_hotels,
             "message": "Live data successfully fetched from SerpApi!"
@@ -1470,6 +1622,280 @@ def search_live():
         return jsonify({
             "status": "error",
             "message": f"Live API Error: {str(error)}"
+        })
+
+
+@app.route("/api/search_multicity", methods=["POST"])
+def search_multicity():
+    payload = request.get_json(silent=True) or {}
+    legs = payload.get("legs", [])
+    if not legs:
+        return jsonify({"status": "error", "message": "Please provide at least one flight leg."})
+    try:
+        adults = max(1, min(9, int(payload.get("adults", payload.get("persons", 1)))))
+    except (TypeError, ValueError):
+        adults = 1
+    try:
+        children = max(0, min(8, int(payload.get("children", 0))))
+    except (TypeError, ValueError):
+        children = 0
+    try:
+        infants = max(0, min(adults, int(payload.get("infants", 0))))
+    except (TypeError, ValueError):
+        infants = 0
+    persons = adults + children + infants
+    mc_traveller_qs = f"&adults={adults}" + (f"&children={children}" if children > 0 else "") + (f"&infants_on_lap={infants}" if infants > 0 else "")
+    mc_hotel_qs = f"&adults={adults}" + (f"&children={children}" if children > 0 else "")
+    pax_parts = [f"{adults} Adult{'s' if adults > 1 else ''}"]
+    if children > 0:
+        pax_parts.append(f"{children} Child{'ren' if children > 1 else ''}")
+    if infants > 0:
+        pax_parts.append(f"{infants} Infant{'s' if infants > 1 else ''}")
+    pax_summary = ", ".join(pax_parts)
+
+    today_str = datetime.now().strftime("%Y-%m-%d")
+    normalized_legs = []
+    for i, leg in enumerate(legs):
+        dep_parts = (leg.get("departure") or "DEL|Delhi").split("|")
+        dest_parts = (leg.get("destination") or "DXB|Dubai").split("|")
+        dep_iata = dep_parts[0].upper() if dep_parts[0] != "any" else "DEL"
+        dep_name = dep_parts[1].title() if len(dep_parts) > 1 else dep_iata
+        dest_iata = dest_parts[0].upper() if dest_parts[0] != "any" else "DXB"
+        dest_name = dest_parts[1].title() if len(dest_parts) > 1 else dest_iata
+
+        date_val = (leg.get("date") or "").strip()
+        if not date_val or date_val < today_str:
+            date_val = (datetime.now() + timedelta(days=7 + i * 3)).strftime("%Y-%m-%d")
+
+        normalized_legs.append({
+            "leg_index": i + 1,
+            "dep_iata": dep_iata,
+            "dep_name": dep_name,
+            "dest_iata": dest_iata,
+            "dest_name": dest_name,
+            "date": date_val,
+        })
+
+    # Determine stay cities & durations between consecutive legs
+    stays = []
+    for i in range(len(normalized_legs)):
+        curr = normalized_legs[i]
+        if i < len(normalized_legs) - 1:
+            nxt = normalized_legs[i + 1]
+            c_dt = datetime.strptime(curr["date"], "%Y-%m-%d")
+            n_dt = datetime.strptime(nxt["date"], "%Y-%m-%d")
+            nights = max(1, (n_dt - c_dt).days)
+            checkout = nxt["date"] if n_dt > c_dt else (c_dt + timedelta(days=1)).strftime("%Y-%m-%d")
+            stays.append({
+                "city": curr["dest_name"],
+                "iata": curr["dest_iata"],
+                "checkin": curr["date"],
+                "checkout": checkout,
+                "nights": nights,
+            })
+        else:
+            # If final destination is not the origin of leg 1, suggest a 2-night stay there too
+            if curr["dest_iata"] != normalized_legs[0]["dep_iata"]:
+                c_dt = datetime.strptime(curr["date"], "%Y-%m-%d")
+                checkout = (c_dt + timedelta(days=2)).strftime("%Y-%m-%d")
+                stays.append({
+                    "city": curr["dest_name"],
+                    "iata": curr["dest_iata"],
+                    "checkin": curr["date"],
+                    "checkout": checkout,
+                    "nights": 2,
+                })
+
+    def fetch_leg_flights(leg):
+        url_f = (
+            f"https://serpapi.com/search.json?engine=google_flights"
+            f"&departure_id={leg['dep_iata']}&arrival_id={leg['dest_iata']}"
+            f"&outbound_date={leg['date']}{mc_traveller_qs}&currency=INR&hl=en&type=2&api_key={SERPAPI_KEY}"
+        )
+        try:
+            res = requests.get(url_f, timeout=15).json()
+            flights_list = res.get("best_flights", []) + res.get("other_flights", [])
+            out = []
+            for idx, f in enumerate(flights_list[:4]):
+                flight_legs = f.get("flights", [])
+                if not flight_legs:
+                    continue
+                first_leg = flight_legs[0]
+                last_leg = flight_legs[-1]
+                dep_time_raw = first_leg.get("departure_airport", {}).get("time", "10:00")
+                arr_time_raw = last_leg.get("arrival_airport", {}).get("time", "13:00")
+                dep_time = dep_time_raw[-5:] if " " in dep_time_raw else dep_time_raw
+                arr_time = arr_time_raw[-5:] if " " in arr_time_raw else arr_time_raw
+                mins = f.get("total_duration", 180)
+                dur_str = f"{mins // 60}h {mins % 60}m"
+                stops = "Non-Stop" if len(flight_legs) == 1 else f"{len(flight_legs)-1} Stop(s)"
+                airline = first_leg.get("airline", "Multiple Airlines")
+                raw_price = f.get("price", 0)
+                paying_pax = max(1, adults + children)
+                price_pp = round(raw_price / paying_pax) if raw_price else 0
+                out.append({
+                    "id": f"f-mc-{leg['dep_iata'].lower()}-{leg['dest_iata'].lower()}-{leg['date']}-{adults}a{children}c{infants}i-{idx}",
+                    "leg_index": leg["leg_index"],
+                    "from_city": f"{leg['dep_name']} ({leg['dep_iata']})",
+                    "to_city": f"{leg['dest_name']} ({leg['dest_iata']})",
+                    "airline": airline,
+                    "airline_code": airline[:2].upper(),
+                    "duration": dur_str,
+                    "departure": dep_time,
+                    "arrival": arr_time,
+                    "stops": stops,
+                    "class": f.get("type", "Economy"),
+                    "trip_type": f"Multi-City Leg {leg['leg_index']}",
+                    "date": leg["date"],
+                    "adults": adults,
+                    "children": children,
+                    "infants": infants,
+                    "persons": persons,
+                    "pax_summary": pax_summary,
+                    "price_per_person": price_pp,
+                    "total_price_all": raw_price,
+                    "price_display": f"₹{raw_price:,}" if raw_price else "Price unavailable",
+                    "features": [f"Leg {leg['leg_index']} ({leg['date']})", pax_summary, "Google Flights"],
+                    "dest_label": leg["dest_name"],
+                })
+            return out
+        except Exception:
+            return []
+
+    def fetch_stay_hotels(stay):
+        url_h = (
+            f"https://serpapi.com/search.json?engine=google_hotels"
+            f"&q={requests.utils.quote(stay['city'])}"
+            f"&check_in_date={stay['checkin']}&check_out_date={stay['checkout']}"
+            f"{mc_hotel_qs}&currency=INR&hl=en&api_key={SERPAPI_KEY}"
+        )
+        try:
+            res = requests.get(url_h, timeout=15).json()
+            hotels_list = res.get("properties", [])
+            parsed = []
+            for idx, h in enumerate(hotels_list[:6]):
+                price = h.get("rate_per_night", {}).get("extracted_lowest", 0)
+                rating = h.get("overall_rating", 0.0)
+                stars = min(5, max(1, int(round(rating)))) if rating else 4
+                images = h.get("images", [])
+                img_url = images[0].get("original_image") if images else "/static/images/dubai.jpg"
+                total_price = price * stay["nights"] if price else 0
+                parsed.append({
+                    "id": f"h-mc-{stay['iata'].lower()}-{stay['checkin']}-{stay['checkout']}-{idx}",
+                    "name": h.get("name", "Premium Hotel"),
+                    "location": (h.get("description") or "City Center")[:40] + "...",
+                    "stars": stars,
+                    "dest_label": stay["city"],
+                    "price_per_night": price,
+                    "price_display": f"₹{price:,}/night" if price else "Price unavailable",
+                    "nights": stay["nights"],
+                    "total_price": total_price,
+                    "total_display": f"₹{total_price:,}" if total_price else "Price unavailable",
+                    "checkin": stay["checkin"],
+                    "checkout": stay["checkout"],
+                    "highlights": "Live Booking via Google Hotels",
+                    "amenities": ["Free WiFi", f"{stay['nights']} Night{'s' if stay['nights'] > 1 else ''} Stay", "Google Hotels"],
+                    "image": img_url,
+                    "is_external_image": True,
+                })
+            return {
+                "city": stay["city"],
+                "iata": stay["iata"],
+                "checkin": stay["checkin"],
+                "checkout": stay["checkout"],
+                "nights": stay["nights"],
+                "hotels": parsed,
+            }
+        except Exception:
+            return {
+                "city": stay["city"],
+                "iata": stay["iata"],
+                "checkin": stay["checkin"],
+                "checkout": stay["checkout"],
+                "nights": stay["nights"],
+                "hotels": [],
+            }
+
+    try:
+        with ThreadPoolExecutor(max_workers=6) as pool:
+            flight_lists = list(pool.map(fetch_leg_flights, normalized_legs))
+            hotel_groups = list(pool.map(fetch_stay_hotels, stays))
+
+        all_flights = [f for sub in flight_lists for f in sub]
+        return jsonify({
+            "status": "success",
+            "trip_type": "multi_city",
+            "stays": stays,
+            "flights": all_flights,
+            "hotel_groups": hotel_groups,
+            "message": "Multi-city flights and hotels fetched!"
+        })
+    except Exception as error:
+        return jsonify({"status": "error", "message": f"Multi-City API Error: {str(error)}"})
+
+
+@app.route("/api/hotels_live")
+def hotels_live():
+    query = request.args.get('q', '').strip() or 'Dubai'
+    today_str = datetime.now().strftime("%Y-%m-%d")
+    default_future = (datetime.now() + timedelta(days=7)).strftime("%Y-%m-%d")
+    date_val = request.args.get('date', '').strip()
+    if not date_val:
+        date_val = default_future
+    if len(date_val) == 7:
+        date_val += "-01"
+    if date_val < today_str:
+        date_val = default_future
+
+    try:
+        checkin_dt = datetime.strptime(date_val, "%Y-%m-%d")
+        checkout_date = (checkin_dt + timedelta(days=1)).strftime("%Y-%m-%d")
+        encoded_q = requests.utils.quote(query)
+        url_hotels = (
+            f"https://serpapi.com/search.json?engine=google_hotels"
+            f"&q={encoded_q}&check_in_date={date_val}&check_out_date={checkout_date}"
+            f"&currency=INR&hl=en&api_key={SERPAPI_KEY}"
+        )
+        resp_h = requests.get(url_hotels, timeout=15)
+        data_h = resp_h.json()
+
+        if "error" in data_h:
+            return jsonify({"status": "error", "message": data_h["error"], "hotels": []})
+
+        parsed_hotels = []
+        hotels_list = data_h.get("properties", [])
+        for idx, h in enumerate(hotels_list[:15]):
+            price = h.get("rate_per_night", {}).get("extracted_lowest", 0)
+            rating = h.get("overall_rating", 0.0)
+            stars = min(5, max(1, int(round(rating)))) if rating else 4
+            images = h.get("images", [])
+            img_url = images[0].get("original_image") if images else "/static/images/dubai.jpg"
+            desc = h.get("description") or h.get("neighborhood") or query
+            parsed_hotels.append({
+                "id": f"h-live-{idx}-{abs(hash(h.get('name', ''))) % 10000}",
+                "name": h.get("name", "Premium Hotel"),
+                "location": (desc[:55] + "...") if len(desc) > 55 else desc,
+                "stars": stars,
+                "dest_label": query,
+                "price_per_night": price,
+                "price_display": f"₹{price:,}/night" if price else "Price on request",
+                "highlights": "Live Booking via Google Hotels",
+                "amenities": ["Free WiFi", "Live Pricing", "Google Hotels"],
+                "image": img_url,
+                "is_external_image": True,
+                "source": "live"
+            })
+
+        return jsonify({
+            "status": "success",
+            "hotels": parsed_hotels,
+            "query": query
+        })
+    except Exception as error:
+        return jsonify({
+            "status": "error",
+            "message": f"Live Hotel API Error: {str(error)}",
+            "hotels": []
         })
 
 
